@@ -1,0 +1,213 @@
+main {
+    width: 100%;
+    height: 30.1em;
+}
+
+
+
+/* STUDENT DETAILS */
+.user-details {
+    width: 21.3%;
+    height: 30em;
+    background-color: #c3e8f7;
+    opacity: 0.9;
+    margin-bottom: 3.9em;
+    margin-right: 0.7em;
+    border-radius: 0px 1.5em 0.7em 0px;
+}
+.user-details div {
+    margin-top: 1em;
+    color: #424242;
+    margin-bottom: 0;
+    padding-left: 1.3em;
+    padding-right: 1.3em;
+}
+
+.user-details div h3 {
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 1em;
+    color: #262525;
+}
+
+div.user-image-icon {
+    width: 100;
+    height: 11em;
+    background-image: url('../images/profile-icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0 0 0 0.2em;
+}
+div.below-user-image-icon-1 {
+    padding: 0;
+    text-align: center;
+    margin-top: 0;
+    font-size: 1.12em;
+}
+div.below-user-image-icon-1 h5 {
+    font-size: 0.75em;
+}
+div.below-user-image-icon-1 h5 span {
+    font-size: 1.2em;
+}
+div.below-user-image-icon-2 {
+    width: 100%;
+    margin-top: 5em;
+    padding: 0;
+    text-align: left;
+}
+
+
+
+/* QUESTION AND OPTIONS */
+.question-sect {
+    width: 55%;
+    height: 30em;
+    margin-bottom: 3.9em;
+}
+div.question {
+    width: 100%;
+    height: 10em;
+    background-color: #e65151;
+    color: white;
+    border-radius: 1.5em;
+    margin-bottom: 0.7em;
+    overflow: scroll;
+}
+div.question h3 {
+    padding-top: 1.1em;
+    padding-bottom: 1.1em;
+    padding-left: 1.3em;
+    font-size: 1.2em;
+    display: inline-block;
+}
+div.question h3#No {
+    vertical-align: top;
+}
+div.question h3#Q {
+    width: 87%;
+    text-align: justify;
+    padding-left: 0;
+    margin-left: 0.3em;
+}
+div.options {
+    width: 100%;
+    height: 14.5em;
+    margin-bottom: .7em;
+    overflow: scroll;
+}
+div.options .option-container {
+    padding: 1.5em 1.7em;
+}
+div.options .option-item {
+    width: 2.5em;
+    height: 2.5em;
+    vertical-align: middle;
+}
+
+div.options span {
+    display: block;
+    color: #664040;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+}
+
+div.question-nav {
+    width: 100%;
+    height: 3.6em;
+    margin-top: 1em;
+    /* border: 1px solid black; */
+}
+div.question-nav button {
+    padding: 1.37em 3.5em;
+    background-color: #e65151;
+    color: white;
+    border: none;
+    border-radius: 0.7em;
+    font-weight: 700;
+}
+div.question-nav button:hover {
+    opacity: 0.7;
+}
+div.question-nav button:active {
+    background-color: #a6a6a6;
+    opacity: 1;
+}
+div.question-nav button#prev {
+    margin-left: 6em;
+    margin-right: 10em;
+}
+div.question-nav button#next {
+    margin-left: 10em;
+}
+div.question-nav button#submit {
+    position: absolute;
+    top: 0em;
+    right: 0em;
+    padding: 1.3em 5em;
+}
+
+
+
+
+/* EXAMINATION DETAILS */
+.exam-details {
+    width: 21.76%;
+    height: 30em;
+    background-color: #c3e8f7;
+    opacity: 0.9;
+    margin-bottom: 3.9em;
+    margin-left: 0.7em;
+    margin-right: 0;
+    border-radius: 1.5em 0px 0px 0.7em;
+}
+.exam-details div {
+    margin-top: 1em;
+    color: #424242;
+    margin-bottom: 1em;
+    padding-left: 1.3em;
+    padding-right: 1.3em;
+}
+
+.exam-details div h3 {
+    text-align: center;
+    color: #262525;
+    text-decoration: underline;
+    padding-left: 0;
+    margin-bottom: 0.5em;
+}
+div div.exam-detail-block {
+    margin-bottom: 10em;
+    margin-left: 0;
+    padding-left: 0;
+    text-align: left;
+}
+div div.exam-detail-block h4 {
+    margin-bottom: 0.4em;
+    font-size: 0.9em;
+}
+div div.examiner-detail-block {
+    padding: 0;
+    font-size: 0.9em;
+}
+div div.examiner-detail-block h5 {
+    font-size: 0.9em;
+    text-align: center;
+}
+div div.examiner-detail-block h5 span {
+    font-size: 1.2em;
+}
+
+.main-content { /* Float objects */
+    float: left;
+}
+
+.hidden {
+    display: none;
+}
+.adjust {
+    
+}

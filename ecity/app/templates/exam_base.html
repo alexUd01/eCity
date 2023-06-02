@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../static/styles/exam_base_header.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/exam_base_footer.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/exam_base_main.css">
+    <link rel="icon" type="image/png" href="../static/images/profile-icon.png">
+    <title>eCity | {{ exam.course_name }} - Examination</title>
+    <script src="../static/scripts/jquery-3.6.4.js"></script>
+    <script src="../static/scripts/question.js"></script>
+  </head>
+  <body>
+    <header>
+      <span class="logo">eCity</span>
+    </header>
+    <main>
+      <section class="main-content user-details">
+	<div>
+	  <h3>STUDENT DETAILS</h3>
+	  <div class="user-image-icon"></div>
+	  <div class="below-user-image-icon-1">
+	    <h4>
+	      {{ user.lastname }} {{ user.firstname }} {{ user.middlename }}
+	    </h4>
+	    <h5><span>(</span> {{ user.email }} <span>)</span></h5>
+	  </div>
+	  <div class="below-user-image-icon-2">
+	    <h4>USERNAME: {{ user.username }}</h4>
+	  </div>
+	</div>
+      </section>
+      <section class="main-content question-sect">
+	<form action="#" method="POST">
+	  <div class="question">
+	    <h3 id="No"></h3>
+	    <h3 id="Q">Fetching question from database...</h3>
+	  </div>
+	  <div class="options">
+	    <div class="option-container">
+	      <!-- OPTIONS HERE -->
+	      <!-- A. OPTION A -->
+	      <!-- B. OPTION B -->
+	      <!-- C. OPTION C -->
+	      <!-- D. OPTION D -->
+	    </div>
+	  </div>
+	  <div class="shaded-answered-questions"><!-- TODO: Implement --></div>
+	</form>
+	<div class="question-nav">
+	    <button id="prev">PREV</button>
+	    <button id="next">NEXT</button>
+	    <button id="submit">SUBMIT</button>
+	</div>
+      </section>
+      <section class="main-content exam-details">
+	<div>
+	  <h3>EXAMINATION DETAILS</h3>
+	  <div class="exam-detail-block">
+	    <h4>COURSE: {{ exam.course_name }}</h4>
+	    <h4>TIME ALLOWED: {{ exam.time_allowed }} minutes</h4>
+	    <h4>TOTAL QUESTIONS: {{ exam.count() }}</h4>
+	    <h4>QUESTIONS ATTEMPTED: 4</h4>
+	    <h4>DATE OF EXAMINATION: May 30th, 2023</h4>
+	  </div>
+	  <div class="examiner-detail-block">
+	    <h4>EXAMINER: {{ exam.examiner.firstname }}
+	      {{ exam.examiner.lastname }} {{ exam.examiner.middlename }}
+	    </h4>
+	    <h5>
+	      <span>(</span> {{ exam.examiner.email }} <span>)</span>
+	    </h5>
+	  </div>
+	</div>
+      </section>
+    </main>
+    <footer>
+      <div>
+	<small>&copy; Xandex Inc. </small>
+      </div>
+    </footer>
+  </body>
+<html>
