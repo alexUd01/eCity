@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../../static/styles/ecity_header.css">
+    <link rel="stylesheet" type="text/css" href="../../static/styles/ecity_footer.css">
+    <link rel="stylesheet" type="text/css" href="../../static/styles/dashboard.css">
+    <link rel="icon" type="image/png" href="../../static/images/profile-icon.png">
+    <title>eCity | Dashboard</title>
+    <script src="../../static/scripts/jquery-3.6.4.js"></script>
+    <script src="../../static/scripts/dashboard.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="header-contents">
+	<div class="h-content">
+	  <a href="/"><span class="logo">eCity</span></a>
+	</div><!--
+	--><div class="h-content user-info-container">
+	  <div class="user-detail">
+	    <span class="user-profile-pic"></span>
+	    <span class="user-profile-details">
+	      <h4 id="username">{{ user.username }}</h4>
+	      <h4 id="fullname">{{ user.firstname }} {{ user.lastname }} {{ user.middlename }}</h4>
+	      <h4 id="email"><b>( </b> {{ user.email }} <b> )</b></h4>
+	    </span>
+	    <span class="clear-float"></span>
+	  </div>
+	</div>
+      </div>
+    </header>
+    <main>
+      <section>
+	<section class="grouped-sections nav-container">
+	  <nav>
+	    <ol class="nav-items">
+	      <a href="/users/{{ user.user_id }}/upcoming_exams"><li class="nav-item" id="upcoming-exams" title="Upcoming Examinations"></li></a>
+	      <a href="/users/{{ user.user_id }}/past_exams"><li class="nav-item" id="past-exams" title="Past Examinations"></li></a>
+	      <a href="/users/{{ user.user_id }}/my_students"><li class="nav-item" id="my-students" title="My students"></li></a>
+	      <a href="/users/{{ user.user_id }}/manage_exams"><li class="nav-item" id="manage-exams" title="Manage Examinations"></li></a>
+	      <a href="/login"><li class="nav-item" id="logout" title="Logout"></li></a>
+	    </ol>
+	  </nav>
+	</section>
+	<section class="grouped-sections workspace-container">
+	  {{ user.firstname }} {{ user.lastname }} can create and schedule examinations from this page...
+	</section>
+	<section class="clear-float"></section>
+      </section>
+    </main>
+    <footer>
+      <div>
+	<small>&copy; Xandex Inc. </small>
+      </div>
+    </footer>
+  </body>
+<html>

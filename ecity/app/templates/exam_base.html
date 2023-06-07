@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="../static/styles/exam_base_header.css">
-    <link rel="stylesheet" type="text/css" href="../static/styles/exam_base_footer.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/ecity_header.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/ecity_footer.css">
     <link rel="stylesheet" type="text/css" href="../static/styles/exam_base_main.css">
     <link rel="icon" type="image/png" href="../static/images/profile-icon.png">
-    <title>eCity | {{ exam.course_name }} - Examination</title>
+    <title>eCity | Quiz - {{ exam.course_name }}</title>
     <script src="../static/scripts/jquery-3.6.4.js"></script>
     <script src="../static/scripts/question.js"></script>
   </head>
@@ -32,9 +32,9 @@
 	</div>
       </section>
       <section class="main-content question-sect">
-	<form action="#" method="POST">
+	<form action="/users/{{ user.user_id }}/dashboard" method="GET">
 	  <div class="question">
-	    <h3 id="No"></h3>
+	    <h3 id="No">&nbsp;&nbsp;</h3> <!-- &nbsp; is whitespace -->
 	    <h3 id="Q">Fetching question from database...</h3>
 	  </div>
 	  <div class="options">
@@ -58,11 +58,11 @@
 	<div>
 	  <h3>EXAMINATION DETAILS</h3>
 	  <div class="exam-detail-block">
-	    <h4>COURSE: {{ exam.course_name }}</h4>
-	    <h4>TIME ALLOWED: {{ exam.time_allowed }} minutes</h4>
-	    <h4>TOTAL QUESTIONS: {{ exam.count() }}</h4>
-	    <h4>QUESTIONS ATTEMPTED: 4</h4>
-	    <h4>DATE OF EXAMINATION: May 30th, 2023</h4>
+	    <h4>COURSE: &nbsp;&nbsp;{{ exam.course_name }}</h4>
+	    <h4 id="time_allowed">TIME ALLOWED: &nbsp;&nbsp;<b>{{ exam.time_allowed }}</b> minutes</h4>
+	    <h4>TOTAL QUESTIONS: &nbsp;&nbsp;{{ exam.count() }}</h4>
+	    <h4 id="attempted">QUESTIONS ATTEMPTED:</h4>
+	    <h4>DATE: &nbsp;&nbsp;{{ exam.date_taken.strftime('%B %d, %Y.') }}</h4>
 	  </div>
 	  <div class="examiner-detail-block">
 	    <h4>EXAMINER: {{ exam.examiner.firstname }}

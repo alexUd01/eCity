@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../static/styles/ecity_header.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/ecity_footer.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/login.css">
+    <link rel="icon" type="image/png" href="../static/images/profile-icon.png">
+    <title>eCity | Login</title>
+    <script src="../static/scripts/jquery-3.6.4.js"></script>
+    <script src="../static/scripts/login.js"></script>
+  </head>
+  <body>
+    <header>
+      <a href="/"><span class="logo">eCity</span></a>
+    </header>
+    <main>
+      <section>
+	<div class="container">
+	  <div class="login-div">
+	    <h4>ENTER LOGIN DETAIL</h4>
+	    <form action="/sign-in" method="post">
+	      <label>
+		<input class="credential" type="text" name="username" placeholder="Username" autocomplete="off" autofocus required>
+	      </label>
+	      <label>
+		<input class="credential" type="password" name="password" placeholder="Password" required>
+	      </label>
+	      <label id="login"><input type="submit" value="LOGIN"></label>
+	    </form>
+	  </div>
+	  <div class="sign-up-div">
+	    <h4>Don't have an account yet?</h4>
+	    <a href="/sign-up"><h4>SIGNUP HERE</h4></a>
+	  </div>
+	</div>
+      </section>
+    </main>
+    <footer>
+      <div>
+	<small>&copy; Xandex Inc. </small>
+      </div>
+    </footer>
+  </body>
+<html>

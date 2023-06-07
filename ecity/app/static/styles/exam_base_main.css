@@ -49,6 +49,7 @@ div.below-user-image-icon-1 {
 }
 div.below-user-image-icon-1 h5 {
     font-size: 0.75em;
+    text-decoration: underline;
 }
 div.below-user-image-icon-1 h5 span {
     font-size: 1.2em;
@@ -188,6 +189,7 @@ div div.exam-detail-block {
 div div.exam-detail-block h4 {
     margin-bottom: 0.4em;
     font-size: 0.9em;
+    border-bottom: 0.2em dotted black;
 }
 div div.examiner-detail-block {
     padding: 0;
@@ -196,6 +198,7 @@ div div.examiner-detail-block {
 div div.examiner-detail-block h5 {
     font-size: 0.9em;
     text-align: center;
+    text-decoration: underline;
 }
 div div.examiner-detail-block h5 span {
     font-size: 1.2em;
@@ -203,11 +206,4 @@ div div.examiner-detail-block h5 span {
 
 .main-content { /* Float objects */
     float: left;
-}
-
-.hidden {
-    display: none;
-}
-.adjust {
-    
 }

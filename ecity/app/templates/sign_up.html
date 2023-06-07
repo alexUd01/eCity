@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../static/styles/ecity_header.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/ecity_footer.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/sign-up.css">
+    <link rel="icon" type="image/png" href="../static/images/profile-icon.png">
+    <title>eCity | Create Account</title>
+    <script src="../static/scripts/jquery-3.6.4.js"></script>
+    <script src="../static/scripts/sign_in.js"></script>
+  </head>
+  <body>
+    <header>
+      <a href="/"><span class="logo">eCity</span></a>
+    </header>
+    <main>
+      <section>
+	<div class="invisible-container">
+	  <div class="container">
+	    <div class="sign-up-div">
+	      <h4>ENTER DETAILS TO CREATE AN ACCOUNT</h4>
+	      <form action="/create-account" method="post">
+		<label class="usual-names">
+		  <input class="credential" type="text" name="firstname" placeholder="Firstname" autocomplete="off" autofocus required>
+		</label>
+		<label class="usual-names">
+		  <input class="credential" type="text" name="lastname" placeholder="Lastname" autocomplete="off" required>
+		</label>
+		<label>
+		  <input class="credential" type="text" name="middlename" placeholder="Middlename (optional)" autocomplete="off">
+		</label>
+		<label>
+		  <input class="credential" type="text" name="username" placeholder="Username (must be unique)" autocomplete="off" required>
+		</label>
+		<label>
+		  <input class="credential" type="email" name="email" placeholder="Email (example@xyz.com)" autocomplete="off"required>
+		</label>
+		<label>
+		  <input class="credential" type="password" name="password" placeholder="Password" required>
+		</label>
+		<label id="login"><input type="submit" value="SIGN UP"></label>
+	      </form>
+	    </div>
+	    <div class="login-div">
+	      <h4>Already have an account?</h4>
+	      <a href="/login"><h4>LOGIN HERE</h4></a>
+	    </div>
+	  </div>
+	</div>
+      </section>
+    </main>
+    <footer>
+      <div>
+	<small>&copy; Xandex Inc. </small>
+      </div>
+    </footer>
+  </body>
+<html>

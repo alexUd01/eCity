@@ -9,6 +9,8 @@ class Answer(BaseModel, db.Model):
     answer_id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.Integer, db.ForeignKey('question.question_id'),
                             nullable=False)
+    exam_id = db.Column(db.Integer, db.ForeignKey('exam.exam_id'),
+                          nullable=False)
     correct_option = db.Column(db.String(1), nullable=True)
     correct_notes = db.Column(db.Text, nullable=True)
 

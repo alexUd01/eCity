@@ -35,5 +35,4 @@ class Exam(BaseModel, db.Model):
             enhanced_obj = obj.to_dict()
             enhanced_obj['options'] = obj.available_options()
             all_q_as_list_of_dict.append(enhanced_obj)
-        print(all_q_as_list_of_dict[5])
         return all_q_as_list_of_dict

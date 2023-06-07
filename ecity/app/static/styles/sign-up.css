@@ -1,0 +1,130 @@
+body {
+    background-color: #eff8fb;
+    padding-bottom: 3em;
+}
+main {
+    width: 100%;
+    margin-bottom: 1.5em;
+}
+
+div.invisible-container {
+    width: 50%;
+    height: auto;
+    margin-left: 25%;
+    border-left: 0.5em dotted #0f465b;
+    border-right: 0.5em dotted #0f465b;
+}
+
+section div.container {
+    width: 84%;
+    margin-top: 2%;
+    padding-left: 8%;
+    padding-top: 5%;
+    padding-bottom: 1%;
+}
+
+section div.sign-up-div,
+section div.login-div {
+    margin-bottom: 0.5em;
+    padding: 0.5em 1em;
+}
+
+section div.sign-up-div {
+    border-radius: 15px;
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
+    background-color: #cbe8f4;
+    filter: drop-shadow(0.5px 5px 4px #98a8ae);
+}
+
+section div.sign-up-div h4 {
+    color: #0c394a;
+    font-size: 1em;
+    text-align: center;
+    margin-bottom: 0.8em;
+}
+
+form label {
+    display: block;
+    margin-bottom: 1.5em;
+    margin-left: 0.5em;
+    width: 100%;
+}
+
+input.credential {
+    width: 94%;
+    height: 2em;
+    border: none;
+    outline: none;
+    padding-left: 1px;
+    font-size: 1.1em;
+    border-bottom: 1px solid #0f465b;
+    color: #0c394a;
+    background-color: #cbe8f4;
+}
+
+label.usual-names {
+    padding: 0;
+    width: 47%;
+    display: inline-block;
+}
+
+label input[name=password] {
+    width: 55%;
+}
+
+input.credential:focus {
+    font-size: 1.15em;
+    border-bottom: 2px solid #0f465b;
+}
+
+label#login {
+    display: block;
+    width: 35%;
+    height: 3em;
+    padding-right: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: 70%;
+    margin-right: 0;
+}
+
+label#login input[type=submit] {
+    padding-top: 1.1em;
+    padding-bottom: 0.8em;
+    padding-right: 2.5em;
+    padding-left: 2.5em;
+    background-color: #0f465b;
+    color: #eff8fb;
+    border: none;
+    border-radius: 8px;
+    margin-right: 0;
+}
+label#login input[type=submit]:focus,
+label#login input[type=submit]:hover {
+    opacity: 0.8;
+}
+label#login input[type=submit]:active {
+    background-color: #b3174a;
+    opacity: 0.5;
+}
+
+div.sign-up-div {
+    color: #0c3646;
+}
+div.login-div a {
+    display: block;
+    width: 33%;
+    color: #b3174a;
+    text-decoration: none;
+}
+div.login-div a:hover {
+    opacity: 0.7;
+}
+div.login-div a h4 {
+    width: 64.9%;
+    letter-spacing: 1.5px;
+    font-size: 0.9em;
+    border-bottom: 3.95px dotted #0c3646;
+}
