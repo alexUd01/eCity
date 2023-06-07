@@ -22,3 +22,5 @@ class User(BaseModel, db.Model):
                            default=datetime.utcnow())
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow())
+    last_login = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow())

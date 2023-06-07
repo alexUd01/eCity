@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """eCity Routes"""
+from datetime import datetime
 from flask import Flask, redirect, url_for, render_template, request, abort
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -12,7 +13,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-
+""" I imported the following after initializing `db` in order to prevent
+partial initializations which raises circular import error. """
 from ecity.models.user import User
 from ecity.models.exam import Exam
 from ecity.models.question import Question
@@ -31,27 +33,33 @@ with app.app_context():
         db = db.session()
         # db.add_all([person1, person2])
 
+
 @app.teardown_appcontext
 def close_db(var):
     """ Close connection to database """
     db.commit()
     db.close()
 
+
 @app.errorhandler(404)
 def err_404(err_no):
-    return jsonify({"error":"Not found"})
+    return jsonify({"error": "Not found"})
 
-@app.route('/', methods=['GET'], strict_slashes=False)
+
+@app.route('/', strict_slashes=False)
+@app.route('/index/', strict_slashes=False)
 def index():
     """ Landing Page """
     # If user is new_user display new_user page
     # else if redirected from login, take old_user to his account
-    return "Welcome\n"
+    return render_template('index.html')
+
 
 @app.route('/sign-up', strict_slashes=False)
 def sign_up():
     """ Sigin-up Page """
     return render_template('sign_up.html')
+
 
 @app.route('/create-account', strict_slashes=False, methods=['POST'])
 def create_user():
@@ -70,14 +78,17 @@ def create_user():
         db.commit()
     except Exception:
         db.rollback()
-        return jsonify({"error": "User already exists.\nDo you want to login?"})
+        return jsonify(
+            {"error": "User already exists.\nDo you want to login?"})
     else:
         return redirect(url_for('dashboard', user_id=user.user_id))
+
 
 @app.route('/login', strict_slashes=False)
 def login():
     """ Login Page """
     return render_template('login.html')
+
 
 @app.route('/sign-in', strict_slashes=False, methods=['POST'])
 def sign_in():
@@ -91,10 +102,13 @@ def sign_in():
         return jsonify({'error': 'Username does not exist'})
     else:
         if password == user.password:
+            user.last_login = datetime.utcnow()
+            db.commit()
             return redirect(url_for('dashboard', user_id=user.user_id))
         else:
             # redirect back to login page with notification
             return jsonify({'error': 'User password is incorect'})
+
 
 @app.route('/users/<int:user_id>/dashboard', strict_slashes=False)
 @app.route('/users/<int:user_id>/upcoming_exams', strict_slashes=False)
@@ -103,11 +117,13 @@ def dashboard(user_id):
     user = User.query.filter(User.user_id == user_id).one()
     return render_template('dashboard.html', user=user)
 
+
 @app.route('/users/<int:user_id>/past_exams', strict_slashes=False)
 def past_exams(user_id):
     """ User dashboard """
     user = User.query.filter(User.user_id == user_id).one()
     return render_template('dashboard_past_exams.html', user=user)
+
 
 @app.route('/users/<int:user_id>/my_students', strict_slashes=False)
 def my_students(user_id):
@@ -115,18 +131,21 @@ def my_students(user_id):
     user = User.query.filter(User.user_id == user_id).one()
     return render_template('dashboard_my_students.html', user=user)
 
+
 @app.route('/users/<int:user_id>/manage_exams', strict_slashes=False)
 def manage_exams(user_id):
     """ User dashboard """
     user = User.query.filter(User.user_id == user_id).one()
     return render_template('dashboard_manage_exams.html', user=user)
 
+
 @app.route('/test_exam', strict_slashes=False)
 def test_exam_page():
     """Delete this route after test"""
-    user1 = User.query.filter(User.username=='Raymonis').first()
-    exam1 = Exam.query.filter(Exam.exam_id=='1').first()
+    user1 = User.query.filter(User.username == 'Raymonis').first()
+    exam1 = Exam.query.filter(Exam.exam_id == '1').first()
     return render_template('exam_base.html', user=user1, exam=exam1)
+
 
 @app.route('/test_exam/<int:exam_id>/', strict_slashes=False)
 def exam(exam_id=None):
@@ -134,10 +153,11 @@ def exam(exam_id=None):
     if exam_id is None:
         abort(404)
     try:
-        exam = Exam.query.filter(Exam.exam_id==exam_id).one()
+        exam = Exam.query.filter(Exam.exam_id == exam_id).one()
     except Exception:
         return "No question found!", 404
     return exam.all_questions()
+
 
 @app.route('/users/<int:user_id>/exams/', methods=['POST'],
            strict_slashes=False)
@@ -169,6 +189,7 @@ def user(user_id=None):
     db.add(score)
     db.commit()
     return redirect(url_for('index'))  # I don't yet know what this does yet
+
 
 def create_scores(answers_list, exam_id):
     """ A function that adds scores to the score table """

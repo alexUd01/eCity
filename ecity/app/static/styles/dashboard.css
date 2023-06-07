@@ -97,7 +97,7 @@ section.grouped-sections {
 
 section.nav-container {
     border: 2px solid white;
-    width: 4%;
+    width: 4.1%;
     height: auto;
     margin-top: 2em;
     padding-top: 2em;
@@ -109,14 +109,16 @@ section.nav-container {
 }
 
 .nav-items li.nav-item {
+    list-style: none;
     width: 2.15em;
     height: 2.15em;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
     border-radius: 50%;
-    margin: 0.8em 0.4em;
-    background-size: 80%;
+    margin: 0.8em 0.3em 0.8em 0.45em;
+    background-size: 65%;
+    box-shadow: 0.7px 0.5px 3px black;
 }
 
 li#upcoming-exams {
@@ -139,21 +141,20 @@ li#logout {
     background-image: url('../../static/images/logout-icon.png');
     margin-top: 7em;
     margin-bottom: 0.6em;
-    background-size: 79%;
+    background-size: 80%;
 }
 
 .nav-items li.nav-item:focus,
 .nav-items li.nav-item:hover {
-    border: 4px dotted #0d4255;
-    background-size: 60%;
+    background-size: 70%;
+    width: 2.3em;
+    height: 2.3em;
+}
+
+.nav-items li.nav-item:active {
     width: 2em;
     height: 2em;
 }
-
-.nav-items li#logout:hover {
-    background-size: 70%;
-}
-
 
 /* 2. workspace-container */
 section.workspace-container {
