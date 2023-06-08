@@ -90,9 +90,13 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/sign-in', strict_slashes=False, methods=['POST'])
+@app.route('/sign-in', strict_slashes=False, methods=['GET', 'POST'])
 def sign_in():
     """ Landing Page """
+    if request.method == 'GET':
+        guest = User.query.filter(User.username == 'guest').one()
+        return redirect(url_for('dashboard', user_id=guest.user_id))
+
     username = request.form['username']
     password = request.form['password']
     try:
@@ -104,6 +108,7 @@ def sign_in():
         if password == user.password:
             user.last_login = datetime.utcnow()
             db.commit()
+            print(user.last_login)
             return redirect(url_for('dashboard', user_id=user.user_id))
         else:
             # redirect back to login page with notification
