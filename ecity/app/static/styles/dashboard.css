@@ -5,13 +5,16 @@ html, body, * {
 main {
     width: 100%;
     height: auto;
-    margin-bottom: 3.5em;
-}
-span.logo {
-    padding-top: 0;
+    margin-bottom: 4vw;
 }
 
 /* HEADER STYLES */
+header {
+    height: 7vw;
+    padding-top: 0.3vw;
+    padding-bottom: 0.4vw;
+}
+
 div.header-contents {
     width: 100%;
     height: 100%;
@@ -22,6 +25,12 @@ div.h-content {
     display: inline-block;
     vertical-align: middle;
 }
+
+span.logo {
+    display: block;
+    padding-top: 1vw;
+}
+
 div.user-info-container {
     width: 91%;
     height: 98%;
@@ -33,26 +42,25 @@ div.user-detail {
 }
 
 span.user-profile-pic {
-    width: 13%;
+    width: 12%;
     height: 80%;
     background-image: url('../../static/images/profile-icon.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position-y: center;
     border-radius: 50%;
-    border: 4px dotted black;
-    border-width: 5px;
+    border: 0.5vw dotted black;
     margin-right: 2%;
     margin-top: 1%;
     filter: invert(95%)
 }
 span.user-profile-details {
     width: 79%;
-    height: 5em;
-    font-size: 1em;
-    padding-top: 0.5em;
-    padding-bottom: 0.4em;
-    padding-right: 0.5em;
+    height: 6.2vw;
+    font-size: 1.25vw;
+    padding-top: 0.8vw;
+    padding-bottom: 0.5vw;
+    padding-right: 0.6vw;
     text-align: right;
     color: #e6dada;
 }
@@ -63,17 +71,17 @@ span.user-profile-details h4 {
 }
 
 h4#username {
-    font-size: 1.15em;
+    font-size: 1.4vw;
     font-stretch: ultra-expanded;
 }
 h4#fullname {
-    font-size: 1.4em;
+    font-size: 1.6vw;
     font-stretch: ultra-expanded;
 }
 h4#email {
-    font-size: 0.85em;
+    font-size: 1.05vw;
     font-weight: bold;
-    text-decoration: underline;
+    text-decoration: underline dotted;
 }
 h4#email b {
     font-size: 1.1em;
@@ -90,35 +98,36 @@ div.user-detail span {
 
 
 /* MAIN STYLE */
-/* 1. nav-container */
 section.grouped-sections {
     float: left;
 }
 
+/* 1. nav-container */
 section.nav-container {
     border: 2px solid white;
     width: 4.1%;
     height: auto;
-    margin-top: 2em;
-    padding-top: 2em;
-    border-top-right-radius: 13px;
-    border-bottom-right-radius: 13px;
+    margin-top: 2.5vw;
+    padding-top: 2vw;
+    border-top-right-radius: 2.5vw;
+    border-bottom-right-radius: 2vw;
     border-left: none;
-    filter: drop-shadow(4px 2px 1px #98a8ae);
-    background-color: #e0eff4;
+    border: 1px solid #98a8ae;
+    filter: drop-shadow(1px 2px 2px #98a8ae);
+    background-color: white;
 }
 
 .nav-items li.nav-item {
     list-style: none;
-    width: 2.15em;
-    height: 2.15em;
+    width: 2.75vw;
+    height: 2.7vw;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
     border-radius: 50%;
-    margin: 0.8em 0.3em 0.8em 0.45em;
+    margin: 1vw 0.4vw 0.1vw 0.55vw;
     background-size: 65%;
-    box-shadow: 0.7px 0.5px 3px black;
+    box-shadow: 2px 2px 3px #98a8ae;
 }
 
 li#upcoming-exams {
@@ -139,45 +148,46 @@ li#manage-exams {
 
 li#logout {
     background-image: url('../../static/images/logout-icon.png');
-    margin-top: 7em;
-    margin-bottom: 0.6em;
+    margin-top: 8vw;
+    margin-bottom: 1vw;
     background-size: 80%;
 }
 
 .nav-items li.nav-item:focus,
 .nav-items li.nav-item:hover {
+    width: 3vw;
+    height: 2.95vw;
     background-size: 70%;
-    width: 2.3em;
-    height: 2.3em;
 }
 
 .nav-items li.nav-item:active {
-    width: 2em;
-    height: 2em;
+    width: 2.75vw;
+    height: 2.7vw;
 }
 
 /* 2. workspace-container */
 section.workspace-container {
-    width: 93%;
+    width: 90%;
     height: 31em;
-    margin-left: 1em;
-    padding-top: 2em;
-    padding-left: 1em;
+    margin-left: 1.3vw;
+    padding-top: 2.5vw;
+    padding-left: 1.3vw;
 }
 
 .upcoming-exams-container {
     width: 40%;
-    height: 70%;
+    height: auto;
     background-color: #f0c6c6;
     text-align: center;
-    padding: 1em 0.6em;
-    border-radius: 20px;
+    padding: 1.3vw 0.9vw;
+    border-radius: 2vw;
     filter: drop-shadow(0.1em 0.1em 2px gray);
 }
 
 .upcoming-exams-container h3 {
-    margin-top: 1em;
-    margin-bottom: 2em;
+    margin-top: 1.3vw;
+    margin-bottom: 2.6vw;
+    font-size: 1.45vw;
 }
 
 .upcoming-exams-items {
@@ -186,11 +196,16 @@ section.workspace-container {
     background-color: #fbfafa;
     text-align: justify;
     padding: inherit;
-    border-radius: 15px;
+    border-radius: 1.5vw;
     filter: drop-shadow(0.1em 0.1em 1px gray);
 }
 
-s
+.upcoming-exams-items p {
+    text-align: center;
+    text-decoration: underline dotted;
+    font-size: 1.2vw;
+}
+
 .clear-float {
     clear: both;
 }

@@ -1,15 +1,25 @@
 body {
     background-color: #eff8fb;
-    padding-bottom: 3em;
+    padding-bottom: 4vw;
 }
 main {
     width: 100%;
 }
 
+header {
+    height: 5vw;
+
+}
+
+section {
+    width: 100%;
+    height: 25vw;
+    margin-top: 9vw;
+}
 section div.container {
     width: 30%;
-    margin-top: 8%;
-    padding-left: 35%;
+    margin: auto;
+    padding-left: 34.5%;
     padding-right: 35%;
     padding-top: 1%;
     padding-bottom: 1%;
@@ -17,74 +27,77 @@ section div.container {
 
 section div.login-div,
 section div.sign-up-div {
-    margin-bottom: 0.5em;
-    padding: 0.5em 1em;
+    margin-bottom: 1vw;
+    padding: 0.6vw 1vw;
 }
 
 section div.login-div {
-    border-radius: 15px;
-    margin-top: 0.5em;
-    padding-top: 2em;
-    padding-left: 2em;
-    padding-right: 2em;
+    border-radius: 1.1vw;
+    margin-top: 0.6vw;
+    padding-top: 2.2vw;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
     background-color: #cbe8f4;
-    filter: drop-shadow(0.5px 8px 6.5px #98a8ae);
+    filter: drop-shadow(0.5px 3px 6px #98a8ae);
 }
 section div.login-div h4 {
     color: #0c394a;
-    font-size: 1em;
+    font-size: 1.3vw;
     text-align: center;
-    margin-bottom: 0.7em;
+    margin-bottom: 0.8vw;
 }
 
 form label {
     display: block;
-    margin-bottom: 1em;
+    margin-bottom: 1.3vw;
     width: 80%;
 }
 
 input.credential {
     width: 100%;
-    height: 2em;
+    height: 2.7vw;
     border: none;
     outline: none;
     padding-left: 1px;
-    font-size: 1.1em;
+    font-size: 1.4vw;
     border-bottom: 1px solid #0f465b;
     color: #0c394a;
     background-color: #cbe8f4;
 }
 input.credential:focus {
-    font-size: 1.15em;
-    border-bottom: 2px solid #0f465b;
+    font-size: 1.45vw;
+    border-bottom: 0.16vw solid #0f465b;
 }
 
 label#login {
     display: block;
     width: 35%;
-    height: 3em;
+    height: 5vw;
     padding-right: 0;
-    margin-top: 2em;
-    margin-bottom: 0.5em;
+    margin-top: 2vw;
+    margin-bottom: 0.6vw;
     margin-left: 66%;
     margin-right: 5%;
 }
 
 label#login input[type=submit] {
-    padding-top: 1.1em;
-    padding-bottom: 0.8em;
-    padding-right: 2.5em;
-    padding-left: 2.5em;
+    padding-top: 1.14vw;
+    padding-bottom: 1vw;
+    padding-right: 2.6vw;
+    padding-left: 2.6vw;
     background-color: #0f465b;
     color: #eff8fb;
     border: none;
-    border-radius: 8px;
+    border-radius: 1vw;
     margin-right: 0;
+    font-size: 1.04vw;
 }
+
 label#login input[type=submit]:focus,
 label#login input[type=submit]:hover {
     opacity: 0.8;
 }
+
 label#login input[type=submit]:active {
     background-color: #b3174a;
     opacity: 0.5;
@@ -92,19 +105,22 @@ label#login input[type=submit]:active {
 
 div.sign-up-div {
     color: #0c3646;
+    font-size: 1.25vw;
 }
+
 div.sign-up-div a {
     display: block;
     width: 33%;
     color: #b3174a;
-    text-decoration: none;
+    text-decoration: underline dotted;
 }
+
 div.sign-up-div a:hover {
     opacity: 0.7;
 }
+
 div.sign-up-div a h4 {
     width: 100%;
     letter-spacing: 1.5px;
-    font-size: 0.9em;
-    border-bottom: 3.5px dotted #0c3646;
+    font-size: 1.04vw;
 }
