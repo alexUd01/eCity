@@ -1,9 +1,15 @@
 #!/usr/bin/python3
 """eCity Routes"""
 from datetime import datetime
+from ecity.models.user import User
+from ecity.models.exam import Exam
+from ecity.models.question import Question
+from ecity.models.answer import Answer
+from ecity.models.answer_sheet import AnswerSheet
+from ecity.models.score import Score
 from flask import Flask, redirect, url_for, render_template, request, abort
 from flask import jsonify
-from flask_sqlalchemy import SQLAlchemy
+from ..models.storage_engine.dbstorage import db
 
 app = Flask(__name__)
 
@@ -11,17 +17,7 @@ db_url = 'mysql+mysqldb://User3:password@localhost/ecity'
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
-
-""" I imported the following after initializing `db` in order to prevent
-partial initializations which raises circular import error. """
-from ecity.models.user import User
-from ecity.models.exam import Exam
-from ecity.models.question import Question
-from ecity.models.answer import Answer
-from ecity.models.answer_sheet import AnswerSheet
-from ecity.models.score import Score
-
+db.init_app(app)
 
 with app.app_context():
     try:
@@ -147,7 +143,7 @@ def manage_exams(user_id):
 @app.route('/test_exam', strict_slashes=False)
 def test_exam_page():
     """Delete this route after test"""
-    user1 = User.query.filter(User.username == 'Raymonis').first()
+    user1 = User.query.filter(User.username == 'guest').first()
     exam1 = Exam.query.filter(Exam.exam_id == '1').first()
     return render_template('exam_base.html', user=user1, exam=exam1)
 

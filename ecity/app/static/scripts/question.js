@@ -1,7 +1,7 @@
 $(function () {
   // The exam answer sheet
   const exam_id = 1;
-  const user_id = 4;
+  const user_id = $('h4#user_id').text().split(' ')[1];
   const ans_sheet = { exam_id:exam_id, user_id:user_id, q_and_a:{} };
 
   // Question sect

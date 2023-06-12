@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """A module containing Exam class"""
-from ecity.app.ecity_app import db
+from .storage_engine.dbstorage import db
 from datetime import datetime
 from ecity.models.base_model import BaseModel
 from ecity.models.question import Question
