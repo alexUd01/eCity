@@ -16,9 +16,9 @@ Checkout [eCity's blog post](https://www.linkedin.com/pulse/my-first-attempt-cre
 Before attempting to spin eCity's web server ensure that you have the
 following software packages installed on your linux machine:
 
-- Python3: `sudo apt-get install python3`
-- Flask Framework: `pip install flask`
-- Flask_Sqlalchemy: `pip install flask_sqlalchemy`
+- Python3:  `sudo apt-get install python3`
+- Flask Framework:  `pip install flask`
+- Flask_Sqlalchemy:  `pip install flask_sqlalchemy`
 
 ### Installation is simple and easy.
 * First clone this repository.
