@@ -24,14 +24,14 @@ following software packages installed on your linux machine:
  - Flask_Sqlalchemy:  `$ pip install flask_sqlalchemy`
 
 ### Installation is simple and easy.
-1. First clone this repository.
+First clone this repository.
 > ```
 > $ git clone https://github.com/alexud01/eCity.git
 >
 > $ cd eCity/
 > ```
 
-2. The next thing to do is to setup your MySQL database and populate it with data. 
+The next thing to do is to setup your MySQL database and populate it with data. 
 For new mysql users follow the steps provided in [this guide](https://phoenixnap.com/kb/install-mysql-ubuntu-20-04) 
 or [this other giude](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04) to set-up your database. 
 After MySQL setup is successful, fire-up your mysql terminal and create a new
@@ -48,13 +48,13 @@ and grant the user permission to view and manipulate tables in the database name
 > Bye
 > ```
 
-3. After creating this database run the following command to populate it with data;
+After creating this database run the following command to populate it with data;
 > ```
 > $ sudo mysql ecity < ecity/models/ecity-bak-3.sql
 > $
 > ```
 
-4. The next thing to do is to 
+The next thing to do is to 
 > ```
 > $ 
 > ```
