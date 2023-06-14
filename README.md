@@ -28,8 +28,9 @@ following software packages installed on your linux machine:
 First clone this repository.
 > ```
 > $ git clone https://github.com/alexud01/eCity.git
+>
 > $ cd eCity/
-> ~/eCity$
+>
 > ```
 
 The next thing to do is to setup your MySQL database and populate it with data. 
@@ -39,9 +40,9 @@ After MySQL setup is successful, fire-up your mysql terminal and create a new
 database with the name `ecity`, a new user with the name `User3` with password set to `password`
 and grant the user permission to view and manipulate tables in the database named `ecity` _(which you just created)_.
 > ```
-> ~/eCity$ sudo systemctl start mysql  # Starts mysql server
-> ~/eCity$ sudo systemctl enable mysql  # Enables auto start-up whenever the system is rebooted
-> ~/eCity$ mysql -p
+> $ sudo systemctl start mysql  # Starts mysql server
+> $ sudo systemctl enable mysql  # Enables auto start-up whenever the system is rebooted
+> $ mysql -p
 > Enter password:
 >     ...
 >     ...
@@ -57,11 +58,11 @@ and grant the user permission to view and manipulate tables in the database name
 
 After creating this database run the following command to populate it with data;
 > ```
-> ~/eCity$ sudo mysql ecity < ecity/models/ecity-bak-3.sql
-> ~/eCity$
+> $ sudo mysql ecity < ecity/models/ecity-bak-3.sql
+> $
 > ```
 
 After all the steps above, installation setup is finished just run the following commands to start eCity's web server
 > ```
-> ~/eCity$ python3 -m ecity.app.ecity_app
+> $ python3 -m ecity.app.ecity_app
 > ```
