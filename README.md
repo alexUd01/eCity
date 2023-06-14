@@ -28,7 +28,6 @@ following software packages installed on your linux machine:
 First clone this repository.
 > ```
 > $ git clone https://github.com/alexud01/eCity.git
-> $
 > $ cd eCity/
 > $
 > ```
@@ -54,6 +53,7 @@ and grant the user permission to view and manipulate tables in the database name
 > Query OK, 0 rows affected (0.155 sec)
 > mysql> exit
 > Bye
+> $
 > ```
 
 After creating this database run the following command to populate it with data;
@@ -69,4 +69,7 @@ Just run the following commands to start eCity's web server
 > ```
 > $ python3 -m ecity.app.ecity_app
 > ```
-Once the server is up and running you can access it in your browser by typing `http://localhost/` into the url space.
+Once the server is up and running you can access it in your browser by typing `http://localhost/` into the url box.
+
+
+# Licensing
