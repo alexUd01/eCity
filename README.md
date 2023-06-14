@@ -1,7 +1,7 @@
 # eCity  -  Assessing students on the go has never been this hassle-free.
 ### Easily create quizes, set examination questions, as well as other assessments for your students ON THE GO!
 
-## Introduction
+# Introduction
 [eCity](https://ecity.xandex.tech) is a Computer Based Test (CBT) platform that
 was designed to provide teachers at various of education, with advanced tools
 that will enable them to easily create quizzes or examinations with the aim
@@ -12,7 +12,7 @@ Checkout [eCity's blog post](https://www.linkedin.com/pulse/my-first-attempt-cre
 [Reachout to me on linkedin](https://www.linkedin.com/in/alexander-ikpeama-442296244)
 
 
-## Installation
+# Installation
 First things first. Run the command bellow to update your linux apps database.
 > `$ sudo apt-get update`
 >
@@ -64,7 +64,7 @@ After creating this database run the following command to populate it with data;
 After all the steps above, installation setup should be finished.
 
 
-## Usage
+# Usage
 Just run the following commands to start eCity's web server
 > ```
 > $ python3 -m ecity.app.ecity_app
