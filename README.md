@@ -73,3 +73,4 @@ Once the server is up and running you can access it in your browser by typing `h
 
 
 # Licensing
+[LICENSE](https://github.com/alexUd01/eCity/blob/master/LICENSE)
