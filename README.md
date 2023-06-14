@@ -4,5 +4,7 @@
 
 ## Introduction
 [eCity](https://ecity.xandex.tech) is a Computer Based Test (CBT) platform that was designed to provide teachers at various of education, with advanced tools that will enable them to easily create quizzes or examinations with the aim of remotely assessing their  students anywhere around the world.
-[Blog post](https://www.linkedin.com/pulse/my-first-attempt-creating-computer-based-test-cbt-app-ikpeama)
+
+Checkout [eCity's Blog post](https://www.linkedin.com/pulse/my-first-attempt-creating-computer-based-test-cbt-app-ikpeama) for more information.
+
 [Reachout to me on linked](https://www.linkedin.com/in/alexander-ikpeama-442296244)
