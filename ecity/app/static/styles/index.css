@@ -44,12 +44,14 @@ section.intro {
     box-shadow: 0.5vw 0 1vw black;
     padding-bottom: 1vw;
 }
+
 div.hero {
     width: 100%;
     height: 100%;
     color: white;
     text-align: center;
 }
+
 div.hero h1 {
     padding-top: 8vw;
     font-family: Quantify;
@@ -57,16 +59,20 @@ div.hero h1 {
     padding-bottom: 1.5vw;
     font-weight: bolder;
 }
+
 div.hero h2, div.hero h4 {
     padding-bottom: 0.5vw;
 }
+
 div.hero h2 {
     font-size: 3vw;
 }
+
 div.hero h4 {
     font-size: 1.5vw;
     font-weight: 300;
 }
+
 div.signup-login {
     width: 100%;
     height: 6vw;
@@ -74,27 +80,32 @@ div.signup-login {
     padding-top: 1%;
     border-bottom: 1.2vw dotted white;
 }
+
 div.signup-login h5 {
     display: inline-block;
     font-size: 1.1vw;
     padding: 0vw 0.5vw;
 }
+
 div.signup-login h5.s-up {
     margin-right: 8vw;
     padding-left: 1vw;
     padding-right: 1vw;
     border-right: 2px solid white;
 }
+
 div.signup-login h5.s-in {
     margin-left: 4vw;
     padding-left: 1vw;
     padding-right: 1vw;
     border-left: 2px solid white;
 }
+
 div.signup-login h5 a {
     color: red;
     text-decoration: underline dotted;
 }
+
 div.signup-login h5 a:hover {
     color: maroon;
 }
@@ -150,11 +161,13 @@ div.feature-item-description {
     padding-top: 1vw;
     padding-left: 1.7vw;
 }
+
 div.feature-item-description li {
     font-weight: 200;
     font-size: 1.5vw;
     margin-bottom: 1vw;
 }
+
 div.feature-item-pic {
     width: 60%;
     height: 80%;
@@ -169,6 +182,7 @@ div.feature-item-pic {
 div.test-exam {
     background-image: url('../images/test_exam.png');
 }
+
 div.upcoming-exams {
     background-image: url('../images/upcoming-exams.png');
 }
@@ -184,6 +198,7 @@ section.about {
     margin-bottom: 5vw;
     box-shadow: 0.3px 0.3px 3.5px black;
 }
+
 div.about-container {
     width: 65%;
     height: 100%;
@@ -193,6 +208,7 @@ div.about-container {
     border-right: 1.05vw dotted black;
     margin: auto;
 }
+
 div.about-container h2 {
     text-align: center;
     font-family: sans-serif;
@@ -209,17 +225,20 @@ div.about-detail {
     height: auto;
     margin: auto;
 }
+
 div.about-detail p {
     font-size: 1.2vw;
     margin-bottom: 0.7vw;
     text-align: justify;
     font-weight: 100;
 }
+
 div.about-detail p a, li a {
     text-decoration: underline dotted;
     color: maroon;
     font-weight: 100;
 }
+
 div.about-detail p a:hover, li a:hover {
     opacity: 0.7;
 }
@@ -239,15 +258,19 @@ div.about-detail li {
 li#email {
     background-image: url('../images/gmail_icon.png');
 }
+
 li#tel {
     background-image: url('../images/phone-call.png');
 }
+
 li#github {
     background-image: url('../images/github_icon.png');
 }
+
 li#l_in {
     background-image: url('../images/linkedin.png');
 }
+
 li#twitt {
     background-image: url('../images/twitter-icon.png');
 }
