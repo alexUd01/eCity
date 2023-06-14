@@ -28,8 +28,8 @@ following software packages installed on your linux machine:
 First clone this repository.
 > ```
 > $ git clone https://github.com/alexud01/eCity.git
->
 > $ cd eCity/
+> ~/eCity$
 > ```
 
 The next thing to do is to setup your MySQL database and populate it with data. 
@@ -37,8 +37,14 @@ For new mysql users follow the steps provided in [this guide](https://phoenixnap
 or [this other giude](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04) to set-up your database. 
 After MySQL setup is successful, fire-up your mysql terminal and create a new
 database with the name `ecity`, a new user with the name `User3` with password set to `password`
-and grant the user permission to view and manipulate tables in the database named "ecity" _(which you just created)_.
+and grant the user permission to view and manipulate tables in the database named `ecity` _(which you just created)_.
 > ```
+> ~/eCity$ sudo systemctl start mysql  # Starts mysql server
+> ~/eCity$ sudo systemctl enable mysql  # Enables auto start-up whenever the system is rebooted
+> ~/eCity$ mysql -p
+> Enter password:
+>     ...
+>     ...
 > mysql> CREATE DATABASE ecity;         -- Create database
 > Query OK, 1 row affected (0.308 sec)
 > mysql> CREATE USER 'User3' identified by 'password';  -- Create User3
@@ -51,15 +57,11 @@ and grant the user permission to view and manipulate tables in the database name
 
 After creating this database run the following command to populate it with data;
 > ```
-> $ sudo mysql ecity < ecity/models/ecity-bak-3.sql
-> $
+> ~/eCity$ sudo mysql ecity < ecity/models/ecity-bak-3.sql
+> ~/eCity$
 > ```
 
-The next thing to do is to 
+After all the steps above, installation setup is finished just run the following commands to start eCity's web server
 > ```
-> $ 
-> ```
-* Then just run the following commands to start eCity's web server
-> ```
-> python3 -m ecity.app.ecity_app
+> ~/eCity$ python3 -m ecity.app.ecity_app
 > ```
