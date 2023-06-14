@@ -22,6 +22,6 @@ Python3, flask and flask_sqlalchemy.
 > $ git clone https://github.com/alexud01/eCity.git
 >
 > $ cd eCity/
-> ```
+```
 * Then just run the following commands to start eCity's web server
 > python3 -m ecity.app.ecity_app
