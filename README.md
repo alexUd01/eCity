@@ -28,9 +28,9 @@ following software packages installed on your linux machine:
 First clone this repository.
 > ```
 > $ git clone https://github.com/alexud01/eCity.git
->
+> $
 > $ cd eCity/
->
+> $
 > ```
 
 The next thing to do is to setup your MySQL database and populate it with data. 
