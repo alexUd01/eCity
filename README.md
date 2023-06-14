@@ -69,4 +69,4 @@ Just run the following commands to start eCity's web server
 > ```
 > $ python3 -m ecity.app.ecity_app
 > ```
-Once the server is up and running you can access it in your browser by typing http://localhost/ into the url space.
+Once the server is up and running you can access it in your browser by typing `http://localhost/` into the url space.
