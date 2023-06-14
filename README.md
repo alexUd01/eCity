@@ -61,8 +61,12 @@ After creating this database run the following command to populate it with data;
 > $ sudo mysql ecity < ecity/models/ecity-bak-3.sql
 > $
 > ```
+After all the steps above, installation setup should be finished.
 
-After all the steps above, installation setup is finished just run the following commands to start eCity's web server
+
+## Usage
+Just run the following commands to start eCity's web server
 > ```
 > $ python3 -m ecity.app.ecity_app
 > ```
+Once the server is up and running you can access it in your browser by typing http://localhost/ into the url space.
