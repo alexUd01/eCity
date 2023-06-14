@@ -19,14 +19,14 @@ Checkout [eCity's blog post](https://www.linkedin.com/pulse/my-first-attempt-cre
 Before attempting to spin eCity's web server ensure that you have the
 following software packages installed on your linux machine:
 
-- Python3:  `$ sudo apt-get install python3`
-- MySQL:  `$ sudo apt-get install mysql-client mysql-community-server mysql-server`
-- Flask Framework:  `$ pip install flask`
-- Flask_Sqlalchemy:  `$ pip install flask_sqlalchemy`
+  - Python3:  `$ sudo apt-get install python3`
+  - MySQL:  `$ sudo apt-get install mysql-client mysql-community-server mysql-server`
+  - Flask Framework:  `$ pip install flask`
+  - Flask_Sqlalchemy:  `$ pip install flask_sqlalchemy`
 
 * The next thing to do is to setup your MySQL database and populate it with data. 
 For new mysql users follow the steps provided in [this guide](https://phoenixnap.com/kb/install-mysql-ubuntu-20-04) 
-or [this other one](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04) to set-up your database. 
+or [this other giude](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04) to set-up your database. 
 After MySQL setup is successful, fire-up your mysql terminal and create a new
 database with the name "ecity", a new user with the name "User3" with password set to "password"
 and grant the user permission to view and manipulate tables in the database named "ecity".
