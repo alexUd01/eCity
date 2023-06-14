@@ -37,7 +37,7 @@ For new mysql users follow the steps provided in [this guide](https://phoenixnap
 or [this other giude](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04) to set-up your database. 
 After MySQL setup is successful, fire-up your mysql terminal and create a new
 database with the name "ecity", a new user with the name "User3" with password set to "password"
-and grant the user permission to view and manipulate tables in the database named "ecity" ~(which you just created)~.
+and grant the user permission to view and manipulate tables in the database named "ecity" _(which you just created)_.
 > ```
 > mysql> CREATE DATABASE ecity;         -- Create database
 > Query OK, 1 row affected (0.308 sec)
