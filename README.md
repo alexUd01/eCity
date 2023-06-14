@@ -13,7 +13,7 @@ Checkout [eCity's blog post](https://www.linkedin.com/pulse/my-first-attempt-cre
 
 
 ## Installation
-First things first. Run the command bellow to update your linux apps database.
+* First things first. Run the command bellow to update your linux apps database.
 > `$ sudo apt-get update`
 
 Before attempting to spin eCity's web server ensure that you have the
@@ -24,7 +24,28 @@ following software packages installed on your linux machine:
 - Flask Framework:  `$ pip install flask`
 - Flask_Sqlalchemy:  `$ pip install flask_sqlalchemy`
 
+* The next thing to do is to setup your MySQL database and populate it with data. 
+For new mysql users follow the steps provided in [this guide](https://phoenixnap.com/kb/install-mysql-ubuntu-20-04) 
+or [this other one](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04) to set-up your database. 
+After MySQL setup is successful, fire-up your mysql terminal and create a new
+database with the name "ecity", a new user with the name "User3" with password set to "password"
+and grant the user permission to view and manipulate tables in the database named "ecity".
+> ```
+> mysql> CREATE DATABASE ecity;         -- Create database
+> Query OK, 1 row affected (0.308 sec)
+> mysql> CREATE USER 'User3' identified by 'password';  -- Create User3
+> Query OK, 0 rows affected (0.743 sec)
+> mysql> GRANT ALL PRIVILEGES ON ecity.* TO User3;     -- Grant User3 permission
+> Query OK, 0 rows affected (0.155 sec)
+> mysql> exit
+> Bye
+> ```
 
+* After creating this database run the following command to populate it with data;
+> ```
+> $ sudo mysql ecity < ecity/models/ecity-bak-3.sql
+> $
+> ```
 
 ### Installation is simple and easy.
 * First clone this repository.
