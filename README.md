@@ -15,7 +15,7 @@ Checkout [eCity's blog post](https://www.linkedin.com/pulse/my-first-attempt-cre
 ## Installation
 First things first. Run the command bellow to update your linux apps database.
 > `$ sudo apt-get update`
-
+>
 Before attempting to spin eCity's web server ensure that you have the
 following software packages installed on your linux machine:
 
