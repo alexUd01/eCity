@@ -15,12 +15,17 @@ Checkout [eCity's blog post](https://www.linkedin.com/pulse/my-first-attempt-cre
 ## Installation
 Before attempting to spin eCity's web server ensure that you have the
 following software packages installed on your linux machine:
+
 Python3, flask and flask_sqlalchemy.
+
 ### Installation is simple and easy.
 * First clone this repository.
 > ```
 > $ git clone https://github.com/alexud01/eCity.git
 >
-> $ cd eCity/ ```
+> $ cd eCity/
+> ```
 * Then just run the following commands to start eCity's web server
+> ```
 > python3 -m ecity.app.ecity_app
+> ```
