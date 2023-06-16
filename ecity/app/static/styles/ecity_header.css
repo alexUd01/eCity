@@ -19,18 +19,18 @@ header a, header div {
     text-decoration: none;
 }
 
-header .logo {
-    border: none;
-    padding: 0.9vw 0.4vw 0.4vw 0.3vw;
-    margin-left: 0.7vw;
-    border-bottom: 0.5vw dotted white;
+header div.logo {
+    width: 10vw;
+    height: 6vw;
+    margin-left: 1vw;
+    background-image: url('../images/ecity-logo.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
-header span.logo {
-    color: white;
-    font-size: 2.5vw;
-}
+
 header div.header-nav {
-    width: 92%;
+    width: 88%;
     height: 100%;
     margin-top: 0.6vw;
 }

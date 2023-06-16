@@ -26,13 +26,12 @@ div.h-content {
     vertical-align: middle;
 }
 
-span.logo {
-    display: block;
+div.logo {
     padding-top: 1vw;
 }
 
 div.user-info-container {
-    width: 91%;
+    width: 88%;
     height: 98%;
 }
 div.user-detail {
@@ -43,14 +42,14 @@ div.user-detail {
 
 span.user-profile-pic {
     width: 12%;
-    height: 80%;
+    height: 79.5%;
     background-image: url('../../static/images/profile-icon.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position-y: center;
     border-radius: 50%;
     border: 0.5vw dotted black;
-    margin-right: 2%;
+    margin-right: 1%;
     margin-top: 1%;
     filter: invert(95%)
 }
