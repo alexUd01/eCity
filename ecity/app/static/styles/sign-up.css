@@ -75,6 +75,8 @@ input.credential {
     border-bottom: 1px solid #0f465b;
     color: #0c394a;
     background-color: white;
+    transition: font-size 0.7s;
+    letter-spacing: 0.13vw;
 }
 
 label.usual-names {
@@ -91,6 +93,7 @@ input.credential:focus {
     font-size: 1.42vw;
     border-bottom: 0.16vw solid #7c0f32;
     color: #7c0f32;
+    transition: font-size 0.3s;
 }
 
 label#login {
@@ -210,6 +213,7 @@ div.login-div a h4 {
 	padding-left: 1px;
 	font-size: 3.5vw;
 	border-bottom: 1px solid #0f465b;
+	letter-spacing: 0.2vw;
     }
 
     label.usual-names {
@@ -217,7 +221,7 @@ div.login-div a h4 {
 	display: block;
     }
 
-    label input[name=password] {
+    label input[type=password] {
 	width: 94%;
     }
 
