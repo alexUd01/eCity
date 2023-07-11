@@ -1,23 +1,32 @@
-body {
-    background-color: #eff8fb;
-    padding-bottom: 4vw;
+* {
+    box-sizing: border-box;
 }
+html {
+    width: 100%;
+    height: auto;
+}
+
+body {
+    background-color: #f5f5f5;
+    padding-top: 8vh;
+    padding-bottom: 4vw;
+    width: 100%;
+    height: 80vh;
+}
+
 main {
     width: 100%;
-}
-
-header {
-    height: 5vw;
-
+    height: auto;
 }
 
 section {
     width: 100%;
-    height: 25vw;
-    margin-top: 9vw;
+    height: auto;
+    margin-top: 19vh;
 }
+
 section div.container {
-    width: 30%;
+    width: 100%;
     margin: auto;
     padding-left: 34.5%;
     padding-right: 35%;
@@ -32,13 +41,13 @@ section div.sign-up-div {
 }
 
 section div.login-div {
-    border-radius: 1.1vw;
+    border-radius: 2vw;
     margin-top: 0.6vw;
     padding-top: 2.2vw;
     padding-left: 2.5vw;
     padding-right: 2.5vw;
-    background-color: #cbe8f4;
-    filter: drop-shadow(0.5px 3px 6px #98a8ae);
+    background-color: white;
+    box-shadow: 0.5px 0.5px 10px #ccc;
 }
 section div.login-div h4 {
     color: #0c394a;
@@ -50,7 +59,7 @@ section div.login-div h4 {
 form label {
     display: block;
     margin-bottom: 1.3vw;
-    width: 80%;
+    width: 87%;
 }
 
 input.credential {
@@ -62,11 +71,12 @@ input.credential {
     font-size: 1.4vw;
     border-bottom: 1px solid #0f465b;
     color: #0c394a;
-    background-color: #cbe8f4;
+    background-color: white;
 }
 input.credential:focus {
     font-size: 1.45vw;
-    border-bottom: 0.16vw solid #0f465b;
+    border-bottom: 0.16vw solid #7c0f32;
+    color: #7c0f32;
 }
 
 label#login {
@@ -110,7 +120,7 @@ div.sign-up-div {
 
 div.sign-up-div a {
     display: block;
-    width: 33%;
+    width: 42%;
     color: #b3174a;
     text-decoration: underline dotted;
 }
@@ -123,4 +133,92 @@ div.sign-up-div a h4 {
     width: 100%;
     letter-spacing: 1.5px;
     font-size: 1.04vw;
+}
+
+/* FOR MOBILE & TABS */
+@media screen and (max-width: 480px) {
+    body {
+	padding-top: 15vh;
+	height: 96vh;
+    }
+
+    section {
+	width: 100%;
+	height: auto;
+	margin-top: 8vh;
+    }
+    section div.container {
+	width: 100%;
+	padding: 0;
+	padding-top: 1%;
+	padding-bottom: 1%;
+    }
+
+    section div.login-div,
+    section div.sign-up-div {
+	padding: 1.6vh 2vw;
+	width: 70vw;
+	margin: auto;
+	margin-bottom: 1.7vw;
+    }
+
+    section div.login-div {
+	height: 30vh;
+	border-radius: 3vw;
+	margin-top: 1.6vh;
+	padding: 3.2vh 3.5vw 3.2vh 3.5vw;
+	filter: drop-shadow(0.5px 0.9px 3px #b5c4ca);
+	border: .01vw solid #d2eaf4;
+    }
+
+    section div.login-div h4 {
+	font-size: 3.5vw;
+	text-align: center;
+	margin-bottom: 2.5vh;
+    }
+
+    form label {
+	display: block;
+	margin-bottom: 1.7vh;
+	padding-left: 2.5vw;
+	width: 95%;
+    }
+
+    input.credential {
+	width: 100%;
+	height: 3.8vh;
+	padding-left: 1px;
+	font-size: 3.4vw;
+	border-bottom: 1px solid #0f465b;
+    }
+
+    input.credential:focus {
+	font-size: 3.45vw;
+	border-bottom: 1.36px solid #0f465b;
+    }
+
+    label#login {
+	width: auto;
+	height: auto;
+	padding-right: 0;
+	margin-top: 4vw;
+	margin-left: 60%;
+	margin-bottom: 0.6vw;
+    }
+
+    label#login input[type=submit] {
+	padding: 1.3vh 6vw 1.3vh 6vw;
+	border-radius: 2vw;
+	font-size: 2.5vw;
+    }
+
+    div.sign-up-div {
+	font-size: 3.25vw;
+    }
+
+    div.sign-up-div a h4 {
+	width: 100%;
+	letter-spacing: 1.5px;
+	font-size: 2.9vw;
+    }
 }

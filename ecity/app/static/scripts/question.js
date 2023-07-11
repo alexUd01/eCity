@@ -1,8 +1,7 @@
 $(function () {
-  // The exam answer sheet
-  const exam_id = 1;
-  const user_id = $('h4#user_id').text().split(' ')[1];
-  const ans_sheet = { exam_id:exam_id, user_id:user_id, q_and_a:{} };
+  exam_id = globalThis.exam_id;
+  user_id = globalThis.user_id;
+  // NOTE: Global properties are initialized in the file `./exports.js`.
 
   // Question sect
   $.get('/test_exam/1/', function (data, status) {
@@ -24,7 +23,7 @@ $(function () {
       }
       // Update attempted questions on click
       $('span input[type="radio"]').on('click', function () {
-	const num = Object.keys(ans_sheet.q_and_a).length + 1
+	const num = Object.keys(globalThis.ans_sheet.q_and_a).length + 1
 	$('h4#attempted').text('QUESTIONS ATTEMPTED:  ' + num);
       });
     };
@@ -59,7 +58,7 @@ $(function () {
 	alert('Please select an option for the current question.');
 	return i - 1;
       }
-      ans_sheet.q_and_a[question_id] = val;
+      globalThis.ans_sheet.q_and_a[question_id] = val;
       return i;
     };
 
@@ -69,7 +68,7 @@ $(function () {
       let i = 0;
       $('h4#attempted').text('QUESTIONS ATTEMPTED: 0');
 
-      // 1. Landing page
+      // 1. First question
       displayQuestion(i, data);
       displayNavBar(i);
 
@@ -95,7 +94,7 @@ $(function () {
       });
       // 4. Click action on submit button
       $('button#submit').on('click', function () {
-	if (Object.keys(ans_sheet.q_and_a).length >= data.length - 1) {  // Check if some questions are unanswered
+	if (Object.keys(globalThis.ans_sheet.q_and_a).length >= data.length - 1) {  // Check if some questions are unanswered
 	  i = storeData(i, data);
 	  const val = $("input[type='radio'][name='ans']:checked").val();
 	  if (val === undefined) {
@@ -103,7 +102,7 @@ $(function () {
 	    console.log('ok'); // Just do nothing (a workaround). Error is already handled by `storeData` above.
 	  } else {
 	    // All questions have been answered
-	    $.post('/users/'+user_id+'/exams/', ans_sheet, function () {
+	    $.post(`/users/${user_id}/exams/`, globalThis.ans_sheet, function () {
 	      $('form').submit();
 	    });
 	  }
@@ -111,41 +110,6 @@ $(function () {
 	  alert('You still have unanswered questions.');
 	}
       });
-      // Create and Manage examination timer
-//      $('header').append('<div class="timer-container"><h1 id="timer">THE TIMER</h1></div>');
-//      $('div.timer-container').css('width', '11.5em');
-//      $('div.timer-container').css('height', '2.8em');
-//      $('div.timer-container').css('position', 'absolute');
-//      $('div.timer-container').css('right', '0');
-//      $('div.timer-container').css('top', '3.2em');
-//      $('div.timer-container').css('color', 'white');
-//      $('h1#timer').css('margin-left', '1em');
-//      $('h1#timer').css('margin-right', '0.3em');
-//      $('h1#timer').css('margin-top', '0.2em');
-//      $('h1#timer').css('font-size', '1.65em');
-//
-      let time_allowed = $('h4#time_allowed b').text();
-      time_allowed = Number(time_allowed);
-      let hours_left = time_allowed > 60 ? time_allowed / 60 : 0;
-      let mins_left = time_allowed % 60;
-//
-//      $('h1#timer').text(hours_left + ':' + mins_left + ':[SECS]');
-//      setInterval(function () {
-//	if (mins_left - 1 === -1 && hours_left > 0) {
-//	  hours_left = hours_left - 1;
-//	  mins_left = 59;
-//	}
-//	$('h1#timer').text(hours_left + ':' + mins_left + ':[SECS]')
-//	mins_left = mins_left - 1;
-//      }, 60 * 1000);
-
-      // CONFIGURE AUTO SUBMIT FEATURE UPON TIME UP
-      setTimeout(function () {
-	$.post('/users/' + user_id + '/exams/', ans_sheet, function () {
-	  alert('TIMEUP!!!');
-	  $('form').submit();
-	});
-      }, time_allowed*60*1000);
     }
     else {
       alert('Something seems wrong...\nPlease notify your system administrator.');

@@ -1,22 +1,28 @@
-body {
-    background-color: #eff8fb;
-    padding-bottom: 3em;
+* {
+    box-sizing: border-box;
 }
 
-header {
-    height: 5vw;
+html {
+    width: 100%;
+}
 
+body {
+    background-color: #f5f5f5;
+    padding-bottom: 3vh;
+    width: 100%;
 }
 
 main {
+    margin-top: 6%;
     width: 100%;
-    margin-bottom: 1.8vw;
+    margin-bottom: 1.8vh;
 }
 
 div.invisible-container {
     width: 70%;
     height: auto;
     margin: auto;
+    margin-top: 15vh;
     border-left: 0.7vw dotted #0f465b;
     border-right: 0.7vw dotted #0f465b;
 }
@@ -41,8 +47,8 @@ section div.sign-up-div {
     padding-top: 1.3vw;
     padding-left: 2.5vw;
     padding-right: 2.5vw;
-    background-color: #cbe8f4;
-    filter: drop-shadow(0.5px 3px 4px #98a8ae);
+    background-color: white;
+    box-shadow: 0.5px 0.5px 10px #ccc;
 }
 
 section div.sign-up-div h4 {
@@ -68,7 +74,7 @@ input.credential {
     font-size: 1.3vw;
     border-bottom: 1px solid #0f465b;
     color: #0c394a;
-    background-color: #cbe8f4;
+    background-color: white;
 }
 
 label.usual-names {
@@ -77,13 +83,14 @@ label.usual-names {
     display: inline-block;
 }
 
-label input[name=password] {
+label input[type=password] {
     width: 55%;
 }
 
 input.credential:focus {
     font-size: 1.42vw;
-    border-bottom: 0.16vw solid #0f465b;
+    border-bottom: 0.16vw solid #7c0f32;
+    color: #7c0f32;
 }
 
 label#login {
@@ -140,4 +147,107 @@ div.login-div a h4 {
     width: 64.9%;
     letter-spacing: 1.5px;
     font-size: 1.04vw;
+}
+
+/* FOR MOBILE & TABS */
+@media screen and (max-width: 480px) {
+    body {
+	padding-bottom: 3vh;
+    }
+
+    main {
+	margin-bottom: 1.8vh;
+    }
+
+    div.invisible-container {
+	width: 90%;
+	height: auto;
+	margin: auto;
+	margin-top: 12vh;
+	border-left: 0.7vw dotted #0f465b; /* May be removed soon */
+	border-right: 0.7vw dotted #0f465b; /* May be removed soon */
+	padding-top: 1vh;
+	padding-bottom: 1vh;
+    }
+
+    section div.container {
+	width: 90%;
+	height: auto;
+	margin: auto;
+	margin-top: 2%;
+	padding-top: 5%;
+	padding-bottom: 1%;
+    }
+
+    section div.sign-up-div,
+    section div.login-div {
+	margin-bottom: 3vw;
+    }
+
+    section div.sign-up-div {
+	height: 59vh;
+	border-radius: 1.1vw;
+	padding: 3.2vh 3.5vw 3.2vh 3.5vw;
+	filter: drop-shadow(2px 2px 4px #b5c4ca);
+	border: .01vw solid #d2eaf4;
+    }
+
+    section div.sign-up-div h4 {
+	font-size: 3.5vw;
+	margin-bottom: 2vh;
+    }
+
+    form label {
+	display: block;
+	margin-bottom: 1.7vh;
+	margin-left: 3.2vw;
+	width: 95%;
+    }
+
+    input.credential {
+	width: 94%;
+	height: 3.9vw;
+	padding-left: 1px;
+	font-size: 3.5vw;
+	border-bottom: 1px solid #0f465b;
+    }
+
+    label.usual-names {
+	width: 94%;
+	display: block;
+    }
+
+    label input[name=password] {
+	width: 94%;
+    }
+
+    input.credential:focus {
+	font-size: 3.45vw;
+	border-bottom: 1.36px solid #0f465b;
+    }
+
+    label#login {
+	width: auto;
+	height: auto;
+	padding-right: 0;
+	margin-top: 4vw;
+	margin-left: 60%;
+	margin-bottom: 0.6vw;
+    }
+
+    label#login input[type=submit] {
+	padding: 1.3vh 6vw 1.3vh 6vw;
+	border-radius: 2vw;
+	font-size: 2.5vw;
+    }
+
+    div.login-div {
+	font-size: 3.25vw;
+    }
+
+    div.login-div a h4 {
+	width: 100%;
+	letter-spacing: 1.5px;
+	font-size: 2.9vw;
+    }
 }

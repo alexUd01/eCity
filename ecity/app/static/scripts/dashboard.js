@@ -11,8 +11,9 @@ $(function () {
     $('div#exam-demo').css('border-radius', '3vw');
     $('div#exam-demo').css('border', '1px solid #0e688c');
     $('div#exam-demo').css('text-align', 'center');
-    $('div#exam-demo').css('padding-top', '0.9vw');
+    $('div#exam-demo').css('padding-top', '1vw');
     $('div#exam-demo').css('color', '#0e688c');
+    $('div#exam-demo').css('font-size', '1.2vw');
     $('div#exam-demo a').css('text-decoration', 'underline dotted');
     $('div#exam-demo a').css('color', 'maroon');
   }

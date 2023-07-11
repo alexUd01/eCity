@@ -6,12 +6,34 @@ html, body, header, footer, main, h1, h2, h3, h4, h5, h6, * {
     letter-spacing: 0.03vw;
 }
 
+
+/* SCROLLBAR STYLE FOR CHROME AND SAFARI */
+::-webkit-scrollbar {
+    width: 1vw;
+}
+
+::-webkit-scrollbar-track {
+    background-color: darkgrey;
+}
+
+::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #02222e;
+    border-radius: 1vw;
+}
+
+
+
+/* HEADER STYLE */
 header {
     background-color: #0f465b;
     width: 100%;
     height: 7.5vw;
     padding-top: 1vw;
     padding-bottom: 1.5vw;
+    position: fixed;
+    top: 0;
+    z-index: 20;
 }
 
 header a, header div {
@@ -29,11 +51,16 @@ header div.logo {
     background-position: center;
 }
 
+header div.logo:hover {
+    opacity: 0.7;
+}
+
 header div.header-nav {
     width: 88%;
     height: 100%;
     margin-top: 0.6vw;
 }
+
 div.header-nav a {
     padding: 1.3vw 2.5vw;
     margin-right: 1vw;
@@ -42,12 +69,49 @@ div.header-nav a {
     border-radius: 2vw;
     color: white;
 }
+
 div.header-nav a:hover {
     border: 1.7px solid white;
 }
+
 div.header-nav a:active {
     color: #0b3140;
     background-color: white;
+}
+
+@media screen and (max-width: 480px) {
+    header {
+	height: 8.5vh;
+	padding-top: 0;
+	padding-left: 1vw;
+    }
+
+    header a, header div {
+	float: left;
+	text-decoration: none;
+    }
+
+    header div.logo {
+	width: 20vw;
+	height: 10vh;
+    }
+
+    header div.header-nav {
+	width: 70.5%;
+	height: 100%;
+	margin-top: 1.7vh;
+    }
+
+    div.header-nav a {
+	padding: 1.4vh 4.2vw;
+	margin-right: 1.5vw;
+	font-size: 2.5vw;
+	float: right;
+	border-radius: 7vw;
+	color: white;
+	border: 1px solid white;
+    }
+
 }
 
 /* GENERAL FOR MAIN */
