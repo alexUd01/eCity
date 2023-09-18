@@ -3,11 +3,8 @@
     src: url('../fonts/Quantify-Bold.ttf') format('truetype');
     font-display: swap; /* auto, block, fallback, optional */
 }
-/* GENERAL */
-* {
-    box-sizing: border-box;
-}
 
+/* GENERAL */
 html {
     width: 100%;
     background-color: #f5f5f5;

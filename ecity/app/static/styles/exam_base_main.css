@@ -1,8 +1,4 @@
 /* GENERAL */
-* {
-    box-sizing: border-box;
-}
-
 main {
     width: 100%;
     height: 35vw;
@@ -147,7 +143,6 @@ div.options {
 div.question:hover,
 div.options:hover {
     overflow: auto;
-    transition: overflow 3s;
 }
 
 div.question-nav {
@@ -259,4 +254,10 @@ section.main-content {
 
 section.main-content { /* Float objects */
     float: left;
+}
+
+@media screen and (max-width: 336px) {
+    main {
+	margin-top: 16%;
+    }
 }

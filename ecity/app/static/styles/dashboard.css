@@ -2,25 +2,22 @@ html, body, * {
     margin: 0;
     padding: 0;
 }
+
 main {
     width: 100%;
     height: auto;
+    margin-top: 8%;
     margin-bottom: 4vw;
 }
 
 /* HEADER STYLES */
-header {
-    height: 7vw;
-    padding-top: 0.3vw;
-    padding-bottom: 0.4vw;
-}
-
 div.header-contents {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
 }
+
 div.h-content {
     display: inline-block;
     vertical-align: middle;
@@ -32,8 +29,9 @@ div.logo {
 
 div.user-info-container {
     width: 88%;
-    height: 98%;
+    height: 100%;
 }
+
 div.user-detail {
     width: 50%;
     height: 100%;
@@ -41,24 +39,21 @@ div.user-detail {
 }
 
 span.user-profile-pic {
-    width: 12%;
-    height: 79.5%;
+    width: 13%;
+    height: 115%;
     background-image: url('../../static/images/profile-icon.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position-y: center;
     border-radius: 50%;
     border: 0.5vw dotted black;
-    margin-right: 1%;
-    margin-top: 1%;
     filter: invert(95%)
 }
+
 span.user-profile-details {
     width: 79%;
     height: 6.2vw;
     font-size: 1.25vw;
-    padding-top: 0.8vw;
-    padding-bottom: 0.5vw;
     padding-right: 0.6vw;
     text-align: right;
     color: #e6dada;
@@ -73,21 +68,23 @@ h4#username {
     font-size: 1.4vw;
     font-stretch: ultra-expanded;
 }
+
 h4#fullname {
     font-size: 1.6vw;
     font-stretch: ultra-expanded;
 }
+
 h4#email {
     font-size: 1.05vw;
     font-weight: bold;
     text-decoration: underline dotted;
 }
+
 h4#email b {
     font-size: 1.1em;
     font-stretch: extra-expanded;
     font-weight: bolder;
 }
-
 
 div.user-detail span {
     float: right;
@@ -103,7 +100,7 @@ section.grouped-sections {
 
 /* 1. nav-container */
 section.nav-container {
-    border: 2px solid white;
+    border: 0.5px solid #ccc;
     width: 4.1%;
     height: auto;
     margin-top: 2.5vw;
@@ -111,8 +108,6 @@ section.nav-container {
     border-top-right-radius: 2.5vw;
     border-bottom-right-radius: 2vw;
     border-left: none;
-    border: 1px solid #98a8ae;
-    filter: drop-shadow(1px 2px 2px #98a8ae);
     background-color: white;
 }
 
@@ -126,7 +121,7 @@ section.nav-container {
     border-radius: 50%;
     margin: 1vw 0.4vw 0.1vw 0.55vw;
     background-size: 65%;
-    box-shadow: 2px 2px 3px #98a8ae;
+    opacity: 0.7;
 }
 
 li#upcoming-exams {
@@ -157,6 +152,7 @@ li#logout {
     width: 3vw;
     height: 2.95vw;
     background-size: 70%;
+    opacity: 1;
 }
 
 .nav-items li.nav-item:active {
@@ -167,20 +163,24 @@ li#logout {
 /* 2. workspace-container */
 section.workspace-container {
     width: 90%;
-    height: 31em;
+    min-height: 30vh;
+    max-height: auto;
+    margin-top: 1.3vw;
     margin-left: 1.3vw;
     padding-top: 2.5vw;
+    padding-bottom: 2.5vw;
     padding-left: 1.3vw;
+    color: #4e4a4a;
 }
 
 .upcoming-exams-container {
     width: 40%;
     height: auto;
-    background-color: #f0c6c6;
+    background-color: #f5f4f4;
     text-align: center;
     padding: 1.3vw 0.9vw;
     border-radius: 2vw;
-    filter: drop-shadow(0.1em 0.1em 2px gray);
+    border: 0.1vw solid #ccc;
 }
 
 .upcoming-exams-container h3 {
@@ -192,11 +192,11 @@ section.workspace-container {
 .upcoming-exams-items {
     width: 96%;
     height: 68%;
-    background-color: #fbfafa;
+    background-color: #fff;
     text-align: justify;
     padding: inherit;
     border-radius: 1.5vw;
-    filter: drop-shadow(0.1em 0.1em 1px gray);
+    border: 0.1vw solid #ccc;
 }
 
 .upcoming-exams-items p {
@@ -207,4 +207,210 @@ section.workspace-container {
 
 .clear-float {
     clear: both;
+}
+
+@media screen and (max-width: 336px) {
+    /* HEADER STYLES */
+    main {
+	margin-top: 15%;
+    }
+
+    div.user-info-container {
+	width: 77.5%;
+    }
+
+    div.user-detail {
+	width: 65%;
+	height: 100%;
+	margin-left: 35.2%;
+	margin-top: 2.5%;
+    }
+
+    span.user-profile-pic {
+	width: 20%;
+	height: 79.5%;
+	margin-right: 1%;
+	margin-top: 1%;
+	filter: invert(95%);
+    }
+
+    span.user-profile-details {
+	width: 70%;
+	height: 6.2vw;
+	font-size: 2vw;
+	padding-top: 0.8vw;
+	padding-bottom: 0.5vw;
+	padding-right: 0.6vw;
+	text-align: right;
+	color: #e6dada;
+    }
+
+    h4#username {
+	font-size: 2.7vw;
+    }
+
+    h4#fullname {
+	font-size: 3.5vw;
+    }
+
+    h4#email {
+	font-size: 2.05vw;
+    }
+
+    h4#email b {
+	font-size: 2.1vw;
+    }
+
+    /* MAIN STYLE */
+    section.grouped-sections {
+	float: left;
+    }
+
+    /* 1. nav-container */
+    section.nav-container {
+	width: 10vw;
+	height: auto;
+	margin-top: 4.5vh;
+	padding-top: 4vh;
+	padding-bottom: 0.7vh;
+	border-top-right-radius: 5.5vw;
+	border-bottom-right-radius: 5vw;
+    }
+
+    .nav-items li.nav-item {
+	list-style: none;
+	width: 8vw;
+	height: 8vw;
+	margin: 1vw 0.4vw 0.1vw 0.55vw;
+	background-size: 65%;
+	opacity: 0.7;
+    }
+
+    li#logout {
+	margin-top: 19vh;
+	margin-bottom: 1vw;
+	background-size: 80%;
+    }
+
+    .nav-items li.nav-item:focus,
+    .nav-items li.nav-item:active {
+	width: 10vw;
+	height: 10vw;
+	background-size: 70%;
+	opacity: 1;
+    }
+
+    /* 2. workspace-container */
+    section.workspace-container {
+	width: 82.5%;
+	margin-left: 3.3vw;
+	padding-top: 3.5vw;
+	padding-left: 3.3vw;
+	color: #4e4a4a;
+    }
+
+    .upcoming-exams-container {
+	width: 95%;
+	min-height: 20vh;
+	max-height: auto;
+	background-color: #f5f4f4;
+	text-align: center;
+	padding: 2.3vh 0.9vw;
+	border-radius: 4vw;
+	border: 0.1vw solid #ccc;
+    }
+
+    .upcoming-exams-container h3 {
+	margin-top: 3.5vh;
+	margin-bottom: 3vh;
+	font-size: 3.45vw;
+    }
+
+    .upcoming-exams-items {
+	width: 90%;
+	min-height: 11vh;
+	max-height: auto;
+	background-color: #fff;
+	text-align: justify;
+	padding-top: 2vh;
+	border-radius: 1.5vw;
+	border: 0.1vw solid #ccc;
+	margin: auto;
+    }
+
+    .upcoming-exams-items p {
+	text-align: center;
+	text-decoration: underline dotted;
+	font-size: 3.2vw;
+    }
+
+    .clear-float {
+	clear: both;
+    }
+}
+
+/* Style for test_exam */
+div#exam-demo {
+    width: 22vw;
+    height: 8vh;
+    position: fixed;
+    bottom: 7.3vh;
+    right: 3vw;
+    border-radius: 3vw;
+    border: 1px solid #0e688c;
+    text-align: center;
+    color: #0e688c;
+    font-size: 1.2vw;
+}
+
+div#exam-demo a {
+    text-decoration: underline dotted;
+    color: maroon;
+}
+
+div#exam-demo p {
+    padding-top: 5%;
+}
+
+@media screen and (max-width: 336px) {
+    /* Style for test_exam */
+    div#exam-demo {
+	width: 45vw;
+	height: 4.3vh;
+	position: fixed;
+	bottom: 7.3vh;
+	right: 3vw;
+	border-radius: 4vw;
+	border: 1px solid #0e688c;
+	text-align: center;
+	color: #0e688c;
+	font-size: 2.5vw;
+    }
+
+    div#exam-demo a {
+	text-decoration: underline dotted;
+	color: maroon;
+    }
+
+    div#exam-demo p {
+	padding-top: 4%;
+    }
+
+}
+
+
+@keyframes drop-down {
+    0% {
+	opacity: 0;
+	transform: translateY(-100%);
+    }
+    3%,
+    97% {
+	opacity: 1;
+	transform: translateY(170%);
+    }
+    100% {
+	opacity: 0;
+	transform: translateY(-100%);
+    }
 }

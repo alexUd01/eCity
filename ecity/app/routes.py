@@ -1,23 +1,31 @@
 #!/usr/bin/python3
 """eCity Routes"""
-from datetime import datetime
+from datetime import datetime, timedelta
+from uuid import uuid4
+import secrets
 from ecity.models.user import User
 from ecity.models.exam import Exam
 from ecity.models.question import Question
 from ecity.models.answer import Answer
 from ecity.models.answer_sheet import AnswerSheet
 from ecity.models.score import Score
-from flask import Flask, redirect, url_for, render_template, request, abort
-from flask import jsonify
+import flask
+from flask import Flask, redirect, url_for, g, render_template, request, abort
+from flask import jsonify, make_response, flash, get_flashed_messages
 from ..models.storage_engine.dbstorage import db
+from .login_manager import *
+from sqlalchemy.exc import IntegrityError, NoResultFound
 
 app = Flask(__name__)
 
 db_url = 'mysql+mysqldb://User3:password@localhost/ecity'
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = secrets.token_hex().encode()
 
-db.init_app(app)
+lm.init_app(app)  # Initialize login manager for `app`
+db.init_app(app)  # Initialize database handle for `app`
+flask.globals.CURR_USER = None
 
 with app.app_context():
     try:
@@ -42,6 +50,33 @@ def err_404(err_no):
     return jsonify({"error": "Not found"})
 
 
+@app.before_request
+def before_request():
+    """ Executed before each request """
+    g.uuid4 = uuid4
+
+
+@lm.user_loader
+def load_user(user_id):
+    """ Loads user """
+    try:
+        user = User.query.filter(User.user_id == user_id).one()
+    except NoResultFound:
+        return None
+    else:
+        user.id = user.user_id
+        flask.globals.CURR_USER = user
+        return user
+
+
+@lm.unauthorized_handler
+def unauthorized_err_401():
+    """ Handles unauthorized error """
+    logout_user()
+    flash('You must be logged in to access the requested resource.', 'error')
+    return redirect(url_for('login'))
+
+
 @app.route('/', strict_slashes=False)
 @app.route('/index/', strict_slashes=False)
 def index():
@@ -53,7 +88,7 @@ def index():
 
 @app.route('/sign-up', strict_slashes=False)
 def sign_up():
-    """ Sigin-up Page """
+    """ Sign-up Page """
     return render_template('sign_up.html')
 
 
@@ -68,15 +103,46 @@ def create_user():
     psword = request.form['password']
 
     user = User(username=u_name, firstname=f_name, lastname=l_name,
-                middlename=m_name, email=email, password=psword)
+                middlename=m_name, email=email, password=psword,
+                last_login=datetime.utcnow(), logged_in='T')
+    user.id = user.user_id
     try:
         db.add(user)
         db.commit()
+    except IntegrityError as e:
+        db.rollback()
+        if 'email' in e._message():
+            flash(
+                f"""User account with email <i>"{email}</i>" already
+                exists.<br>
+                If you\'re the owner of the account please login instead.
+                """,
+                'error'
+            )
+        elif 'username' in e._message():
+            flash(
+                f"""User account with username <i>"{u_name}</i>" already
+                exists.<br>If you\'re the owner of the account please login
+                instead.""",
+                'error'
+            )
+        return redirect(url_for('sign_up'))
     except Exception:
         db.rollback()
-        return jsonify(
-            {"error": "User already exists.\nDo you want to login?"})
+        flash(
+            """A server side error just occured. Please notify the
+            system administrator at "<i>alexanderikpeama@gmail.com</i>".
+            """,
+            'error')
     else:
+        user = User.query.filter(User.user_id == user.user_id).one()
+        user.id = user.user_id
+        login_user(user, duration=timedelta(days=30))
+        flash(
+            f"""Welcome to eCity {user.firstname} {user.lastname}.
+            If you need help in setting-up your workspace, don't hesitate
+            to contact our support centre at alexanderikpeama@gmail.com
+            """, 'success')
         return redirect(url_for('dashboard', user_id=user.user_id))
 
 
@@ -93,26 +159,43 @@ def sign_in():
         guest = User.query.filter(User.username == 'guest').one()
         return redirect(url_for('dashboard', user_id=guest.user_id))
 
-    username = request.form['username']
-    password = request.form['password']
+    username = request.form.get('username')
+    password = request.form.get('password')
+    if not username or not password:
+        return redirect(url_for('login'))
+
     try:
         user = User.query.filter(User.username == username).one()
     except Exception as e:
-        # redirect back to login page with notification
-        return jsonify({'error': 'Username does not exist'})
+        flash('There is no account associated with the username you provided.',
+              'warning')
+        return redirect(url_for('login'))
     else:
         if password == user.password:
-            user.last_login = datetime.utcnow()
-            db.commit()
-            print(user.last_login)
-            return redirect(url_for('dashboard', user_id=user.user_id))
+            user.id = user.user_id
+            if flask.globals.CURR_USER and user == flask.globals.CURR_USER:
+                flash('You are already signed-in.', 'success')
+                login_user(user, duration=timedelta(seconds=30))
+                return redirect(url_for('dashboard', user_id=user.user_id))
+            else:
+                user.last_login = datetime.utcnow()
+                # TODO: fix failure to update last_login in db
+                print(user.last_login)
+                user.logged_in = 'T'
+                db.commit()
+                login_user(user, duration=timedelta(seconds=30))
+                flask.globals.CURR_USER = user
+                flash('Successfully signed-in.Welcome 🙂', 'success')
+                return redirect(url_for('dashboard', user_id=user.user_id))
         else:
-            # redirect back to login page with notification
-            return jsonify({'error': 'User password is incorect'})
+            flash('The password you entered is incorect. '
+                  'Please enter the correct password.', 'warning')
+            return redirect(url_for('login'))
 
 
 @app.route('/users/<int:user_id>/dashboard', strict_slashes=False)
 @app.route('/users/<int:user_id>/upcoming_exams', strict_slashes=False)
+@login_required
 def dashboard(user_id):
     """ User dashboard """
     user = User.query.filter(User.user_id == user_id).one()
@@ -120,6 +203,7 @@ def dashboard(user_id):
 
 
 @app.route('/users/<int:user_id>/past_exams', strict_slashes=False)
+@login_required
 def past_exams(user_id):
     """ User dashboard """
     user = User.query.filter(User.user_id == user_id).one()
@@ -127,6 +211,7 @@ def past_exams(user_id):
 
 
 @app.route('/users/<int:user_id>/my_students', strict_slashes=False)
+@login_required
 def my_students(user_id):
     """ User dashboard """
     user = User.query.filter(User.user_id == user_id).one()
@@ -134,6 +219,7 @@ def my_students(user_id):
 
 
 @app.route('/users/<int:user_id>/manage_exams', strict_slashes=False)
+@login_required
 def manage_exams(user_id):
     """ User dashboard """
     user = User.query.filter(User.user_id == user_id).one()
@@ -141,6 +227,7 @@ def manage_exams(user_id):
 
 
 @app.route('/test_exam', strict_slashes=False)
+@login_required
 def test_exam_page():
     """Delete this route after test"""
     user1 = User.query.filter(User.username == 'guest').first()
@@ -149,6 +236,7 @@ def test_exam_page():
 
 
 @app.route('/test_exam/<int:exam_id>/', strict_slashes=False)
+@login_required
 def exam(exam_id=None):
     """Returns an exam object"""
     if exam_id is None:
@@ -162,6 +250,7 @@ def exam(exam_id=None):
 
 @app.route('/users/<int:user_id>/exams/', methods=['POST'],
            strict_slashes=False)
+@login_required
 def user(user_id=None):
     """Does some stuff"""
     raw_ans_sheet = dict(request.form)
@@ -205,3 +294,19 @@ def create_scores(answers_list, exam_id):
                     exam_score += 1
                     break
     return exam_score, len(correct_answers)
+
+@app.route('/logout', strict_slashes=False)
+def logout():
+    """
+    Please not that this logout feature does not yet include support for total
+    logout from all browsing sessions across different web clients.
+    It's still a work in progress
+    """
+    logout_user()
+    user = flask.globals.CURR_USER
+    if user:
+        user.logged_in = 'F'
+        db.commit()
+        flask.globals.CURR_USER = None
+    flash('You have been logged out successfully.', 'success')
+    return redirect(url_for('login'))
