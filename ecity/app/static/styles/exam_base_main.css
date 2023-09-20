@@ -112,11 +112,17 @@ div.options {
     overflow: auto;
 }
 
+::-webkit-scrollbar {
+    width: 1.5vw;
+}
+
 div.options::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 1vw;
 }
-
+div.options::-webkit-scrollbar-thumb {
+    border-radius: 1vw;
+}
 
 div.options .option-container {
     padding: 1.8vw 2vw;

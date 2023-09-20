@@ -1,4 +1,20 @@
 {% extends "base_dashboard.html" %}
 {% block workspace_content %}
-Previously taken examinations including the questions and answers will appear here...
+<div>
+  <h3>PAST EXAMINATIONS</h3>
+  {% if exams %}
+    {% for exam in exams %}
+      <div class="exam-item-container">
+        {{ exam.exam_id }} - {{ exam.course_name }} Number of Questions: {{ exam.no_of_questions }}<br>
+        Date Taken: {{ exam.exam_date }} Duration: {{ exam.time_allowed }} minutes
+        Started at: {{ exam.start_time }} Ended at: {{ exam.end_time }}
+        <a href="">View details</a>
+      </div>
+    {% endfor %}
+  {% else %}
+      <div>
+	You don't have any past exams yet. Check back after atleast one of your students have written atleast one exam.
+      </div>
+  {% endif %}
+</div>
 {% endblock %}

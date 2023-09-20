@@ -10,10 +10,14 @@ class Exam(BaseModel, db.Model):
     """ Exam Table """
     exam_id = db.Column(db.Integer, primary_key=True)
     course_name = db.Column(db.String(128), nullable=False)
+    no_of_questions = db.Column(db.Integer, nullable=False)
     time_allowed = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False,
                              default=datetime.utcnow())
-    date_taken = db.Column(db.DateTime, nullable=False)
+    date_updated = db.Column(db.DateTime, nullable=True)
+    exam_date = db.Column(db.Date, nullable=False)
+    start_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'),
                         nullable=False)
     examiner = db.relationship('User', backref='exams')

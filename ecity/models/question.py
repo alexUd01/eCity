@@ -4,6 +4,7 @@ from .storage_engine.dbstorage import db
 from datetime import datetime
 from ecity.models.base_model import BaseModel
 
+
 class Question(BaseModel, db.Model):
     """Question Table"""
     question_id = db.Column(db.Integer, primary_key=True)

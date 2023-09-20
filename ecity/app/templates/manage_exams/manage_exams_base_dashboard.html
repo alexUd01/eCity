@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../../../static/styles/ecity_header.css?resource_id={{ g.uuid4() }}">
+    <link rel="stylesheet" type="text/css" href="../../../static/styles/ecity_footer.css?resource_id={{ g.uuid4() }}">
+    <link rel="stylesheet" type="text/css" href="../../../static/styles/dashboard.css?resource_id={{ g.uuid4() }}">
+    <link rel="icon" type="image/png" href="../../../static/images/favicon-blue.png?resource_id={{ g.uuid4() }}">
+    <title>&nbsp;eCity&nbsp; | &nbsp;Dashboard</title>
+    <script src="../../../static/scripts/jquery-3.6.4.js?resource_id={{ g.uuid4() }}"></script>
+    <script src="../../../static/scripts/dashboard.js?resource_id={{ g.uuid4() }}"></script>
+  </head>
+  <body>
+    <header>
+      <div class="header-contents">
+	<div class="h-content">
+	  <a href="/"><div class="logo"></div></a>
+	</div><!--
+	--><div class="h-content user-info-container">
+	  <div class="user-detail">
+	    <span class="user-profile-pic"></span>
+	    <span class="user-profile-details">
+	      <h4 id="username">{{ user.username }}</h4>
+	      <h4 id="fullname">{{ user.firstname }} {{ user.lastname }} {{ user.middlename }}</h4>
+	      <h4 id="email"><b>( </b> {{ user.email }} <b> )</b></h4>
+	    </span>
+	    <span class="clear-float"></span>
+	  </div>
+	</div>
+      </div>
+      {% with message = get_flashed_messages(with_categories=True) %}
+        {% if message %}
+          <div class="flash-message-container">
+            <p class="flash-message {{ message[0][0] }}-flash-message">{{ message[0][1] | safe}}</p>
+          </div>
+        {% endif %}
+      {% endwith %}
+    </header>
+    <main>
+      <section>
+	<section class="grouped-sections nav-container">
+	  <nav>
+	    <ol class="nav-items">
+	      <a href="/users/{{ user.user_id }}/upcoming_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="upcoming-exams" title="Upcoming Examinations"></li></a>
+	      <a href="/users/{{ user.user_id }}/past_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="past-exams" title="Past Examinations"></li></a>
+	      <a href="/users/{{ user.user_id }}/my_students?resource_id={{ g.uuid4() }}"><li class="nav-item" id="my-students" title="My students"></li></a>
+	      <a href="/users/{{ user.user_id }}/manage_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="manage-exams" title="Manage Examinations"></li></a>
+	      <a href="/logout"><li class="nav-item" id="logout" title="Logout"></li></a>
+	    </ol>
+	  </nav>
+	</section>
+	<section class="grouped-sections workspace-container">
+	  {% block workspace_content %}{% endblock %}
+	</section>
+	<section class="clear-float"></section>
+      </section>
+    </main>
+    <footer>
+      <div>
+	<small>Xandex Inc, Copyright &copy; 2023</small>
+      </div>
+    </footer>
+  </body>
+<html>

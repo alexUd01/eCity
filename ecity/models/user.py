@@ -29,3 +29,12 @@ class User(UserMixin, BaseModel, db.Model):
                            default=datetime.utcnow())
     last_login = db.Column(db.DateTime, nullable=True)
     logged_in = db.Column(db.Enum('T', 'F'), nullable=False)
+    teacher_id = db.Column(db.Integer, nullable=True)
+    dp = db.Column(db.String(256), nullable=True,
+                   server_default="profile-icon.png")
+
+    def get_students(self):
+        """ Returns a list of students linked to this user """
+        students = User.query.filter(
+            User.teacher_id == self.user_id).all()
+        return students

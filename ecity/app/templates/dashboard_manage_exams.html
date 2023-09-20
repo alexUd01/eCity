@@ -1,4 +1,30 @@
 {% extends "base_dashboard.html" %}
 {% block workspace_content %}
-  {{ user.firstname }} {{ user.lastname }} can create and schedule examinations from this page...
+  <dl>
+    <dt>CREATE A QUIZ OR AN EXAMINATION</dt>
+    <dd>Enter exam details then click the&nbsp;<span>create exam</span>&nbsp;button to create and schedule an examination or a quiz.</dd>
+    <dd>
+      <form method="POST" action="/users/{{ user.user_id }}/manage_exams/create_exam_template">
+	<label><span>Course Name:</span>&nbsp;<input type="text" name="course_name" value="" required></label>
+	<label><span>Number of questions:</span>&nbsp;<input type="number" name="no_of_questions" inputmode="numeric" min="1" max="9999" value="5" required></label>
+	<label><span>Time Allowed (in minutes):</span>&nbsp;<input type="number" min="1" value="60" name="time_allowed" required></label>
+	<label><span>Examination Date:</span>&nbsp;<input type="date" name="exam_date" min="{{ date.isoformat(datetime.utcnow()) }}" required></label>
+	<label><span>Start Time:</span>&nbsp;<input type="time" name="start_time" required></label>
+	<label><span>End Time:</span>&nbsp;<input type="time" name="end_time" required></label>
+	<label><span>Examiner:</span>&nbsp;<input type="text" value="{{ user.firstname }} {{ user.middlename }} {{user.lastname}}" name="examiner_name" disabled></label>
+	<label><input type="submit" value="Create Exam Template"></label>
+      </form>
+    </dd>
+    <dt>EDIT OR RE-SCHEDULE AN EXAMINATION OR QUIZ</dt>
+    <dd>Select an examination from the list of upcoming examinations below provided below.</dd>
+    <ul>
+      {% for exam in exams %}
+      <li>
+	{{ exam.exam_id }} - {{ exam.course_name }}<br>
+	{{ exam.exam_date }} from {{ exam.start_time }} to {{ exam.end_time }}
+	<a href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Edit exam</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </dl>
 {% endblock %}

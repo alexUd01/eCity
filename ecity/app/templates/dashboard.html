@@ -1,9 +1,19 @@
 {% extends "base_dashboard.html" %}
 {% block workspace_content %}
+</div>
   <div class="upcoming-exams-container">
     <h3>Upcoming examinations at a glance</h3>
     <div class="upcoming-exams-items">
-      <p>No upcoming examinations.</p>
+      {% if exams %}
+        {% for exam in exams %}
+          <p style="text-align: left">
+	    {{ exam.exam_id }} - {{ exam.course_name }} Duration: {{ exam.time_allowed }}.
+	    Will take place on {{ exam.exam_date }} from {{ exam.start_time }} to {{ exam.end_time }}
+	  </p>
+        {% endfor %}
+      {% else %}
+        <p>No upcoming examinations.</p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

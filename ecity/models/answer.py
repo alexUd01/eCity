@@ -4,6 +4,7 @@ from .storage_engine.dbstorage import db
 from datetime import datetime
 from ecity.models.base_model import BaseModel
 
+
 class Answer(BaseModel, db.Model):
     """Answer Table"""
     answer_id = db.Column(db.Integer, primary_key=True)
@@ -12,6 +13,6 @@ class Answer(BaseModel, db.Model):
     exam_id = db.Column(db.Integer, db.ForeignKey('exam.exam_id'),
                           nullable=False)
     correct_option = db.Column(db.String(1), nullable=True)
-    correct_notes = db.Column(db.Text, nullable=True)
+    correct_notes = db.Column(db.Text, nullable=True, server_default="")
 
     question = db.relationship('Question', backref='answer')

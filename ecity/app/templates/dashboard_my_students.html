@@ -1,4 +1,16 @@
 {% extends "base_dashboard.html" %}
 {% block workspace_content %}
-  All students linked to {{ user.firstname }} {{ user.lastname }} will appear here...
+<div>
+  <h3>YOUR STUDENTS</h3>
+  <a href="">Create a new student account</a>
+  {% for user in user.get_students() %}
+  <div class="student-details-container">
+    <div class="text content">
+      {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}
+    </div>
+    <div class="pic content">
+    </div>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}
