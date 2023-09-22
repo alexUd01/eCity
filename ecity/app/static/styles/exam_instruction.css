@@ -1,0 +1,73 @@
+div.instruction-container,
+div.exam-details {
+    width: 90%;
+    height: 60%;
+    margin-bottom: 9vh;
+    margin-left: 1vw;
+}
+
+.instruction-title {
+    margin-bottom: 1vh;
+}
+
+div.instruction-body {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #f9f9f9;
+    margin-left: 0.5vw;
+    padding-top: 1.2vh;
+    padding-left: 1vw;
+    box-shadow: 2px 2px 5px #9c9999;
+}
+
+div.instruction-body pre {
+    font-family: monospace;
+    font-weight: 500;
+}
+
+div.exam-details {
+    height: 10vh;
+}
+
+input {
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 0.9vw;
+    height: 2vw;
+    text-align: center;
+}
+
+input[type=time] {
+    width: 7.5vw;
+}
+
+input[type=text] {
+    width: 6.3vw;
+}
+
+input[type=number] {
+    width: 4vw;
+}
+
+input[type=submit] {
+    width: 16vw;
+    height: 4vw;
+    border-radius: 0.5vw;
+    border: none;
+    margin-top: 4vh;
+    margin-left: 32vw;
+    font-family: helvetica;
+    font-size: 1.2vw;
+    background-color: #e65151;
+    color: #ffffff;
+}
+
+input[type=submit]:hover {
+    opacity: 0.8;
+}
+
+input[type=submit]:active {
+    background-color: #a9a9a9;
+    color: black;
+}

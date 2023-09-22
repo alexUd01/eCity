@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """eCity Routes"""
+import time as t
 from datetime import datetime, timedelta, date, time
 from uuid import uuid4
 import secrets
@@ -14,7 +15,7 @@ from flask import Flask, redirect, url_for, g, render_template, request, abort
 from flask import jsonify, make_response, flash, get_flashed_messages
 from ..models.storage_engine.dbstorage import db
 from .login_manager import *
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.exc import IntegrityError, NoResultFound, InvalidRequestError
 
 app = Flask(__name__)
 
@@ -104,9 +105,11 @@ def create_user():
     email = request.form['email']
     psword = request.form['password']
 
-    user = User(username=u_name, firstname=f_name, lastname=l_name,
-                middlename=m_name, email=email, password=psword,
-                last_login=datetime.utcnow(), logged_in='T')
+    user = User(
+        username=u_name, firstname=f_name, lastname=l_name,
+        middlename=m_name, email=email, password=psword,
+        last_login=datetime.utcnow(), logged_in='T', is_examiner='T'
+    )
     user.id = user.user_id
     try:
         db.add(user)
@@ -128,7 +131,7 @@ def create_user():
                 instead.""",
                 'error'
             )
-        return redirect(url_for('sign_up'))
+        return redirect(url_for('sign_up', resource_id=uuid4()))
     except Exception:
         db.rollback()
         flash(
@@ -136,6 +139,7 @@ def create_user():
             system administrator at "<i>alexanderikpeama@gmail.com</i>".
             """,
             'error')
+        return redirect(url_for('sign_up', resource_id=uuid4()))
     else:
         user = User.query.filter(User.user_id == user.user_id).one()
         user.id = user.user_id
@@ -145,7 +149,9 @@ def create_user():
             If you need help in setting-up your workspace, don't hesitate
             to contact our support centre at alexanderikpeama@gmail.com
             """, 'success')
-        return redirect(url_for('dashboard', user_id=user.user_id))
+        return redirect(
+            url_for('dashboard', user_id=user.user_id, resource_id=uuid4())
+        )
 
 
 @app.route('/login', strict_slashes=False)
@@ -165,7 +171,8 @@ def sign_in():
     username = request.form.get('username')
     password = request.form.get('password')
     if not username or not password:
-        return redirect(url_for('login'))
+        flash('You have not provided valid login credentials', 'warning')
+        return redirect(url_for('login', resource_id=uuid4()))
 
     try:
         user = User.query.filter(User.username == username).one()
@@ -177,23 +184,152 @@ def sign_in():
         if password == user.password:
             user.id = user.user_id
             if flask.globals.CURR_USER and user == flask.globals.CURR_USER:
-                flash('You are already signed-in.', 'success')
-                login_user(user, duration=timedelta(seconds=30))
-                return redirect(url_for('dashboard', user_id=user.user_id))
+                login_user(user, duration=timedelta(days=30))
+                if student_login == 'True':
+                    flash('You are already signed-in.', 'success')
+                    return redirect(url_for('student_dashboard',
+                                            student_id=user.user_id))
+                else:
+                    if user.is_examiner == 'T':
+                        return redirect(
+                            url_for('dashboard', user_id=user.user_id))
+                    else:
+                        logout_user()
+                        flask.globals.CURR_USER = None
+                        flash('Please log-in as a student rather.', 'warning')
+                        return redirect(url_for('login', resource_id=uuid4()))
+
             else:
                 user.last_login = datetime.utcnow()
-                # TODO: fix failure to update last_login in db
-                print(user.last_login)
                 user.logged_in = 'T'
                 db.object_session(user).commit()
-                login_user(user, duration=timedelta(seconds=30))
+                login_user(user, duration=timedelta(days=30))
                 flask.globals.CURR_USER = user
-                flash('Successfully signed-in. Welcome back 🙂', 'success')
-                return redirect(url_for('dashboard', user_id=user.user_id))
+                if student_login == "True":
+                    if user.teacher_id and user.is_student == 'T':
+                        flash('Successfully signed-in', 'success')
+                        return redirect(
+                            url_for('student_dashboard',
+                                    student_id=user.user_id))
+                    else:
+                        flash(
+                            f"""No student account was found with username
+                            {user.username}. Try to login as admin instead.""",
+                            'warning')
+                        logout_user()
+                        flask.globals.CURR_USER = None
+                        return redirect(url_for('login', resource_id=uuid4()))
+                if user.is_examiner == 'T':
+                    flash('Successfully signed-in. Welcome back 🙂', 'success')
+                    return redirect(url_for('dashboard', user_id=user.user_id))
+                else:
+                    logout_user()
+                    flask.globals.CURR_USER = None
+                    flash('Please log-in as a student rather.', 'warning')
+                    return redirect(url_for('login', resource_id=uuid4()))
         else:
             flash('The password you entered is incorect. '
                   'Please enter the correct password.', 'warning')
-            return redirect(url_for('login'))
+            return redirect(url_for('login', resource_id=uuid4()))
+
+
+# ------------------ ALL STUDENTS ROUTES HERE --------------------
+
+
+@app.route('/student/<int:student_id>/dashboard', strict_slashes=False)
+@app.route('/student/<int:student_id>/upcoming_exams', strict_slashes=False)
+@login_required
+def student_dashboard(student_id):
+    """ Students dashboard """
+    submit_status = request.args.get('ans')
+    try:
+        user = User.query.filter(User.user_id == student_id).one()
+    except NoResultFound:
+        abort(404)
+    if user.is_student == 'F' or user.teacher_id in ["", None]:
+        flash("You are not permitted to view this page", 'error')
+        return redirect(url_for('login', resource_id=uuid4()))
+    exams = Exam.query.filter(Exam.user_id == user.teacher_id).all()
+    uniq_exams = []
+    for exam in exams:
+        start_timestamp = "{}T{}.000000".format(exam.exam_date, exam.start_time)
+        end_timestamp = "{}T{}.000000".format(exam.exam_date, exam.end_time)
+        exam_start_datetime = datetime.fromisoformat(start_timestamp)
+        exam_end_datetime = datetime.fromisoformat(end_timestamp)
+        d_time_allowed = timedelta(minutes=exam.time_allowed)
+        if (datetime.now() >= exam_start_datetime or \
+            datetime.now() + timedelta(minutes=5) >= exam_start_datetime) and \
+            datetime.now() <= exam_end_datetime and \
+            exam.exam_id not in user.completed_exams():
+            # Prepare exam instruction page.
+            if submit_status not in ['', None]:  # In case of consecutive exams
+                flash('Answersheet has been submitted successfully', 'success')
+            return render_template('exam_instruction_page.html', exam=exam,
+                                   user=user)
+        elif datetime.now() < exam_start_datetime:
+            exam.exam_end_datetime = exam_end_datetime
+            uniq_exams.append(exam)
+    if submit_status not in ['', None]:
+        flash('Answersheet has been submitted successfully', 'success')
+    uniq_exams.sort(key=lambda exam: exam.exam_end_datetime)
+    return render_template('student_dashboard.html', user=user,
+                           exams=uniq_exams, date=date)
+
+
+@app.route('/student/<int:student_id>/past_exams', strict_slashes=False)
+@login_required
+def student_past_exams(student_id):
+    """ User dashboard - past exams """
+    try:
+        user = User.query.filter(User.user_id == student_id).one()
+    except NoResusltFound:
+        abort(404)
+    if user.is_student == 'F' or user.teacher_id in ["", None]:
+        flash("You are not permitted to view this page", 'error')
+        return redirect(url_for('login', resource_id=uuid4()))
+
+    exams = Exam.query.filter(Exam.user_id == user.teacher_id).all()
+    uniq_exams = []
+    answersheet_list = []
+    for exam in exams:
+        timestamp = "{}T{}.000000".format(exam.exam_date, exam.end_time)
+        exam_end_datetime = datetime.fromisoformat(timestamp)
+        if exam_end_datetime < datetime.now():
+            if exam.exam_id in user.completed_exams():  # User wrote this exam
+                exam.exam_end_datetime = exam_end_datetime
+                uniq_exams.append(exam)
+            else:  # User missed this particular exam
+                # 1. Create and add an answer_sheet in which a student's entire
+                # option is None
+                questions = Question.query.filter(
+                    Question.exam_id == exam.exam_id).all()
+                for question in questions:
+                    answersheet_list.append(
+                        AnswerSheet(user_id=user.user_id, exam_id=exam.exam_id,
+                                    question_id=question.question_id,
+                                    student_choice=None)
+                    )
+                db.add_all(answersheet_list)
+                db.commit()
+                # 2. pass this answer_sheet to the score_calculation function
+                exam_score, score_attainable = create_scores(answersheet_list,
+                                                             exam.exam_id)
+                score = Score(
+                    user_id=user.user_id, exam_id=exam.exam_id,
+                    score=exam_score, score_attainable=score_attainable
+                )
+                db.add(score)
+                db.object_session(score).commit()
+                # append exam to uniq_exams
+                exam.exam_end_datetime = exam_end_datetime
+                uniq_exams.append(exam)
+
+    uniq_exams.sort(key=lambda exam: exam.exam_end_datetime, reverse=True)
+    return render_template('student_dashboard_past_exams.html', user=user,
+                           exams=uniq_exams, date=date)
+
+
+# ------------------ ALL TEACHERS ROUTES HERE --------------------
 
 
 @app.route('/users/<int:user_id>/dashboard', strict_slashes=False)
@@ -203,16 +339,28 @@ def dashboard(user_id):
     """ User dashboard """
     user = User.query.filter(User.user_id == user_id).one()
     exams = Exam.query.filter(Exam.user_id == user_id).all()
-    uniq_exams = []
+    upcoming_exams = []
+    ongoing_exams = []
     for exam in exams:
-        timestamp = "{}T{}.000000".format(exam.exam_date, exam.end_time)
-        exam_end_datetime = datetime.fromisoformat(timestamp)
-        if exam_end_datetime > datetime.now():
-            exam.exam_end_datetime = exam_end_datetime
-            uniq_exams.append(exam)
-    uniq_exams.sort(key=lambda exam: exam.exam_end_datetime)
+        start_timestamp = "{}T{}.000000".format(exam.exam_date, exam.start_time)
+        end_timestamp = "{}T{}.000000".format(exam.exam_date, exam.end_time)
+        exam_start_datetime = datetime.fromisoformat(start_timestamp)
+        exam_end_datetime = datetime.fromisoformat(end_timestamp)
+        if datetime.now() < exam_start_datetime:
+            exam.exam_start_datetime = exam_start_datetime
+            upcoming_exams.append(exam)
+            continue
+        temp_tdelta = timedelta(minutes=int(exam.time_allowed))
+        if datetime.now() >= exam_start_datetime and \
+           datetime.now() <= exam_end_datetime:
+            exam.exam_start_datetime = exam_start_datetime
+            ongoing_exams.append(exam)
+            continue
+    upcoming_exams.sort(key=lambda exam: exam.exam_start_datetime)
+    ongoing_exams.sort(key=lambda exam: exam.exam_start_datetime)
     return render_template('dashboard.html', user=user,
-                           exams=uniq_exams, date=date)
+                           upcoming_exams=upcoming_exams, date=date,
+                           ongoing_exams=ongoing_exams)
 
 
 @app.route('/users/<int:user_id>/past_exams', strict_slashes=False)
@@ -278,7 +426,7 @@ def create_exam_template(user_id):
 
 @app.route('/users/<int:user_id>/manage_exams/edit_exam_template',
            methods=['GET', 'POST'], strict_slashes=False)
-#@login_required
+@login_required
 def edit_exam_template(user_id):
     """ Creates a template for setting an examination """
     exam_id = request.args.get('exam_id')
@@ -296,15 +444,64 @@ def edit_exam_template(user_id):
 
     if request.method == 'POST':
         try:
+            former_no_of_questions = exam.no_of_questions
             exam.no_of_questions = int(request.form.get('no_of_questions'))
+            db.object_session(exam).commit()
         except Exception:
             raise
         else:
-            db.commit()
+            if former_no_of_questions < exam.no_of_questions:
+                flash(
+                    f"""Successfully increased the number of questions
+                    from {former_no_of_questions} to {exam.no_of_questions}
+                    """,
+                    'success')
+            elif former_no_of_questions == exam.no_of_questions:
+                flash(
+                    f'Nothing changed', 'success')
+            else:
+                flash(
+                    f"""Successfully decreased the number of questions
+                    from {former_no_of_questions} to {exam.no_of_questions}
+                    """,
+                    'success')
     return render_template(
         'manage_exams/edit_exam_template.html', user=user, exam=exam,
         questions=questions, date=date, datetime=datetime, len=len
     )
+
+
+@app.route('/users/<int:user_id>/manage_exams/delete_exam',
+           strict_slashes=False)
+@login_required
+def delete_exam(user_id):
+    """ Creates a template for setting an examination """
+    exam_id = request.args.get('exam_id')
+    if not exam_id:
+        flash('Exam id not provided.', 'error')
+        return redirect(url_for('manage_exams', user_id=user_id))
+    print(dir(db))
+
+    user = User.query.filter(User.user_id == user_id).one()
+    exam = Exam.query.filter(Exam.exam_id == exam_id).one()
+    course_name = exam.course_name
+    questions = Question.query.filter(Question.exam_id == exam_id).all()
+    answers = Answer.query.filter(Answer.exam_id == exam_id).all()
+    answer_sheets = AnswerSheet.query.filter(
+        AnswerSheet.exam_id == exam_id).all()
+    scores = Score.query.filter(Score.exam_id == exam_id).all()
+    for obj_list in [scores, answer_sheets, answers, questions]:
+        for obj in obj_list:
+            obj = db.merge(obj)
+            db.delete(obj)
+
+    exam = db.merge(exam)
+    db.delete(exam)
+    db.commit()
+
+    flash(f'Successfully deleted the exam "{course_name}"', 'success')
+    return redirect(url_for('manage_exams', user_id=user_id,
+                            resource_id=uuid4()))
 
 
 @app.route('/users/<int:user_id>/manage_exams/<string:instruction>',
@@ -315,6 +512,7 @@ def create_or_edit_exam(user_id, instruction):
     successful = False
     if instruction == 'create_exam':
         course_name = str(request.form.get('course_name'))
+        ex_instruction = str(request.form.get('exam-instruction'))
         no_of_questions = int(request.form.get('no_of_questions'))
         time_allowed = int(request.form.get('time_allowed'))
         exam_date = date.fromisoformat(request.form.get('exam_date'))
@@ -326,7 +524,7 @@ def create_or_edit_exam(user_id, instruction):
             course_name=course_name, no_of_questions=no_of_questions,
             time_allowed=time_allowed, exam_date=exam_date,
             start_time=start_time, date_created=date_created,
-            end_time=end_time, user_id=user_id
+            end_time=end_time, user_id=user_id, instruction=ex_instruction
         )
         try:  # Prepare Exam
             db.add(exam)
@@ -375,7 +573,7 @@ def create_or_edit_exam(user_id, instruction):
                     by {start_time}.""", 'success'
                 )
             else:
-                flash("Couldnt create exam something went wrong", 'error')
+                flash("Couldn't create exam something went wrong", 'error')
         return redirect(url_for('manage_exams', user_id=user_id))
     elif instruction == 'edit_exam':
         exam_id = int(request.form.get('exam_id'))
@@ -385,6 +583,7 @@ def create_or_edit_exam(user_id, instruction):
         exam = Exam.query.filter(Exam.exam_id == exam_id).one()
         try:  # Collect Exam details
             exam.course_name = str(request.form.get('course_name'))
+            exam.instruction = str(request.form.get('exam-instruction'))
             exam.no_of_questions = int(request.form.get('no_of_questions'))
             exam.time_allowed = int(request.form.get('time_allowed'))
             exam.exam_date = date.fromisoformat(request.form.get('exam_date'))
@@ -462,42 +661,45 @@ def create_or_edit_exam(user_id, instruction):
             flash("Examination successfully updated.", 'success')
         else:
             flash("Could not update exam something went wrong", "error")
-        # print(dir(db))
         return redirect(url_for('manage_exams', user_id=user_id))
     else:
         abort(404)
 
 
-@app.route('/test_exam', strict_slashes=False)
+@app.route('/take_exam', strict_slashes=False, methods=['POST'])
 @login_required
-def test_exam_page():
-    """Delete this route after test"""
-    user1 = User.query.filter(User.username == 'guest').first()
-    exam1 = Exam.query.filter(Exam.exam_id == '1').first()
-    return render_template('exam_base.html', user=user1, exam=exam1)
+def exam_page():
+    """ Examination Page. """
+    user_id = request.form.get('user_id')
+    exam_id = request.form.get('exam_id')
+    user = User.query.filter(User.user_id == user_id).one()
+    exam = Exam.query.filter(Exam.exam_id == exam_id).one()
+    return render_template('exam_base.html', user=user, exam=exam)
 
 
-@app.route('/test_exam/<int:exam_id>/', strict_slashes=False)
+@app.route('/get_exam_questions/<int:exam_id>/', strict_slashes=False)
 @login_required
-def exam(exam_id=None):
-    """Returns an exam object"""
+def get_exam_questions(exam_id=None):
+    """ Returns all questions for an exam object """
     if exam_id is None:
         abort(404)
     try:
         exam = Exam.query.filter(Exam.exam_id == exam_id).one()
-    except Exception:
+    except NoResultFound:
         return "No question found!", 404
     return exam.all_questions()
 
 
-@app.route('/users/<int:user_id>/exams/', methods=['POST'],
+@app.route('/student/<int:student_id>/submit_exam/', methods=['POST'],
            strict_slashes=False)
 @login_required
-def user(user_id=None):
-    """Does some stuff"""
+def recieve_submitted_exam(student_id=None):
+    """
+    This endpoint recieves exam answersheets, marks and scores the student
+    """
     raw_ans_sheet = dict(request.form)
-    user_id = request.form['user_id']
-    exam_id = request.form['exam_id']
+    user_id = request.form.get('user_id')
+    exam_id = request.form.get('exam_id')
     question_id = None
     answers_list = []
     i = 0
@@ -519,8 +721,8 @@ def user(user_id=None):
     score = Score(user_id=user_id, exam_id=exam_id, score=exam_score,
                   score_attainable=score_attainable)
     db.add(score)
-    db.commit()
-    return redirect(url_for('index'))  # I don't yet know what this does yet
+    db.object_session(score).commit()
+    return redirect(url_for('student_dashboard', student_id=user_id))  #Not used
 
 
 def create_scores(answers_list, exam_id):
@@ -537,6 +739,7 @@ def create_scores(answers_list, exam_id):
                     break
     return exam_score, len(correct_answers)
 
+
 @app.route('/logout', strict_slashes=False)
 def logout():
     """
@@ -551,4 +754,9 @@ def logout():
         db.object_session(user).commit()
         flask.globals.CURR_USER = None
     flash('You have been logged out successfully.', 'success')
-    return redirect(url_for('login'))
+    student_login = request.args.get('student_login')
+    if student_login != 'True':
+        return redirect(url_for('login', resource_id=uuid4(),
+                                student_login='True'))
+    else:
+        return redirect(url_for('login', resource_id=uuid4()))

@@ -18,3 +18,26 @@ class BaseModel:
                 continue
             new_dict[key] = val
         return new_dict
+
+    @classmethod
+    def remove(cls):
+        """
+        A class method that removes instances of its class identified by 'id'
+        """
+        from .user import User
+        from .exam import Exam
+        from .question import Question
+        from .answer import Answer
+        from .answer_sheet import AnswerSheet
+        from .score import Score
+
+        mapper = {
+            'User': User,
+            'Exam': Exam,
+            'Question': Question,
+            'Answer': Answer,
+            'AnswerSheet': AnswerSheet,
+            'Score': Score
+        }
+        cls_name = cls.__class__.__name__
+        pass  # TODO: Same concept different function

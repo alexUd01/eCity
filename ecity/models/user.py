@@ -3,6 +3,7 @@
 from .storage_engine.dbstorage import db
 from datetime import datetime
 from ecity.models.base_model import BaseModel
+from ecity.models.answer_sheet import AnswerSheet
 from flask_login import UserMixin
 
 
@@ -38,3 +39,13 @@ class User(UserMixin, BaseModel, db.Model):
         students = User.query.filter(
             User.teacher_id == self.user_id).all()
         return students
+
+    def completed_exams(self):
+        """ Returns a list exam_id's of user completed exams """
+        answer_sheets = AnswerSheet.query.filter(
+            AnswerSheet.user_id == self.user_id).all()
+        exam_ids = []
+        for answer_sheet in answer_sheets:
+            if answer_sheet.exam_id not in exam_ids:
+                exam_ids.append(answer_sheet.exam_id)
+        return exam_ids

@@ -237,6 +237,10 @@ div div.exam-detail-block h4 {
     border-bottom: 0.2vw dotted black;
 }
 
+div div.exam-detail-block h4 span#exam_id {
+    font-size: 0;
+}
+
 div div.examiner-detail-block {
     padding: 0;
     font-size: 1.1vw;

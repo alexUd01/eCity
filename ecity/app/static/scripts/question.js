@@ -4,7 +4,8 @@ $(function () {
   // NOTE: Global properties are initialized in the file `./exports.js`.
 
   // Question sect
-  $.get('/test_exam/1/', function (data, status) {
+  const url = `/get_exam_questions/${exam_id}/`;
+  $.get(url, function (data, status) {
     // Define three functions `displayQuestions`, `displayNavBar` and `clearQuestion` to help
     const displayQuestion = function (i, data) {
       // 1-Display Question
@@ -102,7 +103,7 @@ $(function () {
 	    console.log('ok'); // Just do nothing (a workaround). Error is already handled by `storeData` above.
 	  } else {
 	    // All questions have been answered
-	    $.post(`/users/${user_id}/exams/`, globalThis.ans_sheet, function () {
+	    $.post(`/student/${user_id}/submit_exam/`, globalThis.ans_sheet, function (response) {
 	      $('form').submit();
 	    });
 	  }

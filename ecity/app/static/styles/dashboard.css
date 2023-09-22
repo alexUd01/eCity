@@ -142,7 +142,7 @@ li#manage-exams {
 
 li#logout {
     background-image: url('../../static/images/logout-icon.png');
-    margin-top: 8vw;
+    margin-top: 28.5vh;
     margin-bottom: 1vw;
     background-size: 80%;
 }
@@ -163,46 +163,86 @@ li#logout {
 /* 2. workspace-container */
 section.workspace-container {
     width: 90%;
-    min-height: 30vh;
-    max-height: auto;
-    margin-top: 1.3vw;
+    height: 75vh;
+    margin-top: 2vh;
     margin-left: 1.3vw;
-    padding-top: 2.5vw;
+    padding-top: 3vh;
     padding-bottom: 2.5vw;
     padding-left: 1.3vw;
     color: #4e4a4a;
 }
 
-.upcoming-exams-container {
-    width: 40%;
-    height: auto;
-    background-color: #f5f4f4;
+div.first-workspace-child {
+    width: 100%;
+    height: 100%;
+}
+
+h2.page-heading {
+    margin-bottom: 1vh;
+    margin-left: 28vw;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.upcoming-exams-container,
+.ongoing-exams-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 46%;
+    max-height: 60vh;
+    background-color: #f5f4f470;
     text-align: center;
-    padding: 1.3vw 0.9vw;
+    padding: 3vh 0 1.8vh 0;
     border-radius: 2vw;
     border: 0.1vw solid #ccc;
 }
 
-.upcoming-exams-container h3 {
+.upcoming-exams-container h3,
+.ongoing-exams-container h3 {
     margin-top: 1.3vw;
     margin-bottom: 2.6vw;
     font-size: 1.45vw;
 }
 
-.upcoming-exams-items {
+.upcoming-exams-items,
+.ongoing-exams-items {
+    overflow: auto;
     width: 96%;
-    height: 68%;
+    min-height: 10%;
+    max-height: 72%;
     background-color: #fff;
     text-align: justify;
-    padding: inherit;
+    padding: 1.0vh 0 0 0;
     border-radius: 1.5vw;
     border: 0.1vw solid #ccc;
 }
 
-.upcoming-exams-items p {
+.upcoming-exams-items p,
+.ongoing-exams-items p {
     text-align: center;
-    text-decoration: underline dotted;
     font-size: 1.2vw;
+    padding-left: 1vw;
+    padding-bottom: 0.4vh;
+    padding-top: 0.4vh;
+    border-bottom: 0.1vw solid #ccc;
+}
+
+.upcoming-exams-items p:last-child,
+.ongoing-exams-items p:last-child {
+    border-bottom-left-radius: 1.2vw;
+    border-bottom-right-radius: 1.2vw;
+}
+
+.upcoming-exams-items p:nth-child(even),
+.ongoing-exams-items p:nth-child(even) {
+    background-color: #f5f4f490;
 }
 
 .clear-float {

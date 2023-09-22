@@ -10,6 +10,8 @@ class Exam(BaseModel, db.Model):
     """ Exam Table """
     exam_id = db.Column(db.Integer, primary_key=True)
     course_name = db.Column(db.String(128), nullable=False)
+    instruction = db.Column(db.Text, nullable=False,
+                            server_default="Exam instruction...")
     no_of_questions = db.Column(db.Integer, nullable=False)
     time_allowed = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False,
