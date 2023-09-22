@@ -1,0 +1,24 @@
+{% extends "base_student_dashboard.html" %}
+{% block style_sheet_1 %}
+<link rel="stylesheet" type="text/css" href="../../static/styles/exam_instruction.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
+{% block workspace_content %}
+<div class="first-workspace-child">
+  <h2 class="page-heading">{{ exam.course_name }} Examination</h2>
+  <div class="instruction-container">
+    <h3 class="instruction-title">Instructions:</h3>
+    <div class="instruction-body"><pre>{{ exam.instruction }}</pre></div>
+  </div>
+  <div class="exam-details">
+    <form method="POST" action="/take_exam">
+      Start time: &nbsp;<input type="time" value="{{ exam.start_time }}" disabled>&emsp;&emsp;
+      End time: &nbsp;<input type="time" value="{{ exam.end_time }}" disabled>&emsp;&emsp;
+      Exam duration: &nbsp;<input type="text" value="{{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }}" disabled>&emsp;&emsp;
+      Number of questions: &nbsp;<input type="number" value="{{ exam.no_of_questions }}" disabled>
+      <input type="text" name="exam_id" value="{{ exam.exam_id }}" hidden>
+      <input type="text" name="user_id" value="{{ user.user_id }}" hidden><br>
+      <input type="submit" value="START EXAM">
+    </form>
+  </div>
+</div>
+{% endblock %}

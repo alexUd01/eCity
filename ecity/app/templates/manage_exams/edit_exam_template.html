@@ -5,18 +5,19 @@
       <div class="form-subsection exam-details">
 	<h3>Examination Details</h3>
 	<input type="text" name="exam_id" value="{{ exam.exam_id }}" hidden>
-	<label><span>Course Name:</span>&nbsp;<input type="text" name="course_name" value="{{ exam.course_name }}"></label>
-	<label><span>Number of questions:</span>&nbsp;<input type="number" name="no_of_questions" value="{{ exam.no_of_questions }}" min="1" max="9999"></label>
-	<label><span>Time Allowed (in minutes):</span>&nbsp;<input type="number" name="time_allowed" value="{{ exam.time_allowed }}" min="1"></label>
-	<label><span>Examination Date:</span>&nbsp;<input type="date" name="exam_date" value="{{ exam.exam_date }}" min="{{ date.isoformat(datetime.utcnow()) }}"></label>
-	<label><span>Start Time:</span>&nbsp;<input type="time" name="start_time" value="{{ exam.start_time }}"></label>
-	<label><span>End Time:</span>&nbsp;<input type="time" name="end_time" value="{{ exam.end_time }}"></label>
+	<label><span>Course Name:</span>&nbsp;<input type="text" name="course_name" value="{{ exam.course_name }}" required></label>
+	<label><span>Number of questions:</span>&nbsp;<input type="number" name="no_of_questions" value="{{ exam.no_of_questions }}" min="1" max="9999" required></label>
+	<label><span>Time Allowed (in minutes):</span>&nbsp;<input type="number" name="time_allowed" value="{{ exam.time_allowed }}" min="1" required></label>
+	<label><span>Examination Date:</span>&nbsp;<input type="date" name="exam_date" value="{{ exam.exam_date }}" min="{{ date.isoformat(datetime.utcnow()) }}" required></label>
+	<label><span>Start Time:</span>&nbsp;<input type="time" name="start_time" value="{{ exam.start_time }}" required></label>
+	<label><span>End Time:</span>&nbsp;<input type="time" name="end_time" value="{{ exam.end_time }}" required></label>
 	<label><span>Examiner:</span>&nbsp;<input type="text" value="{{ user.firstname }} {{ user.middlename }} {{user.lastname}}" name="examiner_name" readonly></label>
 	<label><input type="submit" formaction="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}" value="Update Number of questions"></label>
 	<label><input type="submit" value="Save Changes"></label>
       </div>
       <div class="form-subsection question-and-options">
 	<h3>Type in your questions and their options in the respective spaces provided below</h3>
+	<label><span>Instruction:</span><textarea name="exam-instruction" cols="90" rows="10" maxlength="9999" placeholder="Exam instruction..." required autofocus>{{ exam.instruction }}</textarea></label>
 	<ul>
 	  {% for i in range(exam.no_of_questions) %}
 	  <li>

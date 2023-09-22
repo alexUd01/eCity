@@ -15,10 +15,11 @@
       </div>
       <div class="form-subsection question-and-options">
 	<h3>Type in your questions and their options in the respective spaces provided below</h3>
+	<label><span>Instruction:</span><textarea name="exam-instruction" cols="90" rows="10" maxlength="9999" placeholder="Exam instruction..." required autofocus></textarea></label>
 	<ul>
 	  {% for i in range(1, no_of_questions + 1) %}
 	  <li>
-	    <label><span>{{ i }}.</span>&nbsp;<textarea type="textarea" name="Q{{ i }}" cols="70" rows="3" maxlength="5000" placeholder="Type in question {{i}}" required></textarea></label>
+	    <label><span>{{ i }}.</span>&nbsp;<textarea name="Q{{ i }}" cols="70" rows="3" maxlength="5000" placeholder="Question {{i}}" required></textarea></label>
 	    <ul>
 	      {% for j in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] %}
 	      {% if j == 'A' or j == 'B'%}

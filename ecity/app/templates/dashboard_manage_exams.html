@@ -1,5 +1,7 @@
 {% extends "base_dashboard.html" %}
 {% block workspace_content %}
+<div class="first-workspace-child">
+  <h2 class="page-heading">MANAGE EXAMS</h2>
   <dl>
     <dt>CREATE A QUIZ OR AN EXAMINATION</dt>
     <dd>Enter exam details then click the&nbsp;<span>create exam</span>&nbsp;button to create and schedule an examination or a quiz.</dd>
@@ -23,8 +25,10 @@
 	{{ exam.exam_id }} - {{ exam.course_name }}<br>
 	{{ exam.exam_date }} from {{ exam.start_time }} to {{ exam.end_time }}
 	<a href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Edit exam</a>
+	<a href="/users/{{ user.user_id }}/manage_exams/delete_exam?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Delete exam</a>
       </li>
       {% endfor %}
     </ul>
   </dl>
+</div>
 {% endblock %}

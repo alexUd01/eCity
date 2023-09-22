@@ -16,6 +16,8 @@
       <a href="/"><div class="logo"></div></a>
       <div class="header-nav">
 	<a href="/"><span>HOME</span></a>
+	<a href="/login?resource_id={{ g.uuid4() }}"><span>ADMIN&nbsp;&nbsp;LOGIN</span></a>
+	<a href="/login?resource_id={{ g.uuid4() }}&student_login=True"><span>STUDENT&nbsp;&nbsp;LOGIN</span></a>
       </div>
       <span class="clear-float"></span>
       {% with message = get_flashed_messages(with_categories=True) %}
@@ -32,7 +34,7 @@
 	  <div class="login-div">
 	    <h4>ENTER LOGIN DETAIL</h4>
 	    <form action="/sign-in" method="post">
-		<input type="text" name="student_login" value="{{ student_login }}" hidden>
+	      <input type="text" name="student_login" value="{{ student_login }}" hidden>
 	      <label>
 		<input class="credential" type="text" name="username" placeholder="Username" autocomplete="off" autofocus required>
 	      </label>

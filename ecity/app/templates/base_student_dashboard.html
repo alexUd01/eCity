@@ -48,11 +48,9 @@
 	<section class="grouped-sections nav-container">
 	  <nav>
 	    <ol class="nav-items">
-	      <a href="/users/{{ user.user_id }}/upcoming_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="upcoming-exams" title="Upcoming Examinations"></li></a>
-	      <a href="/users/{{ user.user_id }}/past_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="past-exams" title="Past Examinations"></li></a>
-	      <a href="/users/{{ user.user_id }}/my_students?resource_id={{ g.uuid4() }}"><li class="nav-item" id="my-students" title="My students"></li></a>
-	      <a href="/users/{{ user.user_id }}/manage_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="manage-exams" title="Manage Examinations"></li></a>
-	      <a href="/logout"><li class="nav-item" id="logout" title="Logout"></li></a>
+	      <a href="/student/{{ user.user_id }}/upcoming_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="upcoming-exams" title="Upcoming Examinations"></li></a>
+	      <a href="/student/{{ user.user_id }}/past_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="past-exams" title="Past Examinations"></li></a>
+	      <a href="/logout?{{ g.uuid4() }}&student_login=True"><li class="nav-item" id="logout" title="Logout"></li></a>
 	    </ol>
 	  </nav>
 	</section>

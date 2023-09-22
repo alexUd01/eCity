@@ -16,6 +16,8 @@
       <a href="/"><div class="logo"></div></a>
       <div class="header-nav">
 	<a href="/"><span>HOME</span></a>
+	<a href="/login?resource_id={{ g.uuid4() }}"><span>ADMIN&nbsp;&nbsp;LOGIN</span></a>
+	<a href="/login?resource_id={{ g.uuid4() }}&student_login=True"><span>STUDENT&nbsp;&nbsp;LOGIN</span></a>
       </div>
       <span class="clear-float"></span>
       {% with message = get_flashed_messages(with_categories=True) %}

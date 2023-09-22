@@ -35,7 +35,7 @@
 	</div>
       </section>
       <section class="main-content question-sect">
-	<form action="/users/{{ user.user_id }}/dashboard" method="GET">
+	<form action="/student/{{ user.user_id }}/dashboard" method="GET">
 	  <div class="question">
 	    <h3 id="No">&nbsp;&nbsp;</h3> <!-- &nbsp; is whitespace -->
 	    <h3 id="Q">Fetching question from database...</h3>
@@ -61,7 +61,7 @@
 	<div>
 	  <h3>EXAMINATION DETAILS</h3>
 	  <div class="exam-detail-block">
-	    <h4>COURSE: &nbsp;&nbsp;{{ exam.course_name }}</h4>
+	    <h4>COURSE: &nbsp;&nbsp;{{ exam.course_name }} [ <span id="exam_id">{{ exam.exam_id }}</span> ] </h4>
 	    <h4 id="time_allowed">TIME ALLOWED: &nbsp;&nbsp;<b>{{ exam.time_allowed }}</b> minutes</h4>
 	    <h4>TOTAL QUESTIONS: &nbsp;&nbsp;{{ exam.count() }}</h4>
 	    <h4 id="attempted">QUESTIONS ATTEMPTED:</h4>

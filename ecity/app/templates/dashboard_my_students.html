@@ -1,7 +1,7 @@
 {% extends "base_dashboard.html" %}
 {% block workspace_content %}
-<div>
-  <h3>YOUR STUDENTS</h3>
+<div class="first-workspace-child">
+  <h2 class="page-heading">YOUR STUDENTS</h2>
   <a href="">Create a new student account</a>
   {% for user in user.get_students() %}
   <div class="student-details-container">
