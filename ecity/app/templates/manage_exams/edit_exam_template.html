@@ -1,7 +1,11 @@
 {% extends "manage_exams/manage_exams_base_dashboard.html" %}
+{% block other_stylesheets %}
+<link rel="stylesheet" type="text/css" href="../../../static/styles/exam_template.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
 {% block workspace_content %}
   <div class="form-container">
-    <form method="POST" action="/users/{{ user.user_id }}/manage_exams/edit_exam">
+    <h2 class="page-heading">EDIT AN EXAM</h2>
+    <form class="f-container" method="POST" action="/users/{{ user.user_id }}/manage_exams/edit_exam">
       <div class="form-subsection exam-details">
 	<h3>Examination Details</h3>
 	<input type="text" name="exam_id" value="{{ exam.exam_id }}" hidden>
@@ -12,50 +16,52 @@
 	<label><span>Start Time:</span>&nbsp;<input type="time" name="start_time" value="{{ exam.start_time }}" required></label>
 	<label><span>End Time:</span>&nbsp;<input type="time" name="end_time" value="{{ exam.end_time }}" required></label>
 	<label><span>Examiner:</span>&nbsp;<input type="text" value="{{ user.firstname }} {{ user.middlename }} {{user.lastname}}" name="examiner_name" readonly></label>
-	<label><input type="submit" formaction="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}" value="Update Number of questions"></label>
-	<label><input type="submit" value="Save Changes"></label>
+	<label class="update-button"><input type="submit" formaction="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}" value="Update Number of questions"></label>
+	<label class="save-button"><input type="submit" value="Save Changes"></label>
       </div>
       <div class="form-subsection question-and-options">
-	<h3>Type in your questions and their options in the respective spaces provided below</h3>
-	<label><span>Instruction:</span><textarea name="exam-instruction" cols="90" rows="10" maxlength="9999" placeholder="Exam instruction..." required autofocus>{{ exam.instruction }}</textarea></label>
-	<ul>
-	  {% for i in range(exam.no_of_questions) %}
-	  <li>
-	    {% if i < len(questions) %}
-	      <input type="text" name="Q{{ i }}-id" value="{{ questions[i].question_id }}" hidden>
-	      <label><span>{{ i + 1 }}.</span>&nbsp;<textarea name="Q{{ i }}" cols="70" rows="3" maxlength="5000" placeholder="Type in a question" required>{{ questions[i].data }}</textarea></label>
-	      <ul>
-	        {% for j in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] %}
-	          {% set val = questions[i].__dict__[j] %}
-	          {% if j == 'A' or j == 'B'%}
-	            <li><label><span>{{ j }}.</span>&nbsp;<input type="text" name="Q{{ i }}-option-{{ j }}" required placeholder="Option {{ j }}" value="{{ val }}"></label></li>
-	          {% else %}
-	            <li><label><span>{{ j }}.</span>&nbsp;<input type="text" name="Q{{ i }}-option-{{ j }}" placeholder="Option {{ j }}" value="{{ val }}"></label></li>
-	          {% endif %}
-	        {% endfor %}
-	      </ul>
-	    {% else %}
-	      <input type="text" name="Q{{ i }}-id" value="" hidden>
-	      <label><span>{{ i + 1 }}.</span>&nbsp;<textarea name="Q{{ i }}" cols="70" rows="3" maxlength="5000" placeholder="Type in a question"></textarea></label>
-	      <ul>
-	        {% for j in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] %}
-	          <li><label><span>{{ j }}.</span>&nbsp;<input type="text" name="Q{{ i }}-option-{{ j }}" placeholder="Option {{ j }}" value=""></label></li>
-	        {% endfor %}
-	      </ul>
-	    {% endif %}
-	  </li>
-	    {% if i < len(questions) %}
-	      {# Edited questions and answers have "question_id" and "answer_id" respectively #}
-	      <input type="text" name="Q{{ i }}-correct-option-id" value="{{ questions[i].answer[0].answer_id }}" hidden>
-	      <li><label><span>Correct option:</span>&nbsp;<input type="text" name="Q{{ i }}-correct_option" required maxlength="1" placeholder="(A / b / C / d)" value="{{ questions[i].answer[0].correct_option }}"></label></li>
-	      <li><label><span>Explanation if any:</span>&nbsp;<textarea name="Q{{ i }}-correct_notes" maxlength="5000" cols="70" rows="3" placeholder="Enter explanatory notes if any. This explanation will be shown to your students after the examination.">{{ questions[i].answer[0].correct_notes }}</textarea></label></li>
-	    {% else %}
-	      <input type="text" name="Q{{ i }}-correct-option-id" value="" hidden>
-	      <li><label><span>Correct option:</span>&nbsp;<input type="text" name="Q{{ i }}-correct_option" maxlength="1" placeholder="(A / b / C / d)" value=""></label></li>
-	      <li><label><span>Explanation if any:</span>&nbsp;<textarea name="Q{{ i }}-correct_notes" maxlength="5000" cols="70" rows="3" placeholder="Enter explanatory notes if any. This explanation will be shown to your students after the examination."></textarea></label></li>
-	    {% endif %}
-	  {% endfor %}
-	</ul>
+	<details class="help-details-container">
+	  <summary class="help-title">Help</summary>
+	  <p>Type in your questions and their options in the respective spaces provided below</p>
+	</details>
+	<h4 class="instruction">Examination Instruction:</h4><textarea name="exam-instruction" cols="90" rows="10" maxlength="9999" placeholder="This instruction will be made available to your students at the commencement of this examination." required autofocus>{{ exam.instruction }}</textarea>
+	{% for i in range(exam.no_of_questions) %}
+	<div class="question-container">
+	  {% if i < len(questions) %}
+	    <input type="text" name="Q{{ i }}-id" value="{{ questions[i].question_id }}" hidden>
+	    <label class="question"><span class="Q-no">{{ i + 1 }}.</span>&nbsp;<textarea name="Q{{ i }} question-space" cols="90" rows="5" maxlength="5000" placeholder="Type in a question" required>{{ questions[i].data }}</textarea></label>
+	    <div class="options-container">
+	    {% for j in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] %}
+	    {% set val = questions[i].__dict__[j] %}
+	      {% if j == 'A' or j == 'B'%}
+	        <label><span class="Q-opt">{{ j }}.</span>&nbsp;<input type="text" name="Q{{ i }}-option-{{ j }} option-space" required placeholder="Option {{ j }}" value="{{ val }}"></label>
+	      {% else %}
+	        <label><span class="Q-opt">{{ j }}.</span>&nbsp;<input type="text" name="Q{{ i }}-option-{{ j }} option-space" placeholder="Option {{ j }}" value="{{ val }}"></label>
+	      {% endif %}
+	    {% endfor %}
+	    </div>
+	  {% else %}
+	    <input type="text" name="Q{{ i }}-id" value="" hidden>
+	    <label class="question"><span class="Q-no">{{ i + 1 }}.</span>&nbsp;<textarea name="Q{{ i }} question-space" cols="90" rows="5" maxlength="5000" placeholder="Type in a question"></textarea></label>
+	    <div class="options-container">
+	    {% for j in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] %}
+	      <label><span class="Q-opt">{{ j }}.</span>&nbsp;<input type="text" name="Q{{ i }}-option-{{ j }} option-space" placeholder="Option {{ j }}" value=""></label>
+	    {% endfor %}
+	    </div>
+	  {% endif %}
+
+	  {% if i < len(questions) %}
+	    {# Edited questions and answers have "question_id" and "answer_id" respectively #}
+	    <input type="text" name="Q{{ i }}-correct-option-id" value="{{ questions[i].answer[0].answer_id }}" hidden>
+	    <label><span class="Q-no">&nbsp;&nbsp;Correct option:</span>&nbsp;<input type="text" name="Q{{ i }}-correct_option correct-option-space" required maxlength="1" value="{{ questions[i].answer[0].correct_option }}"></label>
+	    <label><span class="Q-no">&nbsp;&nbsp;Explanation if any:</span><br>&nbsp;&nbsp;<textarea name="Q{{ i }}-correct_notes correct-notes-space" maxlength="5000" cols="82" rows="5" placeholder="Enter explanatory notes if any. This explanation will be shown to your students after the examination.">{{ questions[i].answer[0].correct_notes }}</textarea></label>
+	  {% else %}
+	    <input type="text" name="Q{{ i }}-correct-option-id" value="" hidden>
+	    <label><span class="Q-no">&nbsp;&nbsp;Correct option:</span>&nbsp;<input type="text" name="Q{{ i }}-correct_option correct-option-space" maxlength="1" value="" required></label>
+	    <label><span class="Q-no">&nbsp;&nbsp;Explanatory Notes:</span><br>&nbsp;&nbsp;<textarea name="Q{{ i }}-correct_notes correct-notes-space" maxlength="5000" cols="82" rows="5" placeholder="This explanation will be shown to your students only after the examination."></textarea></label>
+	  {% endif %}
+	</div>
+	{% endfor %}
       </div>
     </form>
   </div>

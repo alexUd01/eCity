@@ -63,6 +63,7 @@ input[type=submit] {
     color: #ffffff;
 }
 
+input[type=submit]:focus,
 input[type=submit]:hover {
     opacity: 0.8;
 }

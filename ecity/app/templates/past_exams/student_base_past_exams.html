@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="../../static/styles/ecity_header.css?resource_id={{ g.uuid4() }}">
-    <link rel="stylesheet" type="text/css" href="../../static/styles/ecity_footer.css?resource_id={{ g.uuid4() }}">
-    <link rel="stylesheet" type="text/css" href="../../static/styles/dashboard.css?resource_id={{ g.uuid4() }}">
-    <link rel="icon" type="image/png" href="../../static/images/favicon-blue.png?resource_id={{ g.uuid4() }}">
+    <link rel="stylesheet" type="text/css" href="../../../static/styles/ecity_header.css?resource_id={{ g.uuid4() }}">
+    <link rel="stylesheet" type="text/css" href="../../../static/styles/ecity_footer.css?resource_id={{ g.uuid4() }}">
+    <link rel="stylesheet" type="text/css" href="../../../static/styles/dashboard.css?resource_id={{ g.uuid4() }}">
+    <link rel="icon" type="image/png" href="../../../static/images/favicon-blue.png?resource_id={{ g.uuid4() }}">
     <title>&nbsp;eCity&nbsp; | &nbsp;Dashboard</title>
-    <script src="../../static/scripts/jquery-3.6.4.js?resource_id={{ g.uuid4() }}"></script>
-    <script src="../../static/scripts/dashboard.js?resource_id={{ g.uuid4() }}"></script>
+    <script src="../../../static/scripts/jquery-3.6.4.js?resource_id={{ g.uuid4() }}"></script>
+    <script src="../../../static/scripts/dashboard.js?resource_id={{ g.uuid4() }}"></script>
     {% block other_stylesheets %}{% endblock %}
     {% block other_scripts %}{% endblock %}
   </head>
@@ -21,7 +21,7 @@
 	</div><!--
 	--><div class="h-content user-info-container">
 	  <div class="user-detail">
-	    <span class="user-profile-pic" style="background-image: url('../../static/images/user_profile_pics/compressed_pics/{{ user.dp }}')"></span>
+	    <span class="user-profile-pic" style="background-image: url('../../../static/images/user_profile_pics/compressed_pics/{{ user.dp }}')"></span>
 	    <span class="user-profile-details">
 	      <h4 id="username">{{ user.username }}</h4>
 	      <h4 id="fullname">{{ user.firstname }} {{ user.lastname }} {{ user.middlename }}</h4>
@@ -44,10 +44,8 @@
 	<section class="grouped-sections nav-container">
 	  <nav>
 	    <ol class="nav-items">
-	      <a href="/users/{{ user.user_id }}/upcoming_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="upcoming-exams" title="Upcoming Examinations"></li></a>
-	      <a href="/users/{{ user.user_id }}/past_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="past-exams" title="Past Examinations"></li></a>
-	      <a href="/users/{{ user.user_id }}/my_students?resource_id={{ g.uuid4() }}"><li class="nav-item" id="my-students" title="My students"></li></a>
-	      <a href="/users/{{ user.user_id }}/manage_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="manage-exams" title="Manage Examinations"></li></a>
+	      <a href="/student/{{ user.user_id }}/upcoming_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="upcoming-exams" title="Upcoming Examinations"></li></a>
+	      <a href="/student/{{ user.user_id }}/past_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="past-exams" title="Past Examinations"></li></a>
 	      <a href="/logout?user_id={{ user.user_id }}"><li class="nav-item" id="logout" title="Logout"></li></a>
 	    </ol>
 	  </nav>

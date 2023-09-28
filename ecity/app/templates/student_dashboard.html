@@ -1,15 +1,15 @@
 {% extends "base_student_dashboard.html" %}
 {% block workspace_content %}
-<div>
+<div class="no-heading-page">
   <div class="upcoming-exams-container">
     <h3>Upcoming examinations at a glance</h3>
     <div class="upcoming-exams-items">
       {% if exams %}
         {% for exam in exams %}
           <p style="text-align: left">
-	    {{ exam.exam_id }} - {{ exam.course_name }}<br>
-	    Duration: {{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }}<br>
-	    Will take place on {{ exam.exam_date }} from {{ exam.start_time }} to {{ exam.end_time }}<br>
+	    <span class="instance-id">{{ exam.exam_id }}</span>
+	    <span class="course-name">{{ exam.course_name }}</span><br>
+	      &emsp;&emsp;&nbsp;Will take place on <em>{{ exam.exam_date.strftime('%d/%m/%Y') }}</em> from <em>{{ exam.start_time }}</em> to <em>{{ exam.end_time }}</em>
 	  </p>
         {% endfor %}
       {% else %}

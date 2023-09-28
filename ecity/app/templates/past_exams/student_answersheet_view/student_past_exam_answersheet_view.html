@@ -1,0 +1,60 @@
+{% extends "past_exams/student_answersheet_view/student_base_past_exams.html" %}
+{% block other_stylesheets %}
+<link rel="stylesheet" type="text/css" href="../../../../static/styles/past_exams_answersheet.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
+{% block workspace_content %}
+  <div class="container">
+    <h2 class="page-heading">You Are Viewing {{ student.firstname }}'s {{ exam.course_name }} Examination Answersheet</h2>
+    <div class="main-container">
+      <div class="exam-details content">
+	<h5>Date: &nbsp;<span>{{ exam.exam_date.strftime('%d/%m/%Y') }}</span></h5>
+	<h5>Duration: &nbsp;<span>{{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }}</span></h5>
+	<h5>Number of questions: &nbsp;<span>{{ exam.no_of_questions }}</span></h5>
+	<h5>Score: &nbsp;<span>{{ score.score }} &nbsp;[{{ round(score.score / exam.no_of_questions * 100, 2) }}%]</span></h5>
+	<h5>Failure{{ 's' if (exam.no_of_questions - score.score) > 1 else '' }}: <span>{{ exam.no_of_questions - score.score }}</span></h5>
+      </div>
+      <div class="answersheet-container content">
+	{% for i in range(exam.no_of_questions) %}
+	<div class="answersheet">
+	  <div class="question-container">
+	    <span class="Q-no">{{ i + 1 }}. </span>
+	    <span class="Quest">{{ answersheets[i].question.data }}</span>
+	  </div>
+	  <div class="options-container">
+	    {% for opt in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] %}
+	      {% if answersheets[i].question.__dict__[opt] %}  {# Remove all None options #}
+  	        {% if answersheets[i].student_choice == answersheets[i].question.correct_option[0].correct_option %}  {# student's choice was correct #}
+                  {% if opt == answersheets[i].student_choice %}  {# Highlight only the correct option green #}
+	            <div>
+  	              <span class="correct-opt-selected">{{ opt }}. {{ answersheets[i].question.__dict__[opt] }}</span>
+	            </div>
+		  {% else %}  {# Don't highlight the rest #}
+		    <div>
+  	              <span class="normal-opt">{{ opt }}. {{ answersheets[i].question.__dict__[opt] }}</span>
+		    </div>
+		  {% endif %}
+		{% else %}  {# Student's choice was wrong #}
+                  {% if opt == answersheets[i].student_choice %} {# Highlight the wrong option red #}
+	            <div>
+  	              <span class="normal-opt wrong-opt-selected">{{ opt }}. {{ answersheets[i].question.__dict__[opt] }}</span>
+	            </div>
+		  {% endif %}
+		  {% if opt == answersheets[i].question.correct_option[0].correct_option %} {# Highlight the correct option blue #}
+		    <div>
+  	              <span class="normal-opt correct-opt-not-selected">{{ opt }}. {{ answersheets[i].question.__dict__[opt] }}</span>
+		    </div>
+		  {% else %}  {# Don't highlight the rest #}
+		    <div>
+  	              <span class="normal-opt">{{ opt }}. {{ answersheets[i].question.__dict__[opt] }}</span>
+		    </div>
+		  {% endif %}
+		{% endif %}
+	      {% endif %}
+	    {% endfor %}
+	  </div>
+	</div>
+	{% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

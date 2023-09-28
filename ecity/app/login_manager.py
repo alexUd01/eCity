@@ -8,3 +8,5 @@ from flask_login import login_remembered
 from datetime import timedelta
 
 lm = LoginManager()
+print(dir(flask_login.config))
+print(flask_login.config.SESSION_KEYS)

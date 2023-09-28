@@ -131,11 +131,10 @@ div.flash-message-container {
     display: block;
     z-index: 100;
     position: fixed;
-    top: -9.5vh;
-    left: 31%;
-    height: 24vh;
-    min-width: 26vw;
-    max-width: 40vw;
+    top: -9vh;
+    left: 12%;
+    height: 22vh;
+    width: 47vw;
     font-size: 1vw;
     overflow: hidden;
 }
@@ -159,21 +158,114 @@ p.flash-message {
     color: white;
     border-left: 3px solid white;
     padding: 1.1vw 1vw 1.0vw 1vw;
-    animation: drop-down 20s ease-in-out;
+    animation: drop-down 10s ease-in-out;
 }
 
 @keyframes drop-down {
     0% {
 	opacity: 0;
-	transform: translateY(-100%);
+	transform: translateX(100%) translateY(200%);
     }
-    3%,
-    97% {
+    5%,
+    95% {
 	opacity: 1;
-	transform: translateY(230%);
+	transform: translateX(0%) translateY(200%);
     }
     100% {
 	opacity: 0;
-	transform: translateY(-100%);
+	transform: translateX(100%) translateY(200%);
     }
+}
+
+span.instance-id {
+    display: inline-block;
+    height: 3vh;
+    min-width: 2.5vw;
+    max-width: 6vw;
+    padding: 2px 3px 2px 3px;
+    border-radius: 0.25vw;
+    color: #cf0000;
+    background-color: #ffd1d157;
+    font-family: monospace;
+    font-size: 0.9vw;
+    font-weight: 400;
+    text-align: center;
+    box-shadow: 0.5px 0.5px 5px #fff;
+}
+
+ol, ul {
+    list-style-position: inside;
+}
+
+input::placeholder {
+    font-family: sans-serif;
+    font-weight: 100;
+    opacity: 0.35;
+    color: black;
+}
+
+input::-webkit-input-placeholder {
+    font-family: sans-serif;
+    font-weight: 100;
+    opacity: 0.35;
+    color: black;
+}
+
+input:-ms-input-placeholder {
+    font-family: sans-serif;
+    font-weight: 100;
+    opacity: 0.35;
+    color: black;
+}
+
+input::-moz-placeholder {
+    font-family: sans-serif;
+    font-weight: 100;
+    opacity: 0.35;
+    color: black;
+}
+
+span.sample-button {
+    display: inline-block;
+    background-color: #f7f7f7a6;
+    height: auto;
+    width: auto;
+    padding: 0.1vw 0.4vw 0.1vw 0.4vw;
+    border: 1px #ccc solid;
+    border-radius: 0.3vw;
+    font-size: 0.8vw;
+    color: #cf0000;
+    font-family: monospace;
+    font-weight: 500;
+}
+
+details.help-details-container {
+    font-size: 1.1vw;
+    color: maroon;
+    list-style: none;
+}
+
+summary.help-title {
+    font-family: sans-serif;
+    font-weight: 500;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    letter-spacing: 0.9px;
+}
+
+summary.help-title:hover {
+    text-decoration: underline;
+}
+
+summary.help-title:active {
+    color: black;
+}
+
+details p {
+    font-family: sans-serif;
+    font-weight: 400;
+    color: black;
+    letter-spacing: 0.9px;
 }

@@ -1,34 +1,63 @@
 {% extends "base_dashboard.html" %}
+{% block other_stylesheets %}
+<link rel="stylesheet" type="text/css" href="../../../static/styles/manage_exams.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
+{% block other_scripts %}
+<script src="../../../static/scripts/manage_exams.js?resource_id={{ g.uuid4() }}"></script>
+{% endblock %}
 {% block workspace_content %}
 <div class="first-workspace-child">
   <h2 class="page-heading">MANAGE EXAMS</h2>
-  <dl>
-    <dt>CREATE A QUIZ OR AN EXAMINATION</dt>
-    <dd>Enter exam details then click the&nbsp;<span>create exam</span>&nbsp;button to create and schedule an examination or a quiz.</dd>
-    <dd>
-      <form method="POST" action="/users/{{ user.user_id }}/manage_exams/create_exam_template">
-	<label><span>Course Name:</span>&nbsp;<input type="text" name="course_name" value="" required></label>
-	<label><span>Number of questions:</span>&nbsp;<input type="number" name="no_of_questions" inputmode="numeric" min="1" max="9999" value="5" required></label>
-	<label><span>Time Allowed (in minutes):</span>&nbsp;<input type="number" min="1" value="60" name="time_allowed" required></label>
-	<label><span>Examination Date:</span>&nbsp;<input type="date" name="exam_date" min="{{ date.isoformat(datetime.utcnow()) }}" required></label>
-	<label><span>Start Time:</span>&nbsp;<input type="time" name="start_time" required></label>
-	<label><span>End Time:</span>&nbsp;<input type="time" name="end_time" required></label>
-	<label><span>Examiner:</span>&nbsp;<input type="text" value="{{ user.firstname }} {{ user.middlename }} {{user.lastname}}" name="examiner_name" disabled></label>
-	<label><input type="submit" value="Create Exam Template"></label>
-      </form>
-    </dd>
-    <dt>EDIT OR RE-SCHEDULE AN EXAMINATION OR QUIZ</dt>
-    <dd>Select an examination from the list of upcoming examinations below provided below.</dd>
-    <ul>
-      {% for exam in exams %}
-      <li>
-	{{ exam.exam_id }} - {{ exam.course_name }}<br>
-	{{ exam.exam_date }} from {{ exam.start_time }} to {{ exam.end_time }}
-	<a href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Edit exam</a>
-	<a href="/users/{{ user.user_id }}/manage_exams/delete_exam?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Delete exam</a>
-      </li>
-      {% endfor %}
-    </ul>
-  </dl>
+  <div class="main-container">
+    <details>
+      <summary class="summary-title">Create A Quiz or An Examination</summary>
+      <div class="details-detail">
+	<details class="help-details-container">
+	  <summary class="help-title">Help</summary>
+	  <p>Enter exam details then click the&nbsp;<span class="sample-button">Create Exam Template</span>&nbsp;button to create and schedule an examination or a quiz.</p>
+	</details>
+	<form method="POST" action="/users/{{ user.user_id }}/manage_exams/create_exam_template">
+	  <label class="form-item"><span>Course Name:</span>&nbsp;<input autofocus type="text" name="course_name" value="" required></label>
+	  <label class="form-item numbers">
+	    <label class="num"><span>Number of questions:</span>&nbsp;<input type="number" name="no_of_questions" inputmode="numeric" min="1" max="9999" placeholder="max 9999" value="5" required></label>
+	    <label class="num"><span>Time Allowed (in minutes):</span>&nbsp;<input type="number" name="time_allowed" inputmode="numeric" min="1" value="60" required></label>
+	  </label>
+	  <label class="form-item datetime">
+	    <label class="date"><span>Examination Date:</span>&nbsp;<input type="date" name="exam_date" min="{{ date.isoformat(datetime.utcnow()) }}" required></label>
+	    <label class="time"><span>Start Time:</span>&nbsp;<input type="time" name="start_time" required></label>
+	    <label class="time"><span>End Time:</span>&nbsp;<input type="time" name="end_time" required></label>
+	  </label>
+	  <label class="form-item"><span>Examiner:</span>&nbsp;<input type="text" name="examiner_name" value="{{ user.firstname }} {{ user.middlename }} {{user.lastname}}" disabled></label>
+	  <div class="submit-area">
+	    <label><input type="submit" value="Create Exam Template"></label>
+	  </div>
+	</form>
+      </div>
+    </details>
+    <details>
+      <summary class="summary-title">Edit or Re-schedule An Examination or Quiz</summary>
+      <div class="details-detail details-detail-2">
+	<details class="help-details-container">
+	  <summary class="help-title">Help</summary>
+	  <p>From the list of examinations provided below, select an examination to edit or delete.</p>
+	  <p>Use the&nbsp;<span class="sample-button">Edit exam</span>&nbsp;button to edit an examination and the&nbsp;<span class="sample-button">Delete exam</span>&nbsp;button to delete an examination completely.</p>
+	</details>
+	<div class="exams-list">
+	  {% for exam in exams %}
+	  <div class="exam">
+	    <div class="scheduled-exam">
+	      <span class="instance-id">{{ exam.exam_id }}</span>&nbsp; {{ exam.course_name }}<br>
+	      &emsp;&nbsp;&nbsp;&emsp;<span class="minor-details">Scheduled for <em>{{ exam.exam_date.strftime('%d/%m/%Y') }}</em> from <em>{{ exam.start_time }}</em> to <em>{{ exam.end_time }}</em>. &nbsp;({{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }})</span>
+	    </div>
+	    <div class="util-buttons">
+	      <a class="left" href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Edit exam</a>
+	      <a class="right" href="/users/{{ user.user_id }}/manage_exams/delete_exam?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}" class="delete-exam">Delete exam</a>
+	    </div>
+	  </div>
+	  {% endfor %}
+	</div>
+      </div>
+    </details>
+  </div>
 </div>
 {% endblock %}

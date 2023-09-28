@@ -7,15 +7,11 @@
     <link rel="stylesheet" type="text/css" href="../../static/styles/ecity_footer.css?resource_id={{ g.uuid4() }}">
     <link rel="stylesheet" type="text/css" href="../../static/styles/dashboard.css?resource_id={{ g.uuid4() }}">
     <link rel="icon" type="image/png" href="../../static/images/favicon-blue.png?resource_id={{ g.uuid4() }}">
-    {% block style_sheet_1 %}{% endblock %}
-    {% block style_sheet_2 %}{% endblock %}
-    {% block style_sheet_3 %}{% endblock %}
-    {% block style_sheet_4 %}{% endblock %}
-    {% block style_sheet_5 %}{% endblock %}
-    {% block style_sheet_6 %}{% endblock %}
     <title>&nbsp;eCity&nbsp; | &nbsp;Dashboard</title>
     <script src="../../static/scripts/jquery-3.6.4.js?resource_id={{ g.uuid4() }}"></script>
     <script src="../../static/scripts/dashboard.js?resource_id={{ g.uuid4() }}"></script>
+    {% block other_stylesheets %}{% endblock %}
+    {% block other_scripts %}{% endblock %}
   </head>
   <body>
     <header>
@@ -25,7 +21,7 @@
 	</div><!--
 	--><div class="h-content user-info-container">
 	  <div class="user-detail">
-	    <span class="user-profile-pic"></span>
+	    <span class="user-profile-pic" style="background-image: url('../../static/images/user_profile_pics/compressed_pics/{{ user.dp }}')"></span>
 	    <span class="user-profile-details">
 	      <h4 id="username">{{ user.username }}</h4>
 	      <h4 id="fullname">{{ user.firstname }} {{ user.lastname }} {{ user.middlename }}</h4>
@@ -50,7 +46,7 @@
 	    <ol class="nav-items">
 	      <a href="/student/{{ user.user_id }}/upcoming_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="upcoming-exams" title="Upcoming Examinations"></li></a>
 	      <a href="/student/{{ user.user_id }}/past_exams?resource_id={{ g.uuid4() }}"><li class="nav-item" id="past-exams" title="Past Examinations"></li></a>
-	      <a href="/logout?{{ g.uuid4() }}&student_login=True"><li class="nav-item" id="logout" title="Logout"></li></a>
+	      <a href="/logout?{{ g.uuid4() }}&student_login=True&user_id={{ user.user_id }}"><li class="nav-item" id="logout" title="Logout"></li></a>
 	    </ol>
 	  </nav>
 	</section>

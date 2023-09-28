@@ -1,0 +1,266 @@
+div.main-container {
+    width: 95%;
+    height: 93%;
+    margin-left: 2vw;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+details {
+    width: 95%;
+    height: auto;
+    margin-bottom: 2vw;
+}
+
+summary {
+    list-style: none;
+}
+
+summary.summary-title {
+    width: 100%;
+    height: 6vw;
+    border: 1px #ccc solid;
+    margin: auto;
+    font-size: 1.5vw;
+    font-family: sans-serif;
+    padding: 2.1vw 0 2vw 2.2vw;
+    border-radius: 1vw;
+    list-style: none;
+    background-color: #f7f7f775;
+}
+
+summary.summary-title:hover {
+    text-decoration: underline;
+    background-color: #a9a9a920;
+}
+
+details[open] summary.summary-title {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+div.details-detail {
+    height: auto;
+    width: 100%;
+    border: 1px #ccc solid;
+    padding: 1vw 0 1vw 2.2vw;
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
+}
+
+label.form-item {
+    display: block;
+    height: 3.5vw;
+    width: 97%;
+    border: 1px #ccc solid;
+    margin-bottom: 1vw;
+    font-family: sans-serif;
+    font-size: 1.3vw;
+    font-weight: 700;
+    padding: 0.8vw 0 0 1.5vw;
+    border-radius: 1vw;
+}
+
+label.form-item span {
+    font-family: sans-serif;
+    font-size: 1.3vw;
+    font-weight: 100;
+}
+
+input {
+    outline: none;
+    border: none;
+    border-bottom: 1px #ccc solid;
+    height: 80%;
+    margin-left: 0.8vw;
+    font-size: 1.3vw;
+    font-weight: 100;
+}
+
+input[name=course_name],
+input[name=examiner_name] {
+    width: 75%;
+}
+
+input[name=no_of_questions],
+input[name=time_allowed] {
+    width: 7vw;
+}
+
+input[name=exam_date] {
+    width: 11vw;
+}
+
+input[name=start_time],
+input[name=end_time] {
+    width: 9vw;
+}
+
+label.datetime, label.numbers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 0;
+    padding-left: 0;
+    border: none;
+}
+
+label.numbers {
+    justify-content: flex-start;
+    gap: 2.7vw;
+}
+
+label.num {
+    width: 37%;
+    height: 100%;
+    border: 1px #ccc solid;
+    border-radius: 1vw;
+    padding: 0.8vw 0 0 1.4vw;
+}
+
+label.date {
+    width: 37%;
+    height: 100%;
+    border: 1px #ccc solid;
+    border-radius: 1vw;
+    padding: 0.8vw 0 0 1.4vw;
+}
+
+label.time {
+    width: 28%;
+    height: 100%;
+    border: 1px #ccc solid;
+    border-radius: 1vw;
+    padding: 0.8vw 0 0 1.5vw;
+}
+
+div.submit-area {
+    width: 97%;
+    height: 3.5vw;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: 0.5vw;
+}
+
+input[name=examiner_name] {
+    border: 0.5px #cccccc50 solid;
+    padding-left: 1vw;
+    border-radius: 0.3vw;
+}
+
+input[type=submit] {
+    border: 1px #ff5656 solid;
+    height: 100%;
+    width: 20vw;
+    border-radius: 1vw;
+    color: #ff5656;
+    background-color: #ffffff;
+}
+
+input[type=submit]:hover,
+input[type=submit]:hover {
+    background-color: #ff5656;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+input[type=submit]:active {
+    border: none;
+    background-color: #a9a9a9;
+    color: black;
+}
+
+div.details-detail-2 {
+    padding-left: 0;
+    padding-bottom: 0;
+}
+
+details.help-details-container,
+div.exam {
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
+}
+
+div.exams-list {
+    width: 100%;
+    height: 100%;
+}
+
+div.exam {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5vw;
+    border: 1px #ccc solid;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+div.scheduled-exam,
+div.util-buttons {
+    height: 100%;
+}
+
+div.scheduled-exam,
+div.util-buttons a {
+    font-family: sans-serif;
+    font-weight: 100;
+    font-size: 1.3vw;
+}
+
+div.scheduled-exam {
+    padding-top: 1vw;
+}
+
+div.scheduled-exam span.minor-details {
+    font-size: 1.1vw;
+    font-family: inherit;
+    font-weight: inherit;
+}
+
+div.util-buttons {
+    width: 25vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+div.util-buttons a {
+    width: 50%;
+    height: 75%;
+    text-decoration: none;
+    padding-top: .9vw;
+    text-align: center;
+}
+
+div.util-buttons a.left {
+    border: 0.2px green solid;
+    color: green;
+    border-right: none;
+    border-top-left-radius: 0.7vw;
+    border-bottom-left-radius: 0.7vw;
+}
+
+div.util-buttons a.right {
+    border: 0.2px #ff0000 solid;
+    color: #ff0000;
+    border-top-right-radius: 0.7vw;
+    border-bottom-right-radius: 0.7vw;
+}
+
+div.util-buttons a.left:focus,
+div.util-buttons a.left:hover {
+    border: none;
+    background-color: green;
+    color: #ffffff;
+}
+
+div.util-buttons a.right:focus,
+div.util-buttons a.right:hover {
+    border: none;
+    background-color: #ff0000;
+    color: #ffffff;
+}

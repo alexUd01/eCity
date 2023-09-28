@@ -1,0 +1,138 @@
+div.container {
+    width: 100%;
+    height: 100%;
+}
+
+div.primary-container {
+    width: 100%;
+    height: 94%;
+    padding: 1vw;
+    overflow: auto;
+    border: 1px solid #ccc;
+    border-radius: 1vw;
+}
+
+div.primary-container h3 {
+    font-size: 1.5vw;
+    margin-bottom: 0.5vw;
+}
+
+div.content {
+    width: 100%;
+    padding: 1vw;
+    margin-bottom: 1vw;
+}
+
+div.general-stat-info {
+    max-height: 25vw;
+}
+
+div.general-stat-info h4 {
+    font-family: sans-serif;
+    font-weight: 100;
+    font-size: 1.21vw;
+    margin-bottom: 0.2vw;
+}
+
+div.scoresheet {
+    height: auto;
+}
+
+details {
+    width: 100%;
+    height: auto;
+}
+
+summary.summ {
+    width: 100%;
+    height: 6vw;
+    padding: 2.1vw 2vw 2.1vw 2vw;
+    list-style: none;
+    border-radius: 1vw;
+    border: 1px solid #ccc;
+    background-color: #a9a9a910;
+    font-size: 1.3vw;
+}
+
+summary.summ:hover {
+    text-decoration: underline;
+    background-color: #a9a9a918;
+}
+
+details[open] summary.summ {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+div.table-container {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
+}
+
+table#scoresheet-table {
+    width: 100%;
+}
+
+table#scoresheet-table,
+tr, th, td {
+    border-collapse: collapse;
+}
+
+tr.tr-head,
+tr.tr-body {
+    height: 3vw;
+}
+
+th, td {
+    font-family: sans-serif;
+    font-weight: 100;
+    font-size: 1.2vw;
+    padding: 0;
+    text-align: center;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr.tr-head {
+    background-color: #a9a9a930;
+}
+
+tr.tr-body:nth-child(even) {
+    background-color: #a9a9a915;
+}
+
+tr.tr-body:hover {
+    background-color: #a9a9a925;
+}
+
+.name,
+.ans-sheet-link {
+    text-align: left;
+    padding-left: 1.2vw;
+}
+
+.name {
+    width: 41%;
+}
+
+.id-col {
+    width: 5%;
+}
+
+td.ans-sheet-link a {
+    font-weight: 100;
+    color: darkred;
+}
+
+td.ans-sheet-link a:hover {
+    color: black;
+}
+
+td.ans-sheet-link a:active {
+    opacity: 0.7;
+}

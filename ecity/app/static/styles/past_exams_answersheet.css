@@ -1,0 +1,95 @@
+div.container {
+    height: 93%;
+    width: 100%;
+}
+
+div.main-container {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    border: 1px #ccc solid;
+    border-radius: 1vw;
+    padding: 1vw 1vw 1vw 1vw;
+}
+
+div.content {
+    border: none;
+    padding: 1vw;
+    margin-bottom: 2.2vw;
+    width: 100%;
+}
+
+div.exam-details {
+    padding-top: 1.5vw;
+    height: auto;
+    border-bottom: 1px #ccc solid;
+}
+
+div.exam-details h5,
+div.exam-details h5 span {
+    margin-bottom: 0.5vw;
+    font-family: sans-serif;
+    font-weight: 100;
+    font-size: 1.2vw;
+}
+
+div.exam-details h5 {
+    font-weight: bold;
+}
+
+div.answersheet-container {
+}
+
+div.answersheet {
+    width: 90%;
+    padding: 1vw;
+    margin-bottom: 2vw;
+}
+
+span.Q-no,
+span.Quest {
+    font-size: 1.4vw;
+    font-weight: bold;
+}
+
+div.options-container {
+    padding: 0.7vw 0.7vw 0.7vw 1vw;
+}
+
+span.normal-opt {
+    padding: 0.1vw 0.9vw 0.1vw 0.6vw;
+    width: auto;
+    font-family: sans-serif;
+    font-weight: 100;
+    font-size: 1.2vw;
+}
+
+div.options-container div {
+    margin-bottom: 0.3vw;
+}
+
+span.correct-opt-selected,
+span.wrong-opt-selected,
+span.correct-opt-not-selected {
+    display: inline-block;
+    border-radius: 0.4vw;
+    padding: 0.15vw 0.9vw 0.15vw 0.6vw;
+    font-family: sans-serif;
+    font-weight: 100;
+    font-size: 1.2vw;
+}
+
+span.correct-opt-selected {
+    background-color: #00ff0015;
+    color: darkgreen;
+}
+
+span.wrong-opt-selected {
+    background-color: #ff000015;
+    color: darkred;
+}
+
+span.correct-opt-not-selected {
+    background-color: #0000ff15;
+    color: darkblue;
+}

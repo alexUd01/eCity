@@ -1,0 +1,120 @@
+.first-workspace-child div.tools {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: right;
+    width: 100%;
+    height: 3.5vw;
+}
+
+div.tools-item {
+    height: 100%;
+    width: 20%;
+}
+
+.tools-item a {
+    display: inline-block;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 1.1vw;
+    background-color: #e65151;
+    color: #ffffff;
+    border-radius: 1vw;
+    font-size: 1.2vw;
+    font-family: sans-serif;
+    font-weight: 500;
+}
+
+.tools-item a:focus,
+.tools-item a:hover {
+    opacity: 0.8;
+}
+
+.tools-item a:active {
+    background-color: #a9a9a9;
+    color: black;
+}
+
+div.all-students-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 1vw 1vw;
+    width: 100%;
+    height: 83%;
+    margin-top: 1vw;
+    overflow: auto;
+}
+
+div.student-details-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 5.95vw;
+    width: 32.54%;
+    border: 1px solid #ccc;
+    border-radius: 1vw;
+}
+
+.content {
+    display: block;
+    height: 100%;
+}
+
+.content a {
+    color: #4e4a4a;
+    font-size: 1.25vw;
+}
+
+.content a:focus,
+.content a:hover {
+    color: black;
+}
+
+img.pic {
+    width: 15%;
+    height: auto;
+    filter: invert(62%);
+}
+
+div.text {
+    width: 79.5%;
+    height: 90%;
+    padding-top: 0.5vw;
+    padding-left: 0.5vw;
+    overflow: auto;
+}
+
+div.online-status-container {
+    height: 90%;
+    padding-top: 0.5vw;
+}
+
+div.online-status {
+    width: 0.7vw;
+    height: 0.7vw;
+    background-color: #02681de9;
+    border-radius: 50%;
+}
+
+span.other-detail {
+    display: inline-block;
+    font-family: sans-serif;
+    font-weight: 100;
+    font-size: 0.9vw;
+    max-width: 90%;
+}
+
+span.email {
+    color: #cf0000;
+    background-color: #ffd1d167;
+    height: 1.4vw;
+    padding: 0.5px .6vw 0.2px .6vw;
+    margin-left: 3vw;
+    border-radius: 0.3vw;
+    letter-spacing: 1px;
+}

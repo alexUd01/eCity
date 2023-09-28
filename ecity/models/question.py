@@ -23,6 +23,7 @@ class Question(BaseModel, db.Model):
     exam_id = db.Column(db.Integer, db.ForeignKey('exam.exam_id'),
                           nullable=False)
     exam = db.relationship('Exam', backref='questions')
+    correct_option = db.relationship('Answer', backref='questions')
 
     def available_options(self, permutate=True):
         opt_avail = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')

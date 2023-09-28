@@ -1,6 +1,7 @@
 html, body, * {
     margin: 0;
     padding: 0;
+    scroll-behavior: smooth;
 }
 
 main {
@@ -41,7 +42,7 @@ div.user-detail {
 span.user-profile-pic {
     width: 13%;
     height: 115%;
-    background-image: url('../../static/images/profile-icon.png');
+    /* background-image: url('../../static/images/profile-icon.png'); */
     background-size: contain;
     background-repeat: no-repeat;
     background-position-y: center;
@@ -166,7 +167,6 @@ section.workspace-container {
     height: 75vh;
     margin-top: 2vh;
     margin-left: 1.3vw;
-    padding-top: 3vh;
     padding-bottom: 2.5vw;
     padding-left: 1.3vw;
     color: #4e4a4a;
@@ -177,9 +177,15 @@ div.first-workspace-child {
     height: 100%;
 }
 
+div.no-heading-page {
+    padding-top: 3vh
+}
+
 h2.page-heading {
     margin-bottom: 1vh;
-    margin-left: 28vw;
+    color: #000000d9;
+    font-size: 1.6vw;
+    text-align: center;
 }
 
 .flex-container {
@@ -200,8 +206,8 @@ h2.page-heading {
     background-color: #f5f4f470;
     text-align: center;
     padding: 3vh 0 1.8vh 0;
-    border-radius: 2vw;
     border: 0.1vw solid #ccc;
+    border-radius: 2vw 2vw 1.75vw 1.75vw;
 }
 
 .upcoming-exams-container h3,
@@ -220,24 +226,32 @@ h2.page-heading {
     background-color: #fff;
     text-align: justify;
     padding: 1.0vh 0 0 0;
-    border-radius: 1.5vw;
-    border: 0.1vw solid #ccc;
+    border-radius: 0.8vw;
+    border: 0.1px solid #ccc;
 }
 
 .upcoming-exams-items p,
 .ongoing-exams-items p {
+    width: 100%;
+    min-height: 2.5vw;
+    max-height: 7vw;
     text-align: center;
+    font-family: sans-serif;
     font-size: 1.2vw;
+    font-weight: 200;
     padding-left: 1vw;
-    padding-bottom: 0.4vh;
-    padding-top: 0.4vh;
+    padding-bottom: 0.4vw;
+    padding-top: 0.4vw;
     border-bottom: 0.1vw solid #ccc;
+}
+
+.upcoming-exams-items p span.course-name,
+.ongoing-exams-items p span.course-name{
+    
 }
 
 .upcoming-exams-items p:last-child,
 .ongoing-exams-items p:last-child {
-    border-bottom-left-radius: 1.2vw;
-    border-bottom-right-radius: 1.2vw;
 }
 
 .upcoming-exams-items p:nth-child(even),
@@ -436,21 +450,4 @@ div#exam-demo p {
 	padding-top: 4%;
     }
 
-}
-
-
-@keyframes drop-down {
-    0% {
-	opacity: 0;
-	transform: translateY(-100%);
-    }
-    3%,
-    97% {
-	opacity: 1;
-	transform: translateY(170%);
-    }
-    100% {
-	opacity: 0;
-	transform: translateY(-100%);
-    }
 }

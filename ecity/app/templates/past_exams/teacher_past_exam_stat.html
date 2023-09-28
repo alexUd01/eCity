@@ -1,0 +1,55 @@
+{% extends "past_exams/past_exams_base_dashboard.html" %}
+{% block other_stylesheets %}
+<link rel="stylesheet" type="text/css" href="../../../static/styles/teacher_past_exam_stat.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
+{% block workspace_content %}
+  <div class="container">
+    <h2 class="page-heading">Examination Statistics For {{ exam.course_name }} Examination</h2>
+    <div class="primary-container">
+      <h3>General Information</h3>
+      <div class="content general-stat-info">
+	<h4>Date Taken: <em>{{ exam.exam_date.strftime('%d/%m/%Y') }}</em></h4>
+	<h4>Duration: <em>{{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }}</em></h4>
+	<h4>Start Time: <em>{{ exam.start_time }}</em></h4>
+	<h4>End Time: <em>{{ exam.end_time }}</em></h4>
+	<h4>Number of Questions: <em>{{ exam.no_of_questions }}</em></h4>
+	<h4>Number of students who sat for this Examination: </h4>
+	<h4>Number of Students who missed this Examination: </h4>
+	<h4>Percentage Success: <em>{{ round(no_succ / len(students) * 100, 2) }}%</em></h4>
+	<h4>Percentage Failure: <em>{{ round(no_fail / len(students) * 100, 2) }}%</em></h4>
+      </div>
+      <h3>Examination Scoresheet</h3>
+      <div class="content scoresheet">
+	<details>
+	  <summary class="summ">Tap to view examination scoresheet</summary>
+	  <div class="table-container">
+	    <table id="scoresheet-table">
+	      <thead>
+		<tr class="tr-head">
+		  <th class="id-col">Id</th>
+		  <th class="name">Student</th>
+		  <th class="score">Score</th>
+		  <th class="percent">Percentage</th>
+		  <th class="time">Submission Time</th>
+		  <th class="ans-sheet-link">Student's Answersheet</th>
+		</tr>
+	      </thead>
+	      <tbody>
+		{% for student in students %}
+		<tr class="tr-body">
+		  <td clas="id-col"><span class="instance-id">{{ student.user_id }}</span></td>
+		  <td class="name">{{ student.firstname }} {{ student.middlename }} {{ student.lastname }}</td>
+		  <td class="score">{{ student.score.score }}</td>
+		  <td class="percent">{{ round(student.score.score / student.score.score_attainable * 100, 2) }}%</td>
+		  <td class="time">{{ exam.answer_sheets[0].created_at.strftime('%H:%M:%S') }}</td> {# This line is wrong because I am using thesame answersheet for all students #}
+		  <td class="ans-sheet-link"><a href="/user/{{ user.user_id }}/past_exams/{{ exam.exam_id }}/{{ student.user_id }}?resource_id={{ g.uuid4() }}">{{ student.firstname }}'{{ '' if student.firstname.endswith('s') else 's' }} Answersheet</a></td>
+		</tr>
+		{% endfor %}
+	      </tbody>
+	    </table>
+	  </div>
+	</details>
+      </div>
+    </div>
+  </div>
+{% endblock %}

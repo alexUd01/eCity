@@ -1,0 +1,30 @@
+{% extends "base_dashboard.html" %}
+{% block other_stylesheets %}
+<link rel="stylesheet" type="text/css" href="../../static/styles/add_new_student_template.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
+{% block workspace_content %}
+<div class="first-workspace-child">
+  <h2 class="page-heading">CREATE A NEW STUDENT ACCOUNT</h2>
+  <div class="second-workspace-child">
+    <div class="form-container">
+      <h4>Enter student's details</h4>
+      <form id="new-student-form" method="POST" action="/users/{{ user.user_id }}/create_new_student">
+	<label>Firstname: <input type="text" name="firstname" placeholder="Student's firstname" required autofocus></label>
+	<label>Middlename: <input type="text" name="middlename" placeholder="Student's middlename (optional)"></label>
+	<label>Lastname: <input type="text" name="lastname" placeholder="Student's lastname" required></label>
+	<label>Email: <input type="email" name="email" placeholder="Student's email" required></label>
+	<div class="gender">
+	  <label>Male:<input type="radio" name="gender" value="M" required></label>
+	  <label>Female: <input type="radio" name="gender" value="F" required></label>
+	</div>
+	<label>Detault Student Password: <input type="text" name="default-password" value="ecity-student-pass" disabled></label>
+	<label class="submit-flex">
+	  <div class="submit-container">
+	    <input type="submit" value="Create Student Account">
+	  </div>
+	</label>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

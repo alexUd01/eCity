@@ -21,3 +21,5 @@ class AnswerSheet(BaseModel, db.Model):
                            default=datetime.utcnow())
 
     user = db.relationship('User', backref="answer_sheets")
+    exam = db.relationship('Exam', backref="answer_sheets")
+    question = db.relationship('Question', backref="answer_sheets")

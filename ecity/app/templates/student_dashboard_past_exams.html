@@ -1,19 +1,38 @@
 {% extends "base_student_dashboard.html" %}
+{% block other_stylesheets %}
+<link rel="stylesheet" type="text/css" href="../../static/styles/past_exams_general.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
 {% block workspace_content %}
-<div>
+<div class="first-workspace-child">
   <h2 class="page-heading">PAST EXAMINATIONS</h2>
   {% if exams %}
-    {% for exam in exams %}
-      <div class="exam-item-container">
-        {{ exam.exam_id }} - {{ exam.course_name }} Number of Questions: {{ exam.no_of_questions }}<br>
-        Date Taken: {{ exam.exam_date }} Duration: {{ exam.time_allowed }} minutes
-        Started at: {{ exam.start_time }} Ended at: {{ exam.end_time }}
-        <a href="">View details</a>
-      </div>
-    {% endfor %}
+    <div class="all-exam-container">
+      {% for exam in exams %}
+	<div class="an-exam">
+	  <div class="exam-item-container">
+            <div class="exam-item">
+	      <span class="instance-id">{{ exam.exam_id }}</span>
+	    </div>
+	    <div class="exam-item">
+	      <span class="details course-name">{{ exam.course_name }}&nbsp; - &nbsp;<i>{{ exam.exam_date.strftime('%d/%m/%Y') }}</i></span>
+	      <ul>
+		<li><span class="details"><b>Duration</b>: {{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }}</span></li>
+		<li><span class="details"><b>Number of questions</b>: {{ exam.no_of_questions }}</span></li>
+		{% if exam.score %}
+		<li><span class="details"><b>Score</b>: {{ exam.score.score }}&nbsp;&nbsp;[{{ round(exam.score.score / exam.no_of_questions * 100, 2) }}%]</span></li>
+		{% else %}
+		<li><span class="details"><b>Score</b>: {{ 0 }}&nbsp;&nbsp;[{{ 0 }}%]</span></li>
+		{% endif %}
+	      </ul>
+	    </div>
+	  </div>
+          <a href="/student/{{ user.user_id }}/past_exams/{{ exam.exam_id }}?resource_id={{ g.uuid4() }}">View detail</a>
+	</div>
+      {% endfor %}
+    </div>
   {% else %}
-      <div>
-	You don't have any past exams yet. Check back after atleast one of your students have written atleast one exam.
+      <div class="exam-item-container">
+	You have not taken any examination yet.
       </div>
   {% endif %}
 </div>

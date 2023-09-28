@@ -1,16 +1,42 @@
 {% extends "base_dashboard.html" %}
+{% block other_stylesheets %}
+<link rel="stylesheet" type="text/css" href="../../static/styles/my_students.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
 {% block workspace_content %}
 <div class="first-workspace-child">
-  <h2 class="page-heading">YOUR STUDENTS</h2>
-  <a href="">Create a new student account</a>
-  {% for user in user.get_students() %}
-  <div class="student-details-container">
-    <div class="text content">
-      {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}
-    </div>
-    <div class="pic content">
-    </div>
+  <h2 class="page-heading">MY STUDENTS</h2>
+  <div class="tools">
+    <div class="tools-item"><a href="/users/{{ user.user_id }}/create_new_student_template?resource_id={{ g.uuid4() }}">Add a new student</a></div><!-- Add a + icon later -->
+    <!--<div class="tools-item">Search for students</div> -->
+    <!--<div class="tools-item"></div> -->
+    <!--<div class="tools-item"></div> -->
   </div>
-  {% endfor %}
+  <div class="all-students-container">
+    {% if students %}
+      {% for student in students %}
+        <div class="student-details-container">
+	  <img class="pic content" src="../../static/images/user_profile_pics/compressed_pics/{{ student.dp }}" alt="{{ student.username }}'s profile picture">
+	  <div class="text content">
+	    <span class="instance-id">{{ student.user_id }}</span>&nbsp;
+	    <a href="">{{ student.firstname }} {{ student.middlename }} {{ student.lastname }}</a><br>
+	    <span class="other-detail email">{{ student.email }}</span><br>
+	    {% if student.logged_in == 'F' %}
+	    <span class="other-detail">Last seen: <em>{{ student.last_logout.strftime('%d/%m/%Y at %H:%M:%S') if student.last_logout else 'Never'}}</em></span>
+	    {% endif %}
+	  </div>
+	  {% if student.logged_in == 'T' %}
+	  <div class="online-status-container">
+	    <div class="online-status">
+	    </div>
+	  </div>
+	  {% endif %}
+	</div>
+      {% endfor %}
+    {% else %}
+	<div>
+	  You do not have any student yet click the "Add a new student" button to add a new student.
+	</div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
