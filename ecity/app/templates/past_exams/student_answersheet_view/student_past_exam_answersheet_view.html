@@ -6,6 +6,7 @@
   <div class="container">
     <h2 class="page-heading">You Are Viewing {{ student.firstname }}'s {{ exam.course_name }} Examination Answersheet</h2>
     <div class="main-container">
+    {% if answersheets %}
       <div class="exam-details content">
 	<h5>Date: &nbsp;<span>{{ exam.exam_date.strftime('%d/%m/%Y') }}</span></h5>
 	<h5>Duration: &nbsp;<span>{{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }}</span></h5>
@@ -43,7 +44,8 @@
 		    <div>
   	              <span class="normal-opt correct-opt-not-selected">{{ opt }}. {{ answersheets[i].question.__dict__[opt] }}</span>
 		    </div>
-		  {% else %}  {# Don't highlight the rest #}
+		  {% endif %}
+		  {% if opt != answersheets[i].student_choice and opt != answersheets[i].question.correct_option[0].correct_option %}  {# Don't highlight the rest #}
 		    <div>
   	              <span class="normal-opt">{{ opt }}. {{ answersheets[i].question.__dict__[opt] }}</span>
 		    </div>
@@ -55,6 +57,9 @@
 	</div>
 	{% endfor %}
       </div>
+    {% else %}
+      <h3>{{ student.firstname }} {{ student.lastname }} missed this examination</h3>
+    {% endif %}
     </div>
   </div>
 {% endblock %}
