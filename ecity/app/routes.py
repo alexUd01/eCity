@@ -325,38 +325,19 @@ def student_past_exams(student_id):
                     ).first()
                 uniq_exams.append(exam)
             else:  # User missed this particular exam
-                # 1. Create and add an answer_sheet in which a student's entire
-                #    choice is `None`
-                questions = Question.query.filter(
-                    Question.exam_id == exam.exam_id).all()
-                for question in questions:
-                    answersheet_list.append(
-                        AnswerSheet(user_id=user.user_id, exam_id=exam.exam_id,
-                                    question_id=question.question_id,
-                                    student_choice=None)
-                    )
-                db.add_all(answersheet_list)
-                db.commit()
-                # 2. pass this answer_sheet to the score_calculation function
-                exam_score, score_attainable = create_scores(
-                    answersheet_list, exam.exam_id
-                )
+                # 1. Create and add a score with value -1
                 score = Score(
                     user_id=user.user_id, exam_id=exam.exam_id,
-                    score=exam_score, score_attainable=score_attainable
+                    score=-1, score_attainable=exam.no_of_questions
                 )
-                db.add(score)
-                db.object_session(score).commit()
                 # append exam to uniq_exams
                 exam.exam_end_datetime = exam_end_datetime
-                exam.score = Score.query.filter(
-                    Score.exam_id == exam.exam_id).filter(
-                        Score.user_id == int(student_id)
-                    ).first()
+                exam.score = score
                 db.commit()
                 uniq_exams.append(exam)
 
     uniq_exams.sort(key=lambda exam: exam.exam_end_datetime, reverse=True)
+
     return render_template('student_dashboard_past_exams.html', user=user,
                            exams=uniq_exams, date=date, round=round)
 
@@ -380,10 +361,16 @@ def student_past_exam_answersheet(student_id, exam_id):
         AnswerSheet.exam_id == exam_id).filter(
             AnswerSheet.user_id == student_id
         ).all()
-    score = Score.query.filter(
-        Score.exam_id == exam_id).filter(
-            Score.user_id == student_id
-        ).one()
+    try:
+        score = Score.query.filter(
+            Score.exam_id == exam_id).filter(
+                Score.user_id == student_id
+            ).one()
+    except NoResultFound:
+        score = Score(
+            user_id=user.user_id, exam_id=exam.exam_id, score=-1,
+            score_attainable=exam.no_of_questions
+        )
 
     return render_template(
         'past_exams/student_past_exam_answersheet.html', user=user, exam=exam,
@@ -448,10 +435,16 @@ def past_exams(user_id, exam_id=None):
     exam = Exam.query.filter(Exam.exam_id == exam_id).one()
     students = user.get_students()
     for student in students:
-        student.score = Score.query.filter(
-            Score.exam_id == exam.exam_id).filter(
-                Score.user_id == student.user_id
-            ).one()
+        try:
+            student.score = Score.query.filter(
+                Score.exam_id == exam.exam_id).filter(
+                    Score.user_id == student.user_id
+                ).one()
+        except NoResultFound:
+            student.score = Score(
+                user_id=student.user_id, exam_id=exam_id, score=-1,
+                score_attainable=exam.no_of_questions
+            )
 
     no_succ = len(
         list(filter(
@@ -494,10 +487,16 @@ def past_exam_answersheet(user_id, exam_id, student_id):
         AnswerSheet.exam_id == exam_id).filter(
             AnswerSheet.user_id == student_id
         ).all()
-    score = Score.query.filter(
-        Score.exam_id == exam_id).filter(
-            Score.user_id == student_id
-        ).one()
+    try:
+        score = Score.query.filter(
+            Score.exam_id == exam_id).filter(
+                Score.user_id == student_id
+            ).one()
+    except NoResultFound:
+        score = Score(
+            user_id=student_id, exam_id=exam.exam_id, score=-1,
+            score_attainable=exam.no_of_questions
+        )
 
     filename = 'student_past_exam_answersheet_view.html'
     return render_template(
@@ -522,7 +521,7 @@ def my_students(user_id):
            methods=['GET'], strict_slashes=False)
 @app.route('/users/<int:user_id>/create_new_student', methods=['POST'],
            strict_slashes=False)
-#@login_required
+@login_required
 def create_new_student(user_id):
     """ User dashboard """
     import os
