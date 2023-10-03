@@ -43,12 +43,28 @@ span.user-profile-pic {
     width: 13%;
     height: 115%;
     /* background-image: url('../../static/images/profile-icon.png'); */
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position-y: center;
     border-radius: 50%;
-    border: 0.5vw dotted black;
-    filter: invert(95%)
+    border: 0.2vw solid #efefef;
+}
+
+span.user-profile-pic a {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    transition: border 0.3s ease-in-out;
+    background-color: #ffffff00;
+    transition: background-color 0.5s linear;
+}
+
+span.user-profile-pic a:hover {
+    border: 1.5px solid darkgreen;
+    transition: border 0.3s ease-in-out;
+    background-color: #ffffff30;
+    transition: background-color 0.3s linear;
 }
 
 span.user-profile-details {

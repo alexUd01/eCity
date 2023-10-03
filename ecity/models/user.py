@@ -5,6 +5,7 @@ from datetime import datetime
 from ecity.models.base_model import BaseModel
 from ecity.models.answer_sheet import AnswerSheet
 from flask_login import UserMixin
+from sqlalchemy.exc import NoResultFound
 
 
 class User(UserMixin, BaseModel, db.Model):
@@ -17,7 +18,7 @@ class User(UserMixin, BaseModel, db.Model):
                          server_default='guest')
     middlename = db.Column(db.String(128), nullable=False,
                            server_default='guest')
-    password = db.Column(db.String(256), nullable=False)
+    password = db.Column(db.Text, nullable=False)
     email = db.Column(db.String(128), nullable=False,
                       server_default='guest@ecity.com',
                       unique=True)
@@ -34,7 +35,7 @@ class User(UserMixin, BaseModel, db.Model):
     teachers = db.Column(db.Text, nullable=True)
     students = db.Column(db.Text, nullable=True)
     dp = db.Column(db.String(256), nullable=True,
-                   server_default="profile-icon.png")
+                   server_default="profile-icon-grey.webp")
 
     def completed_exams(self):
         """ Returns a list exam_id's of user completed exams """
@@ -52,11 +53,17 @@ class User(UserMixin, BaseModel, db.Model):
         if self.is_examiner == 'T':
             try:
                 students_ids = eval(self.students)
-            except SyntaxError:
+            except (SyntaxError, TypeError):
                 students_ids = ()
             for _id in students_ids:
-                student = User.query.filter(User.user_id == _id).one()
-                students.append(student)
+                try:
+                    student = User.query.filter(User.user_id == _id).one()
+                except NoResultFound:
+                    print('A student id has been skipped (NoResultFound)'
+                          '. This student may have already been deleted.')
+                    continue
+                else:
+                    students.append(student)
         return students
 
     def add_student(self, student_id):

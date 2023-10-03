@@ -16,10 +16,24 @@ from flask import jsonify, make_response, flash, get_flashed_messages
 from ..models.storage_engine.dbstorage import db
 from .login_manager import *
 from sqlalchemy.exc import IntegrityError, NoResultFound, InvalidRequestError
+from os import getcwd, system
+import os
+from bcrypt import hashpw, checkpw, gensalt
+
 
 app = Flask(__name__)
+path = os.getcwd()
+salt = None
 
-db_url = 'mysql+mysqldb://alex:kalixan01@localhost/ecity'
+try:
+    with open(f"{path}/ecity/salt.txt", 'r', encoding="utf-8") as f:
+        salt = f.read().encode()
+except FileNotFoundError:
+    salt = gensalt()
+    with open(f"{path}/ecity/salt.txt", 'w', encoding="utf-8") as f:
+        f.write(salt.decode())
+
+db_url = 'mysql+mysqldb://User3:password@localhost/ecity'
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = secrets.token_hex().encode()
@@ -44,18 +58,13 @@ with app.app_context():
 @app.teardown_appcontext
 def close_db(var):
     """ Close connection to database """
-    for user_id in flask.globals.CURR_USERS:  # Log all active user users out
-        user = User.query.filter(User.user_id == user_id).one()
-        user.logged_in = 'F'
-        user.last_logout = datetime.now()
-        db.object_session(user).commit()
     db.commit()
     db.close()
 
 
 @app.errorhandler(404)
 def err_404(err_no):
-    return jsonify({"error": "Not found"})
+    return jsonify({"error": "Not found"}), 404
 
 
 @app.before_request
@@ -109,10 +118,17 @@ def create_user():
     m_name = request.form['middlename']
     email = request.form['email']
     psword = request.form['password']
+    _psword = request.form['_password']
+
+    if psword != _psword:
+        flash("The passwords you provided don't match", 'warning')
+        return redirect(url_for('sign_up'))
+
+    hashed_password = hashpw(psword.encode(), salt)
 
     user = User(
         username=u_name, firstname=f_name, lastname=l_name,
-        middlename=m_name, email=email, password=psword,
+        middlename=m_name, email=email, password=hashed_password,
         last_login=datetime.utcnow(), logged_in='T', is_examiner='T'
     )
     user.id = user.user_id
@@ -149,11 +165,10 @@ def create_user():
         user = User.query.filter(User.user_id == user.user_id).one()
         user.id = user.user_id
         login_user(user, duration=timedelta(days=30))
-        flash(
-            f"""Welcome to eCity {user.firstname} {user.lastname}.
-            If you need help in setting-up your workspace, don't hesitate
-            to contact our support centre at alexanderikpeama@gmail.com
-            """, 'success')
+        flash(f"Welcome to eCity {user.firstname} {user.lastname}. "
+              "If you need help in setting-up your workspace, don't hesitate "
+              "to contact our support centre at alexanderikpeama@gmail.com ",
+              'success')
         return redirect(
             url_for('dashboard', user_id=user.user_id, resource_id=uuid4())
         )
@@ -186,7 +201,11 @@ def sign_in():
               'warning')
         return redirect(url_for('login'))
     else:
-        if password == user.password:
+        hashed_password = hashpw(password.encode(), salt)
+        print(hashed_password)
+        print(user.password)
+        print(user.password.encode())
+        if password == user.password or hashed_password == user.password.encode():  # TODO: remove support for unencrypted passords
             user.id = user.user_id
             if flask.globals.CURR_USERS and \
                user.user_id in flask.globals.CURR_USERS:
@@ -207,8 +226,8 @@ def sign_in():
                         return redirect(url_for('login', resource_id=uuid4()))
 
             else:
-                user.last_login = datetime.utcnow()
                 user.logged_in = 'T'
+                user.last_login = datetime.utcnow()
                 db.object_session(user).commit()
                 login_user(user, duration=timedelta(days=30))
                 flask.globals.CURR_USERS.add(user.user_id)
@@ -434,6 +453,8 @@ def past_exams(user_id, exam_id=None):
     # Load examination where Exam.exam_id == exam_id
     exam = Exam.query.filter(Exam.exam_id == exam_id).one()
     students = user.get_students()
+    no_of_students_who_sat = 0
+    no_of_students_who_missed = 0
     for student in students:
         try:
             student.score = Score.query.filter(
@@ -445,6 +466,9 @@ def past_exams(user_id, exam_id=None):
                 user_id=student.user_id, exam_id=exam_id, score=-1,
                 score_attainable=exam.no_of_questions
             )
+            no_of_students_who_missed += 1
+        else:
+            no_of_students_who_sat += 1
 
     no_succ = len(
         list(filter(
@@ -463,7 +487,8 @@ def past_exams(user_id, exam_id=None):
     return render_template(
         'past_exams/teacher_past_exam_stat.html', user=user, exam=exam,
         students=students, round=round, len=len, no_succ=no_succ,
-        no_fail=no_fail
+        no_fail=no_fail, no_of_students_who_sat=no_of_students_who_sat,
+        no_of_students_who_missed=no_of_students_who_missed
     )
 
 
@@ -535,7 +560,7 @@ def create_new_student(user_id):
         l_name = str(request.form.get('lastname'))
         username = str(os.urandom(7)).replace('\\', '').replace(
             'b', '').replace("'", '').replace(' ', '')  # A random username
-        default_pass = 'ecity-student-pass'
+        default_pass = hashpw('ecity-student-pass'.encode(), salt)
         email = str(request.form.get('email'))
         gender = str(request.form.get('gender'))
         teachers = str(f"{user.user_id},")  # Will be converted to a tuple
@@ -569,6 +594,13 @@ def manage_exams(user_id):
     """ User dashboard """
     user = User.query.filter(User.user_id == user_id).one()
     exams = Exam.query.filter(Exam.user_id == user_id).all()
+    for exam in exams:
+        timestamp = "{}T{}.000000".format(exam.exam_date, exam.end_time)
+        exam_end_datetime = datetime.fromisoformat(timestamp)
+        if exam_end_datetime < datetime.now():  # Exam has passed
+            exam.has_past = True
+        else:
+            exam.has_past = False
     return render_template('dashboard_manage_exams.html', user=user,
                            date=date, time=time, datetime=datetime,
                            exams=sorted(exams, key=lambda exam: exam.exam_id,
@@ -654,7 +686,6 @@ def delete_exam(user_id):
     if not exam_id:
         flash('Exam id not provided.', 'error')
         return redirect(url_for('manage_exams', user_id=user_id))
-    print(dir(db))
 
     user = User.query.filter(User.user_id == user_id).one()
     exam = Exam.query.filter(Exam.exam_id == exam_id).one()
@@ -854,6 +885,219 @@ def create_or_edit_exam(user_id, instruction):
         return redirect(url_for('manage_exams', user_id=user_id))
     else:
         abort(404)
+
+
+@app.route('/profiles/<int:user_id>/profile/<string:person_id>',
+           methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def all_profiles(user_id, person_id):
+    """
+    Returns or updates the current user's profile page
+    or the profile page of the current user's student
+    """
+    method = request.args.get('method')
+    if method and method.upper() == 'DELETE':
+        request.method = 'DELETE'
+
+    try:
+        user = User.query.filter(User.user_id == int(user_id)).one()
+    except NoResultFound:
+        abort(404)
+    else:
+        user.id = user.user_id
+        person = None
+
+    if person_id == 'me':
+        person = user
+        person.person_id = 'me'
+    else:
+        try:
+            person_id = int(person_id)
+        except ValueError:
+            abort(404)
+        else:
+            for student in user.get_students():
+                if student.user_id == person_id:
+                    student.id = student.user_id
+                    person = student
+                    person.person_id = person.user_id
+                    break
+            else:
+                abort(404)
+
+    if request.method == 'GET':  # Simply load profile page
+        return render_template('profiles/my_profile_page.html', user=user,
+                                   person=person)
+    elif request.method == 'POST':
+        changed = False
+        if user.is_examiner != 'T':  # user is a student
+            attrs = ['username']
+        else:  # user is an admin
+            attrs = [
+                'username', 'firstname', 'middlename',
+                'lastname', 'email'
+            ]
+
+        dp = request.files.get('dp')
+        if dp and dp.content_type.split('/')[0] == 'image':
+            f_ext = dp.filename.split('.')[-1]
+            path = f'{getcwd()}/ecity/app/static/images/user_profile_pics'
+            dp.save(
+                f"{path}/normal_pics/dp-{user.user_id}.{f_ext}"
+            )
+            dp.close()
+            system(  # TODO: Resize image to 50px by 50px
+                f"cp -rv {path}/normal_pics/dp-{user.user_id}.{f_ext} "
+                f"{path}/compressed_pics/"
+            )
+            person.dp = f'dp-{user.user_id}.{f_ext}'
+            changed = True
+
+        for attr in attrs:
+            if str(request.form.get(attr)) and \
+               getattr(person, attr) != str(request.form.get(attr)) and \
+                   str(request.form.get(attr)) not in ['None', '', None]:
+                setattr(person, attr, str(request.form.get(attr)))
+                changed = True
+
+        if changed:
+            person.updated_at = datetime.utcnow()
+            db.object_session(person).commit()
+            var = "Your" if user == person else "Your student's"
+            flash(f'{var} profile has been updated successfully.', 'success')
+            return render_template(
+                'profiles/my_profile_page.html', user=user, person=person
+            )
+        flash('Nothing has changed.', 'success')
+        return render_template(
+            'profiles/my_profile_page.html', user=user, person=person
+        )
+    elif request.method == 'DELETE':
+        temp_firstname = None
+        temp_id = None
+        if person.is_student == 'T' and person.is_examiner != 'T':
+            temp_firstname = person.firstname
+            temp_id = person.user_id
+            # delete scores where`score.user_id` == person.user_id
+            scores = Score.query.filter(Score.user_id == temp_id).all()
+            for score in scores:
+                score = db.merge(score)
+                db.delete(score)
+            # delete answersheets where `answer_sheet.user_id` == person.user_id
+            answersheets = AnswerSheet.query.filter(
+                AnswerSheet.user_id == temp_id
+            ).all()
+            for answersheet in answersheets:
+                answersheet = db.merge(answersheet)
+                db.delete(answersheet)
+
+        if person.is_examiner == 'T':
+            temp_firstname = person.firstname
+            temp_id = person.user_id
+            # Delete students where user.user_id in person.get_students().
+            # Firstly delete the student scores, Secondly delete answersheets,
+            # Thirdly delete the student
+            for student in person.get_students():
+                scores = Score.query.filter(  # Delete all scores
+                    Score.user_id == student.user_id
+                ).all()
+                for score in scores:
+                    score = db.merge(score)
+                    db.delete(score)
+
+                answersheets = AnswerSheet.query.filter(  # Delete all ans_shts
+                    AnswerSheet.user_id == student.user_id
+                ).all()
+                for answersheet in answersheets:
+                    answersheet = db.merge(answersheet)
+                    db.delete(answersheet)
+
+                student = db.merge(student)
+                db.delete(student)
+            print(f'Successfully deleted all students of {temp_firstname}')
+
+            # Delete answers, questions and exams
+            exams = Exam.query.filter(Exam.user_id == person.user_id).all()
+            for exam in exams:
+                questions = Question.query.filter(
+                    Question.exam_id == exam.exam_id
+                ).all()
+                for question in questions:
+                    answer = Answer.query.filter(
+                        Answer.question_id == question.question_id
+                    ).one()
+                    answer = db.merge(answer)
+                    db.delete(answer)
+                    question = db.merge(question)
+                    db.delete(question)
+                exam = db.merge(exam)
+                db.delete(exam)
+
+        # delete person
+        person = db.merge(person)
+        path = f'{getcwd()}/ecity/app/static/images/user_profile_pics'
+
+        if person.dp not in ['profile-icon-grey.webp', 'profile-icon.png']:
+            system(f'rm -rfv {path}/normal_pics/{person.dp}')
+            system(f'rm -rfv {path}/compressed_pics/{person.dp}')
+
+        db.delete(person)
+        db.commit()
+        if user.user_id != temp_id and user.is_examiner == 'T':
+            # This block runs only if examiner didn't delete his account
+            remaining_students = [std.user_id for std in user.get_students()]
+            user.students = str(remaining_students).strip('[]')
+            db.object_session(user).commit()
+            flash(f"Successfully deleted {temp_firstname}'s account alongside"
+                  " all related data.", 'success')
+            return redirect(url_for('my_students', user_id=user.user_id))
+        else:
+            flash("Your account has been successfully deleted alongside all "
+                  "related data (Including your student's data).", 'success')
+            return redirect(url_for('login'))
+    abort(404)
+
+
+@app.route('/reset_password', strict_slashes=False, methods=['GET', 'POST'])
+@login_required
+def reset_password():
+    """ Resets user password """
+    if request.method == 'GET':
+        try:
+            user_id = int(request.args.get('user_id'))
+        except (TypeError, ValueError):
+            abort(404)
+        user = User.query.filter(User.user_id == user_id).one()
+        return render_template('reset_password.html', user=user)
+
+    elif request.method == 'POST':
+        user_id = int(request.form.get('user_id'))
+        curr_password = request.form.get('curr-password')
+        new_password = request.form.get('new-password')
+        re_new_password = request.form.get('re-new-password')
+
+        user = User.query.filter(User.user_id == user_id).one()
+
+        if new_password != re_new_password:
+            flash("New passwords don't match.", 'warning')
+            return render_template('reset_password.html', user=user)
+
+        if curr_password != user.password: #or hashpw(curr_password.encode(), salt) != user.password.encode():  # TODO: remove support for unencrytped passwords
+            flash('The current password you entered is incorrect.', 'warning')
+            return render_template('reset_password.html', user=user)
+
+        if new_password == user.password:
+            flash('The new password you provided is the same as your '
+                  'current password.', 'warning')
+            return render_template('reset_password.html', user=user)
+
+        user.updated_at = datetime.utcnow()
+        user.password = new_password
+        db.object_session(user).commit()
+        flash('Password successfully changed', 'success')
+        return redirect(url_for(
+            'all_profiles', user_id=user.user_id, person_id='me'
+        ))
 
 
 @app.route('/take_exam', strict_slashes=False, methods=['POST'])

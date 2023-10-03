@@ -1,0 +1,39 @@
+{% extends "base_dashboard.html" %}
+{% block workspace_content %}
+<div class="flex-container no-heading-page">
+  <div class="upcoming-exams-container">
+    <h3>Upcoming examinations at a glance</h3>
+    <div class="upcoming-exams-items">
+      {% if upcoming_exams %}
+        {% for exam in upcoming_exams %}
+          <p style="text-align: left">
+	    <span class="instance-id">{{ exam.exam_id }}</span>
+	    <span class="course-name">{{ exam.course_name }}</span><br>
+	    &emsp;&emsp;&nbsp;<b>Duration</b>: {{ exam.time_allowed }} minute{{ '' if exam.time_allowed == 1 else 's' }}.<br>
+	    &emsp;&emsp;&nbsp;Will take place on <em>{{ exam.exam_date.strftime('%d/%m/%Y') }}</em> from <em>{{ exam.start_time }}</em> to <em>{{ exam.end_time }}</em>
+	  </p>
+        {% endfor %}
+      {% else %}
+        <p>No upcoming examinations.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="ongoing-exams-container">
+    <h3>Ongoing Exams</h3>
+    <div class="ongoing-exams-items">
+      {% if ongoing_exams %}
+        {% for exam in ongoing_exams %}
+          <p style="text-align: left">
+	    <span class="instance-id">{{ exam.exam_id }}</span>
+	    <span class="course-name">{{ exam.course_name }}</span><br>
+	    &emsp;&emsp;&nbsp;<b>Duration</b>: {{ exam.time_allowed }} minute{{ '' if exam.time_allowed == 1 else 's' }}.<br>
+	    &emsp;&emsp;&nbsp;Started on <em>{{ exam.exam_date.strftime('%d/%m/%Y') }}</em> at <em>{{ exam.start_time }}</em>. Will end on <em>{{ exam.exam_date.strftime('%d/%m/%Y') }}</em> at &emsp;&emsp;&nbsp;<em>{{ exam.end_time }}</em>.
+	  </p>
+        {% endfor %}
+      {% else %}
+        <p>No ongiong examinations.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

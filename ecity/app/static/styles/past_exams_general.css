@@ -61,11 +61,15 @@ div.an-exam a {
     font-family: sans-serif;
     font-weight: 100;
     font-size: 1.2vw;
+    transition: color 0.5s linear;
 }
 
 div.an-exam a:hover {
-    color: #021f3e;
+    color: black;
+    text-decoration: none;
+    transition: color 0.2s linear;
 }
+
 div.an-exam a:active {
     opacity: 0.5;
 }

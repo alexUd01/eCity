@@ -50,8 +50,12 @@
 	      &emsp;&nbsp;&nbsp;&emsp;<span class="minor-details">Scheduled for <em>{{ exam.exam_date.strftime('%d/%m/%Y') }}</em> from <em>{{ exam.start_time }}</em> to <em>{{ exam.end_time }}</em>. &nbsp;({{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }})</span>
 	    </div>
 	    <div class="util-buttons">
-	      <a class="left" href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Edit exam</a>
-	      <a class="right" href="/users/{{ user.user_id }}/manage_exams/delete_exam?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}" class="delete-exam">Delete exam</a>
+	      {% if exam.has_past %}
+	        <a class="left" href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Re-schedule exam</a>
+	      {% else %}
+	        <a class="left" href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Edit exam</a>
+	      {% endif %}
+	      <a class="right delete-exam" href="/users/{{ user.user_id }}/manage_exams/delete_exam?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Delete exam</a>
 	    </div>
 	  </div>
 	  {% endfor %}

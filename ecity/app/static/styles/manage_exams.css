@@ -156,6 +156,7 @@ input[type=submit] {
     border-radius: 1vw;
     color: #ff5656;
     background-color: #ffffff;
+    transition: background-color 0.5s linear, border 0.5s linear, color 0.5s linear;
 }
 
 input[type=submit]:hover,
@@ -163,6 +164,7 @@ input[type=submit]:hover {
     background-color: #ff5656;
     color: #ffffff;
     opacity: 0.9;
+    transition: background-color 0.3s linear, border 0.1s linear, color 0.3s linear;
 }
 
 input[type=submit]:active {
@@ -219,48 +221,54 @@ div.scheduled-exam span.minor-details {
     font-size: 1.1vw;
     font-family: inherit;
     font-weight: inherit;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 div.util-buttons {
-    width: 25vw;
+    width: 30vw;
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 1vw;
 }
 
 div.util-buttons a {
-    width: 50%;
+    width: 51%;
     height: 75%;
-    text-decoration: none;
     padding-top: .9vw;
     text-align: center;
+    background-color: #ffffff;
+    transition: background-color 0.5s linear, color 0.5s linear, text-decoration 0.5s linear;
+    font-size: 1.2vw;
 }
 
 div.util-buttons a.left {
-    border: 0.2px green solid;
-    color: green;
+    /* border: 0.2px darkgreen solid; */
+    color: darkgreen;
     border-right: none;
-    border-top-left-radius: 0.7vw;
-    border-bottom-left-radius: 0.7vw;
+    border-radius: 0.7vw;
 }
 
 div.util-buttons a.right {
-    border: 0.2px #ff0000 solid;
-    color: #ff0000;
-    border-top-right-radius: 0.7vw;
-    border-bottom-right-radius: 0.7vw;
+    /* border: 0.2px #ff0000ff solid; */
+    color: #ff0000ff;
+    border-left: none;
+    border-radius: 0.7vw;
 }
 
 div.util-buttons a.left:focus,
 div.util-buttons a.left:hover {
-    border: none;
-    background-color: green;
+    background-color: darkgreen;
     color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out, color 0.1s ease-in-out, text-decoration 0.1s ease-in-out;
 }
 
 div.util-buttons a.right:focus,
 div.util-buttons a.right:hover {
-    border: none;
-    background-color: #ff0000;
+    background-color: #ff0000ff;
     color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out, color 0.1s ease-in-out, text-decoration 0.1s ease-in-out;
 }

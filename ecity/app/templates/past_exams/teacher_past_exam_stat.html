@@ -13,8 +13,8 @@
 	<h4>Start Time: <em>{{ exam.start_time }}</em></h4>
 	<h4>End Time: <em>{{ exam.end_time }}</em></h4>
 	<h4>Number of Questions: <em>{{ exam.no_of_questions }}</em></h4>
-	<h4>Number of students who sat for this Examination: </h4>
-	<h4>Number of Students who missed this Examination: </h4>
+	<h4>Number of students who sat for this Examination: <em>{{ no_of_students_who_sat }}</em></h4>
+	<h4>Number of Students who missed this Examination: <em>{{ no_of_students_who_missed }}</em></h4>
 	<h4>Percentage Success: <em>{{ round(no_succ / len(students) * 100, 2) }}%</em></h4>
 	<h4>Percentage Failure: <em>{{ round(no_fail / len(students) * 100, 2) }}%</em></h4>
       </div>
@@ -39,9 +39,19 @@
 		<tr class="tr-body">
 		  <td clas="id-col"><span class="instance-id">{{ student.user_id }}</span></td>
 		  <td class="name">{{ student.firstname }} {{ student.middlename }} {{ student.lastname }}</td>
-		  <td class="score">{{ student.score.score }}</td>
-		  <td class="percent">{{ round(student.score.score / student.score.score_attainable * 100, 2) }}%</td>
-		  <td class="time">{{ exam.answer_sheets[0].created_at.strftime('%H:%M:%S') }}</td> {# This line is wrong because I am using thesame answersheet for all students #}
+		  <td class="score">{{ student.score.score if student.score.score >= 0 else 'N/A' }}</td>
+		  <td class="percent">{{ round(student.score.score / student.score.score_attainable * 100, 2) if student.score.score >= 0 else 0.0 }}%</td>
+		  {% if student.score.score == -1 %}
+		    <td class="time">Missed Exam</td>
+		  {% else %}
+		    {% set temp = [] %}
+		    {% for sht in exam.answer_sheets %}
+		      {% if sht.user_id == student.user_id and sht.exam_id == exam.exam_id %}
+		        {% set temp = temp.append(sht) %}
+		      {% endif %}
+		    {% endfor %}
+		    <td class="time">{{ temp[-1].created_at.strftime('%H:%M:%S') }}</td>
+  		  {% endif %}
 		  <td class="ans-sheet-link"><a href="/user/{{ user.user_id }}/past_exams/{{ exam.exam_id }}/{{ student.user_id }}?resource_id={{ g.uuid4() }}">{{ student.firstname }}'{{ '' if student.firstname.endswith('s') else 's' }} Answersheet</a></td>
 		</tr>
 		{% endfor %}

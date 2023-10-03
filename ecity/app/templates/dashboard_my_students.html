@@ -18,7 +18,7 @@
 	  <img class="pic content" src="../../static/images/user_profile_pics/compressed_pics/{{ student.dp }}" alt="{{ student.username }}'s profile picture">
 	  <div class="text content">
 	    <span class="instance-id">{{ student.user_id }}</span>&nbsp;
-	    <a href="">{{ student.firstname }} {{ student.middlename }} {{ student.lastname }}</a><br>
+	    <a href="/profiles/{{ user.user_id }}/profile/{{ student.user_id }}?resource_id={{ g.uuid4() }}">{{ student.firstname }} {{ student.middlename }} {{ student.lastname }}</a><br>
 	    <span class="other-detail email">{{ student.email }}</span><br>
 	    {% if student.logged_in == 'F' %}
 	    <span class="other-detail">Last seen: <em>{{ student.last_logout.strftime('%d/%m/%Y at %H:%M:%S') if student.last_logout else 'Never'}}</em></span>

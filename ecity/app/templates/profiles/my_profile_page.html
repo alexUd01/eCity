@@ -1,0 +1,90 @@
+{% extends "profiles/base_dashboard.html" %}
+{% block other_stylesheets %}
+<link rel="stylesheet" type="text/css" href="../../../static/styles/profile_page.css?resource_id={{ g.uuid4() }}">
+{% endblock %}
+{% block other_scripts %}
+<script src="../../../static/scripts/profile_page.js?resource_id={{ g.uuid4() }}"></script>
+{% endblock %}
+{% block workspace_content %}
+<div class="first-workspace-child">
+  <h2 class="page-heading">{{ 'My Profile' if user == person else person.firstname + "'s Profile" }}</h2>
+  <div class="second-workspace-child">
+    <form id="profile-form" method="POST" action="/profiles/{{ user.user_id }}/profile/{{ person.person_id }}" enctype="multipart/form-data">
+      <div class="at-a-glance">
+	{% if person.logged_in == 'T' %}
+	<div class="d-pic-container at-a-glance-content online-status-indicator" style="background-image: url('../../../static/images/user_profile_pics/normal_pics/{{ person.dp }}')"></div>
+	{% else %}
+	<div class="d-pic-container at-a-glance-content offline-status-indicator" style="background-image: url('../../../static/images/user_profile_pics/normal_pics/{{ person.dp }}')"></div>
+	{% endif %}
+	<div class="user-details-summary at-a-glance-content">
+	  <h4 id="u_name">{{ person.username }}</h4>
+	  <h4 id="f_names">{{ person.firstname }} {{ person.middlename }} {{ person.lastname }}</h4>
+	  <h4 id="e_mail">{{ person.email }}</h4>
+	  {% if user.logged_in == 'F' %}
+	  <h4 id="last-seen">Last seen: <em>{{ person.last_logout.strftime('%d/%m/%y @ %H:%M') if person.last_logout else 'Never' }}</em></h4>
+	  {% endif %}
+	</div>
+      </div> <!-- at-a-glance ENDS -->
+      {% if user == person %}  {# user is viewing his own profile #}
+        {% if user.is_examiner == 'T' %}
+        <div class="edit-personal-info">
+	  <h4>Edit Personal Information:</h4>
+	  <label><span class="update-dp">Update Profile Picture:</span><input type="file" accept=".jpg, .png, .webp" name="dp"></label>
+	  <label><span>Username:</span><input type="text" name="username" value="{{ person.username }}" required></label>
+	  <label><span>Firstname:</span><input type="text" name="firstname" value="{{ person.firstname }}" required></label>
+	  <label><span>Middlename:</span><input type="text" name="middlename" value="{{ person.middlename }}"></label>
+	  <label><span>Lastname:</span><input type="text" name="lastname" value="{{ person.lastname }}" required></label>
+	</div>
+	<div class="edit-contact-info">
+	  <h4>Edit Contact Information:</h4>
+	  <label><span>Email:</span><input type="email" name="email" value="{{ person.email }}" required></label>
+	</div>
+	{% else %}
+	<div class="edit-personal-info">
+	  <h4>Personal Information:</h4>
+	  <label><span class="update-dp">Update Profile Picture:</span><input type="file" accept=".jpg, .png, .webp" name="dp"></label>
+	  <label><span>Username:</span><input type="text" name="username" value="{{ person.username }}" required></label>
+	  <label><span>Firstname:</span><input type="text" name="firstname" value="{{ person.firstname }}" required disabled></label>
+	  <label><span>Middlename:</span><input type="text" name="middlename" value="{{ person.middlename }}" disabled></label>
+	  <label><span>Lastname:</span><input type="text" name="lastname" value="{{ person.lastname }}"required disabled></label>
+	</div>
+	<div class="edit-contact-info">
+	  <h4>Contact Information:</h4>
+	  <label><span>Email:</span><input type="email" name="email" value="{{ person.email }}" required disabled></label>
+	</div>
+	{% endif %}
+      {% endif %}
+      {% if user != person %}  {# user is viewing student's profile #}
+      <div class="edit-personal-info">
+	<h4>Edit Personal Information:</h4>
+	<label><span>Username:</span><input type="text" name="username" value="{{ person.username }}" disabled></label>
+	<label><span>Firstname:</span><input type="text" name="firstname" value="{{ person.firstname }}" required></label>
+	<label><span>Middlename:</span><input type="text" name="middlename" value="{{ person.middlename }}"></label>
+	<label><span>Lastname:</span><input type="text" name="lastname" value="{{ person.lastname }}"required></label>
+      </div>
+      <div class="edit-contact-info">
+	<h4>Edit Contact Information:</h4>
+	<label><span>Email:</span><input type="email" name="email" value="{{ person.email }}"></label>
+      </div>
+      {% endif %}
+      <label class="submit-label"><input type="submit" value="Save changes"></label>
+    </form>
+    <div class="warning-container">
+      <details>
+	<summary>Click to view more options (proceed with caution):</summary>
+	<div class="hidden-details">
+	  {% if user.is_examiner == 'T' and user in person.get_teachers() %}
+	    <a class="del" id="del-student-button" href="/profiles/{{ user.user_id }}/profile/{{ person.user_id }}?resource_id={{ g.uuid4() }}&method=delete">Delete {{ person.firstname }}'{{ '' if person.firstname.endswith('s') else 's' }} account</a>
+	  {% endif %}
+	  {% if user == person %}
+	    <a class="ch-pswd" href="/reset_password?user_id={{ person.user_id }}&resource_id={{ g.uuid4() }}&">Change my password</a>
+	    {% if user.is_examiner %}
+	      <a class="del" id="del-me-button" href="/profiles/{{ user.user_id }}/profile/me?resource_id={{ g.uuid4() }}&method=delete">Delete my account</a>
+	    {% endif %}
+	  {% endif %}
+	</div>
+      </details>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -18,7 +18,7 @@
 	      <ul>
 		<li><span class="details"><b>Duration</b>: {{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }}</span></li>
 		<li><span class="details"><b>Number of questions</b>: {{ exam.no_of_questions }}</span></li>
-		{% if exam.score %}
+		{% if exam.score and exam.score.score >= 0 %}
 		<li><span class="details"><b>Score</b>: {{ exam.score.score }}&nbsp;&nbsp;[{{ round(exam.score.score / exam.no_of_questions * 100, 2) }}%]</span></li>
 		{% else %}
 		<li><span class="details"><b>Score</b>: {{ 0 }}&nbsp;&nbsp;[{{ 0 }}%]</span></li>
