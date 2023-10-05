@@ -291,7 +291,7 @@ def sign_in():
         return redirect(url_for('login'))
     else:
         hashed_password = hashpw(password.encode(), salt)
-        if password == user.password or hashed_password == user.password.encode():  # TODO: remove support for unencrypted passords
+        if hashed_password == user.password.encode():
             user.id = user.user_id
             if flask.globals.CURR_USERS and \
                user.user_id in flask.globals.CURR_USERS:
@@ -1223,12 +1223,12 @@ def reset_password():
             flash("New passwords don't match.", 'warning')
             return render_template('reset_password.html', user=user)
 
-        if hashpw(new_password.encode(), salt) == user.password.encode() or new_password == user.password:  # TODO: remove support for unencrytped passwords
+        if hashpw(new_password.encode(), salt) == user.password.encode():
             flash('The new password you provided is the same as your '
                   'current password.', 'warning')
             return render_template('reset_password.html', user=user)
 
-        if hashpw(curr_password.encode(), salt) == user.password.encode() or curr_password == user.password:  # TODO: remove support for unencrytped passwords
+        if hashpw(curr_password.encode(), salt) == user.password.encode():
             user.updated_at = datetime.utcnow()
             user.password = hashpw(new_password.encode(), salt)
             db.object_session(user).commit()
