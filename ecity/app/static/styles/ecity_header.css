@@ -72,15 +72,20 @@ div.header-nav a {
     float: right;
     border-radius: 2vw;
     color: white;
+    border: 1px solid #ffffff00;
+    background-color: #ffffff00;
+    transition: background-color 0.5s linear, color 0.5s linear;
 }
 
 div.header-nav a:hover {
     border: 1.7px solid white;
+    transition: border 0.3s linear;
 }
 
 div.header-nav a:active {
     color: #0b3140;
     background-color: white;
+    transition: background-color 0.3s linear, color 0.3s linear;
 }
 
 @media screen and (max-width: 480px) {

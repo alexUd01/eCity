@@ -51,7 +51,7 @@
 	    </div>
 	    <div class="util-buttons">
 	      {% if exam.has_past %}
-	        <a class="left" href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Re-schedule exam</a>
+	        <a class="left reschedule-exam" href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&reschedule=True&resource_id={{ g.uuid4() }}">Re-schedule exam</a>
 	      {% else %}
 	        <a class="left" href="/users/{{ user.user_id }}/manage_exams/edit_exam_template?exam_id={{ exam.exam_id }}&resource_id={{ g.uuid4() }}">Edit exam</a>
 	      {% endif %}

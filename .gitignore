@@ -2,3 +2,6 @@ __pycache__/
 *~
 *.bak
 salt.txt
+.salt.txt
+blocked_users.json
+.blocked_users.json

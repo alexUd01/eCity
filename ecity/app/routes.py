@@ -19,7 +19,8 @@ from sqlalchemy.exc import IntegrityError, NoResultFound, InvalidRequestError
 from os import getcwd, system
 import os
 from bcrypt import hashpw, checkpw, gensalt
-
+import json
+from json.decoder import JSONDecodeError
 
 app = Flask(__name__)
 path = os.getcwd()
@@ -41,6 +42,14 @@ app.config['SECRET_KEY'] = secrets.token_hex().encode()
 lm.init_app(app)  # Initialize login manager for `app`
 db.init_app(app)  # Initialize database handle for `app`
 flask.globals.CURR_USERS = set()
+
+flask.globals.BLOCKED_USERS = []
+try:
+    with open('ecity/.blocked_users.json', 'r', encoding='utf-8') as f:
+        flask.globals.BLOCKED_USERS = json.load(f)
+except (FileNotFoundError, JSONDecodeError):
+    with open('ecity/.blocked_users.json', 'w', encoding='utf-8') as f:
+        json.dump(flask.globals.BLOCKED_USERS, f)
 
 available_options = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
 
@@ -92,6 +101,58 @@ def unauthorized_err_401():
     logout_user()
     flash('You must be logged in to access the requested resource.', 'error')
     return redirect(url_for('login'))
+
+
+def block_user(user):
+    """ Adds a user to `flask.globals.BLOCKED_USERS` """
+    flask.globals.BLOCKED_USERS.append(user.user_id)
+    with open('ecity/.blocked_users.json', 'w', encoding='utf-8') as f:
+        json.dump(list(set(flask.globals.BLOCKED_USERS)), f)
+    return flask.globals.BLOCKED_USERS
+
+
+def unblock_user(user):
+    """ Unblocks a user `flask.globals.BLOCKED_USERS` to file"""
+    flask.globals.BLOCKED_USERS.remove(user.user_id)
+    with open('ecity/.blocked_users.json', 'w', encoding='utf-8') as f:
+        json.dump(list(set(flask.globals.BLOCKED_USERS)), f)
+    return flask.globals.BLOCKED_USERS
+
+
+def authenticate_teacher():
+    """
+    A helper function that blocks non-teacher account from accessing
+    teachers' resources
+    """
+    user = current_user
+    user.id = user.user_id
+
+    # Block non-teachers
+    if current_user.is_examiner != 'T':
+        flash("You are not permitted to view the requested page", 'error')
+        return redirect(url_for('student_dashboard', student_id=user.user_id,
+                                resource_id=uuid4()))
+    return user
+
+
+def authenticate_student():
+    """
+    A helper function that blocks non-student account from accessing
+    students' resources
+    """
+    user = current_user
+    user.id = user.user_id
+
+    # Block non-students
+    if current_user.is_student != 'T':
+        flash("You are not permitted to view the requested page", 'error')
+        return redirect(url_for('dashboard', user_id=user.user_id,
+                                resource_id=uuid4()))
+    if user.user_id in flask.globals.BLOCKED_USERS:
+        flash('Please change default password to continue using this account',
+              'warning')
+        return redirect(url_for('reset_password', user_id=user.user_id))
+    return user
 
 
 @app.route('/', strict_slashes=False)
@@ -178,6 +239,26 @@ def create_user():
 def login():
     """ Login Page """
     student_login = request.args.get('student_login')
+    user = current_user
+
+    if hasattr(user, 'user_id'):
+        if user.user_id in flask.globals.BLOCKED_USERS:
+            flash(
+                'You are logged in. To secure your account, change the'
+                ' current default password of your account.',
+                'success'
+            )
+            return redirect(url_for(
+                'reset_password', user_id=user.user_id
+            ))
+        if user.is_student == 'T':
+            return redirect(url_for(
+                'student_dashboard', student_id=user.user_id
+            ))
+        elif user.is_examiner == 'T':
+            return redirect(url_for(
+                'dashboard', user_id=user.user_id
+            ))
     if student_login == 'True':
         return render_template('login.html', student_login=True)
     else:
@@ -202,14 +283,20 @@ def sign_in():
         return redirect(url_for('login'))
     else:
         hashed_password = hashpw(password.encode(), salt)
-        print(hashed_password)
-        print(user.password)
-        print(user.password.encode())
         if password == user.password or hashed_password == user.password.encode():  # TODO: remove support for unencrypted passords
             user.id = user.user_id
             if flask.globals.CURR_USERS and \
                user.user_id in flask.globals.CURR_USERS:
                 login_user(user, duration=timedelta(days=30))
+                if user.user_id in flask.globals.BLOCKED_USERS:
+                    flash(
+                        'You are logged in. To secure your account, change the'
+                        ' current default password of your account.',
+                        'success'
+                    )
+                    return redirect(url_for(
+                        'reset_password', user_id=user.user_id
+                    ))
                 if student_login == 'True':
                     flash('You are already signed-in.', 'success')
                     return redirect(url_for('student_dashboard',
@@ -231,6 +318,15 @@ def sign_in():
                 db.object_session(user).commit()
                 login_user(user, duration=timedelta(days=30))
                 flask.globals.CURR_USERS.add(user.user_id)
+                if user.user_id in flask.globals.BLOCKED_USERS:
+                    flash(
+                        'You are logged in. To secure your account, change the'
+                        ' current default password of your account.',
+                        'success'
+                    )
+                    return redirect(url_for(
+                        'reset_password', user_id=user.user_id
+                    ))
                 if student_login == "True":
                     if user.get_teachers() and user.is_student == 'T':
                         flash('Successfully signed-in', 'success')
@@ -268,15 +364,9 @@ def sign_in():
 def student_dashboard(student_id):
     """ Students dashboard """
     submit_status = request.args.get('ans')
-    try:
-        user = User.query.filter(User.user_id == student_id).one()
-    except NoResultFound:
-        abort(404)
-
-    # Block non-students
-    if user.is_student == 'F' or user.get_teachers() == []:
-        flash("You are not permitted to view this page", 'error')
-        return redirect(url_for('login', resource_id=uuid4()))
+    user = authenticate_student()
+    if not isinstance(user, User):
+        return user
 
     # Load exams from all teachers
     all_exams = []
@@ -315,13 +405,9 @@ def student_dashboard(student_id):
 @login_required
 def student_past_exams(student_id):
     """ User dashboard - past exams """
-    try:
-        user = User.query.filter(User.user_id == student_id).one()
-    except NoResusltFound:
-        abort(404)
-    if user.is_student == 'F' or user.get_teachers() == []:
-        flash("You are not permitted to view this page", 'error')
-        return redirect(url_for('login', resource_id=uuid4()))
+    user = authenticate_student()
+    if not isinstance(user, User):
+        return user
 
     # Load exams from all teachers
     all_exams = []
@@ -366,13 +452,9 @@ def student_past_exams(student_id):
 @login_required
 def student_past_exam_answersheet(student_id, exam_id):
     """ User dashboard - past exam answersheet """
-    try:
-        user = User.query.filter(User.user_id == student_id).one()
-    except NoResusltFound:
-        abort(404)
-    if user.is_student == 'F' or user.get_teachers() == []:
-        flash("You are not permitted to view this page", 'error')
-        return redirect(url_for('login', resource_id=uuid4()))
+    user = authenticate_student()
+    if not isinstance(user, User):
+        return user
 
     # Load exam answersheet for this student
     exam = Exam.query.filter(Exam.exam_id == exam_id).one()
@@ -405,7 +487,16 @@ def student_past_exam_answersheet(student_id, exam_id):
 @login_required
 def dashboard(user_id):
     """ User dashboard """
-    user = User.query.filter(User.user_id == user_id).one()
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
+
+    print()
+    print()
+    print(current_user == user)
+    print()
+    print()
+
     exams = Exam.query.filter(Exam.user_id == user_id).all()
     upcoming_exams = []
     ongoing_exams = []
@@ -437,7 +528,10 @@ def dashboard(user_id):
 @login_required
 def past_exams(user_id, exam_id=None):
     """ User dashboard """
-    user = User.query.filter(User.user_id == user_id).one()
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
+
     if exam_id is None:
         exams = Exam.query.filter(Exam.user_id == user_id).all()
         uniq_exams = []
@@ -497,13 +591,9 @@ def past_exams(user_id, exam_id=None):
 @login_required
 def past_exam_answersheet(user_id, exam_id, student_id):
     """ User dashboard - past exam answersheet """
-    try:
-        user = User.query.filter(User.user_id == user_id).one()
-    except NoResusltFound:
-        abort(404)
-    if user.is_examiner == 'F' or user.get_students() == []:
-        flash("You are not permitted to view this page", 'error')
-        return redirect(url_for('login', resource_id=uuid4()))
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
 
     # Load exam answersheet for this student
     exam = Exam.query.filter(Exam.exam_id == exam_id).one()
@@ -535,7 +625,10 @@ def past_exam_answersheet(user_id, exam_id, student_id):
 @login_required
 def my_students(user_id):
     """ User dashboard """
-    user = User.query.filter(User.user_id == user_id).one()
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
+
     students = sorted(user.get_students(), key=lambda student: student.user_id,
                       reverse=True)
     return render_template('dashboard_my_students.html', user=user,
@@ -551,7 +644,10 @@ def create_new_student(user_id):
     """ User dashboard """
     import os
 
-    user = User.query.filter(User.user_id == user_id).one()
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
+
     if request.method == 'GET':
         return render_template('add_new_student_template.html', user=user)
     if request.method == 'POST':
@@ -578,6 +674,9 @@ def create_new_student(user_id):
             db.rollback()
             raise
         db.object_session(student).commit()
+        block_user(student)
+        print(f'blocked student: {student.user_id} {student.firstname} {student.lastname}')
+        print(flask.globals.BLOCKED_USERS)
         user.students = f"{user.students},{str(student.user_id)}"
         db.object_session(user).commit()
         flash(
@@ -592,7 +691,10 @@ def create_new_student(user_id):
 @login_required
 def manage_exams(user_id):
     """ User dashboard """
-    user = User.query.filter(User.user_id == user_id).one()
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
+
     exams = Exam.query.filter(Exam.user_id == user_id).all()
     for exam in exams:
         timestamp = "{}T{}.000000".format(exam.exam_date, exam.end_time)
@@ -612,6 +714,8 @@ def manage_exams(user_id):
 @login_required
 def create_exam_template(user_id):
     """ Creates an examination """
+    user = authenticate_teacher()
+
     course_name = str(request.form.get('course_name'))
     no_of_questions = int(request.form.get('no_of_questions'))
     time_allowed = int(request.form.get('time_allowed'))
@@ -635,14 +739,40 @@ def create_exam_template(user_id):
 @login_required
 def edit_exam_template(user_id):
     """ Creates a template for setting an examination """
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
+
     exam_id = request.args.get('exam_id')
     if not exam_id:
         flash('Exam id not provided.', 'error')
         return redirect(url_for('manage_exams', user_id=user_id))
-
-    user = User.query.filter(User.user_id == user_id).one()
     exam = Exam.query.filter(Exam.exam_id == exam_id).one()
     questions = Question.query.filter(Question.exam_id == exam_id).all()
+
+    reschedule = request.args.get('reschedule')
+    if reschedule == 'True':  # Delete scores with exam_id == exam.exam_id
+        scores = Score.query.filter(
+            Score.exam_id == exam.exam_id
+        ).all()
+        answersheets = AnswerSheet.query.filter(
+            AnswerSheet.exam_id == exam.exam_id
+        ).all()
+        for item in [scores, answersheets]:
+            for obj in item:
+                obj = db.merge(obj)
+                db.delete(obj)
+        db.commit()
+        print(f"To {user.firstname}: your students'answersheets and scores "
+              "have been deleted")
+        flash(
+            """
+            Your students' answersheets and scores for this examination have
+            been deleted
+            """,
+            "success"
+        )
+
     for question in questions:
         answer = Answer.query.filter(
             Answer.question_id == question.question_id).one()
@@ -682,6 +812,10 @@ def edit_exam_template(user_id):
 @login_required
 def delete_exam(user_id):
     """ Creates a template for setting an examination """
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
+
     exam_id = request.args.get('exam_id')
     if not exam_id:
         flash('Exam id not provided.', 'error')
@@ -715,6 +849,10 @@ def delete_exam(user_id):
 def create_or_edit_exam(user_id, instruction):
     """ Creates or edits an examination """
     successful = False
+    user = authenticate_teacher()
+    if not isinstance(user, User):
+        return user
+
     if instruction == 'create_exam':
         course_name = str(request.form.get('course_name'))
         ex_instruction = str(request.form.get('exam-instruction'))
@@ -899,13 +1037,9 @@ def all_profiles(user_id, person_id):
     if method and method.upper() == 'DELETE':
         request.method = 'DELETE'
 
-    try:
-        user = User.query.filter(User.user_id == int(user_id)).one()
-    except NoResultFound:
-        abort(404)
-    else:
-        user.id = user.user_id
-        person = None
+    user = current_user
+    user.id = user.user_id
+    person = None
 
     if person_id == 'me':
         person = user
@@ -1062,42 +1196,40 @@ def all_profiles(user_id, person_id):
 @login_required
 def reset_password():
     """ Resets user password """
+    user = current_user
     if request.method == 'GET':
-        try:
-            user_id = int(request.args.get('user_id'))
-        except (TypeError, ValueError):
-            abort(404)
-        user = User.query.filter(User.user_id == user_id).one()
         return render_template('reset_password.html', user=user)
 
     elif request.method == 'POST':
-        user_id = int(request.form.get('user_id'))
         curr_password = request.form.get('curr-password')
         new_password = request.form.get('new-password')
         re_new_password = request.form.get('re-new-password')
-
-        user = User.query.filter(User.user_id == user_id).one()
 
         if new_password != re_new_password:
             flash("New passwords don't match.", 'warning')
             return render_template('reset_password.html', user=user)
 
-        if curr_password != user.password: #or hashpw(curr_password.encode(), salt) != user.password.encode():  # TODO: remove support for unencrytped passwords
-            flash('The current password you entered is incorrect.', 'warning')
-            return render_template('reset_password.html', user=user)
-
-        if new_password == user.password:
+        if hashpw(new_password.encode(), salt) == user.password.encode() or new_password == user.password:  # TODO: remove support for unencrytped passwords
             flash('The new password you provided is the same as your '
                   'current password.', 'warning')
             return render_template('reset_password.html', user=user)
 
-        user.updated_at = datetime.utcnow()
-        user.password = new_password
-        db.object_session(user).commit()
-        flash('Password successfully changed', 'success')
-        return redirect(url_for(
-            'all_profiles', user_id=user.user_id, person_id='me'
-        ))
+        if hashpw(curr_password.encode(), salt) == user.password.encode() or curr_password == user.password:  # TODO: remove support for unencrytped passwords
+            user.updated_at = datetime.utcnow()
+            user.password = hashpw(new_password.encode(), salt)
+            db.object_session(user).commit()
+            print(flask.globals.BLOCKED_USERS)
+            if user.user_id in flask.globals.BLOCKED_USERS:
+                unblock_user(user)
+                print(f'unblocked student: {user.user_id} {user.firstname} {user.lastname}')
+                print(flask.globals.BLOCKED_USERS)
+            flash('Password successfully changed', 'success')
+            return redirect(url_for(
+                'all_profiles', user_id=user.user_id, person_id='me'
+            ))
+
+        flash('The current password you entered is incorrect.', 'warning')
+        return render_template('reset_password.html', user=user)
 
 
 @app.route('/take_exam', strict_slashes=False, methods=['POST'])
@@ -1141,7 +1273,7 @@ def recieve_submitted_exam(student_id=None):
             AnswerSheet.user_id == user_id
         ).all()
     if answer_sheets != []:  # i.e. User has already attempted this exam before
-        flash('Not submitted because you have already concluded this exam'
+        flash('Exam not submitted because you have already concluded this exam'
               ' in the past', 'warning')
         return redirect(url_for('student_dashboard', student_id=user_id))
 
@@ -1193,19 +1325,15 @@ def logout():
     logout from all browsing sessions across different web clients.
     It's still a work in progress
     """
-    user_id = int(request.args.get('user_id'))
-    user = User.query.filter(User.user_id == user_id).one()
+    user = current_user
     users_ids = flask.globals.CURR_USERS
 
-    print("user_id -> {}".format(user_id))
-    print("users_ids -> {}".format(users_ids))
-
     for u_id in users_ids:
-        if u_id == user_id:
+        if u_id == user.user_id:
             user.last_logout = datetime.utcnow()
             user.logged_in = 'F'
             db.object_session(user).commit()
-            flask.globals.CURR_USERS.remove(user_id)
+            flask.globals.CURR_USERS.remove(u_id)
             flash('You have been logged out successfully.', 'success')
             break
     logout_user()
