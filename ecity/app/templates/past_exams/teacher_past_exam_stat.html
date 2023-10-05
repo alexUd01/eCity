@@ -7,6 +7,7 @@
     <h2 class="page-heading">Examination Statistics For {{ exam.course_name }} Examination</h2>
     <div class="primary-container">
       <h3>General Information</h3>
+      {% if students %}
       <div class="content general-stat-info">
 	<h4>Date Taken: <em>{{ exam.exam_date.strftime('%d/%m/%Y') }}</em></h4>
 	<h4>Duration: <em>{{ exam.time_allowed }} minute{{ 's' if exam.time_allowed > 1 else '' }}</em></h4>
@@ -18,6 +19,9 @@
 	<h4>Percentage Success: <em>{{ round(no_succ / len(students) * 100, 2) }}%</em></h4>
 	<h4>Percentage Failure: <em>{{ round(no_fail / len(students) * 100, 2) }}%</em></h4>
       </div>
+      {% else %}
+      <h4><em>No student sat for this examination.</em></h4><br><br><br>
+      {% endif %}
       <h3>Examination Scoresheet</h3>
       <div class="content scoresheet">
 	<details>

@@ -124,8 +124,12 @@ def authenticate_teacher():
     A helper function that blocks non-teacher account from accessing
     teachers' resources
     """
-    user = current_user
-    user.id = user.user_id
+    try:
+        user = current_user
+        user.id = user.user_id
+    except AttributeError:
+        flash('Please login to continue', 'warning')
+        return redirect(url_for('login'))
 
     # Block non-teachers
     if current_user.is_examiner != 'T':
@@ -140,8 +144,12 @@ def authenticate_student():
     A helper function that blocks non-student account from accessing
     students' resources
     """
-    user = current_user
-    user.id = user.user_id
+    try:
+        user = current_user
+        user.id = user.user_id
+    except AttributeError:
+        flash('Please login to continue', 'warning')
+        return redirect(url_for('login'))
 
     # Block non-students
     if current_user.is_student != 'T':
@@ -1145,6 +1153,12 @@ def all_profiles(user_id, person_id):
                 for answersheet in answersheets:
                     answersheet = db.merge(answersheet)
                     db.delete(answersheet)
+
+                path = f'{getcwd()}/ecity/app/static/images/user_profile_pics'
+                if student.dp not in ['profile-icon-grey.webp',
+                                      'profile-icon.png']:
+                    system(f"rm -rfv {path}/normal_pics/{student.dp}")
+                    system(f"rm -rfv {path}/compressed_pics/{student.dp}")
 
                 student = db.merge(student)
                 db.delete(student)

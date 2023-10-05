@@ -55,6 +55,9 @@ class User(UserMixin, BaseModel, db.Model):
                 students_ids = eval(self.students)
             except (SyntaxError, TypeError):
                 students_ids = ()
+            else:
+                if type(students_ids) is int:
+                    students_ids = [students_ids]
             for _id in students_ids:
                 try:
                     student = User.query.filter(User.user_id == _id).one()
@@ -83,6 +86,9 @@ class User(UserMixin, BaseModel, db.Model):
                 teachers_ids = eval(self.teachers)
             except SyntaxError:
                 teachers_ids = ()
+            else:
+                if type(teachers_ids) is int:
+                    teachers_ids = [teachers_ids]
             for _id in teachers_ids:
                 teacher = User.query.filter(User.user_id == _id).one()
                 teachers.append(teacher)
